@@ -1,4 +1,4 @@
-import { IUser, IUserService } from '../types/userTypes';
+import { IUser, IUserService } from '../models/IUser';
 
 export class UserService {
     private users: IUser[] = [];

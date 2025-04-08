@@ -1,10 +1,4 @@
-export interface IUser {
-    id: number;
-    username: string;
-    password: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+import IUser from './IUser';
 
 export interface IUserService {
     getAllUsers(): IUser[];
@@ -14,3 +8,4 @@ export interface IUserService {
     deleteUser(id: number): IUser | undefined;
 }
 
+export default IUserService;

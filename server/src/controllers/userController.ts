@@ -1,35 +1,39 @@
+// userController.ts
 import { Request, Response } from "express";
 import { UserService } from "../services/userService";
+import { IUserController } from "../models/controllers/IUserController";
 
 const userService = new UserService();
 
-export const getAllUsers = (req: Request, res: Response) => {
-    res.json(userService.getAllUsers());
-};
+export const createUserController = (service = userService): IUserController => ({
+  getAllUsers: (req: Request, res: Response) => {
+    res.json(service.getAllUsers());
+  },
 
-export const createUser = (req: Request, res: Response) => {
+  createUser: (req: Request, res: Response) => {
     const { username, password } = req.body;
-    res.json(userService.createUser(username, password));
-};
+    res.json(service.createUser(username, password));
+  },
 
-export const getUserById = (req: Request, res: Response) => {
+  getUserById: (req: Request, res: Response) => {
     const userId = Number(req.params.id);
-    const user = userService.getUserById(userId);
+    const user = service.getUserById(userId);
     if (user) res.json(user);
     else res.status(404).json({ error: `User with id ${userId} not found` });
-};
+  },
 
-export const updateUser = (req: Request, res: Response) => {
+  updateUser: (req: Request, res: Response) => {
     const userId = Number(req.params.id);
     const { username, password } = req.body;
-    const user = userService.updateUser(userId, username, password);
+    const user = service.updateUser(userId, username, password);
     if (user) res.json(user);
     else res.status(404).json({ error: `User with id ${userId} not found` });
-};
+  },
 
-export const deleteUser = (req: Request, res: Response) => {
+  deleteUser: (req: Request, res: Response) => {
     const userId = Number(req.params.id);
-    const user = userService.deleteUser(userId);
-    if (user) res.json({ message: `User with id ${userId} deleted`});
+    const user = service.deleteUser(userId);
+    if (user) res.json({ message: `User with id ${userId} deleted` });
     else res.status(404).json({ error: `User with id ${userId} not found` });
-};
+  },
+});
