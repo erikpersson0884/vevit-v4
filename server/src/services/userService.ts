@@ -1,6 +1,7 @@
-import { IUser, IUserService } from '../models/IUser';
+import { IUser } from '../models/IUser';
+import { IUserService } from '../models/services/IUserService';
 
-export class UserService {
+export class UserService implements IUserService {
     private users: IUser[] = [];
     private nextId = this.users.length > 0 ? Math.max(...this.users.map(user => user.id)) + 1 : 1;
 
@@ -9,8 +10,8 @@ export class UserService {
         return this.users;
     }
 
-    getUserById(id: number): IUser | undefined {
-        return this.users.find(user => user.id === id);
+    getUserById(id: number): IUser | null {
+        return this.users.find(user => user.id === id) || null;
     }
 
     createUser(username: string, password: string): IUser {
@@ -37,12 +38,12 @@ export class UserService {
         return null;
     }
 
-    deleteUser(id: number): boolean {
+    deleteUser(id: number): IUser | null {
         const index = this.users.findIndex(user => user.id === id);
         if (index !== -1) {
             this.users.splice(index, 1);
-            return true;
+            return this.users[index];
         }
-        return false;
+        return null;
     }
 }
