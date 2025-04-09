@@ -1,0 +1,13 @@
+
+.main-page .filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter-container button {
+    height: 100%;
+    padding: .7rem;
+
+}

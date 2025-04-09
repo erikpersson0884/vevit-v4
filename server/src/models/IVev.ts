@@ -1,8 +1,8 @@
 
 export interface IVev {
     id: string;
-    challangerId: string;
-    challangedId: string;
+    challengerId: string;
+    challengedId: string;
     date: Date;
     bookedDate: Date;
     reason: string;

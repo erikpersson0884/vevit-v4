@@ -11,18 +11,15 @@ export const createVevController = (service = vevService): IVevController => ({
     },
 
     createVev: async (req: Request, res: Response): Promise<void> => {
-        const { challangerId, challangedId, date, reason } = req.body;
-        if (!challangerId || !challangedId || !date || !reason) {
+        let { challengerId, challengedId, date, reason } = req.body;
+        if (!challengerId || !challengedId || !date || !reason) {
             res.status(400).json({ error: "All fields are required" });
             return;
         }
         
-        if (challangerId === challangedId) {
-            res.status(400).json({ error: "Challanger and Challanged cannot be the same" });
-            return;
-        }
+        date = new Date(date);
 
-        const vev = await service.createVev(challangerId, challangedId, date, reason);
+        const vev = await service.createVev(challengerId, challengedId, date, reason);
         res.status(201).json(vev);
     },
 
@@ -38,8 +35,8 @@ export const createVevController = (service = vevService): IVevController => ({
 
     updateVev: async (req: Request, res: Response): Promise<void> => {
         const { id } = req.params;
-        const { challangerId, challangedId, date } = req.body;
-        const vev = await service.updateVev(id, challangerId, challangedId, date);
+        const { challengerId, challengedId, date } = req.body;
+        const vev = await service.updateVev(id, challengerId, challengedId, date);
         if (!vev) {
             res.status(404).json({ error: "Vev not found" });
             return;

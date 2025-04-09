@@ -1,6 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 
 #root {
-    background-color: #2c2c2c;
+    background-color: var(--background-color);
+    color: var(--text-color);
 
+    font-family: Inter;
+    font-size: 18px;
+
+    box-sizing: border-box;
     min-height: 100vh;
+    padding: .3rem;
 }
+
+
+.no-ul-formatting {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+

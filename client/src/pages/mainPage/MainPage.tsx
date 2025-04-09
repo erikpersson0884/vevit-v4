@@ -1,0 +1,45 @@
+import React from 'react';
+import './mainPage.css';
+
+import { useVevContext } from '../../contexts/vevContext';
+import VevItem from './vevItem/VevItem';
+import UserFilter from '../../components/Filter/userFilter/UserFilter';
+import TimeFilter from '../../components/Filter/timeFilter/TimeFilter'; 
+
+const MainPage: React.FC = () => {
+    const { filteredVevs, vevs } = useVevContext();
+
+    const handleCreateVev = () => {
+        console.log(vevs.length);
+    }
+
+    return (
+        <div className='main-page'>
+
+            <div className='filter-container'>
+                <UserFilter />
+                <button className='create-vev-button' onClick={handleCreateVev}>Skapa vev</button>
+            </div>
+            
+            <TimeFilter />
+            
+            {filteredVevs.length > 0 && (
+                <ul className='vev-list no-ul-formatting'>
+                    <li className='vev-item'>
+                        <p>Utmanare</p>
+                        <p>Utmanad</p>
+                        <p>Datum</p>
+                    </li>
+                    
+                    <hr />
+
+                    {filteredVevs.map((vev) => (
+                        <VevItem key={vev.id} vev={vev} />
+                    ))} 
+                </ul>
+            )}
+        </div>
+    );
+};
+
+export default MainPage;

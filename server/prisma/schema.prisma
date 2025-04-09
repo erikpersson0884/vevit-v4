@@ -11,14 +11,14 @@ generator client {
   
 model Vev {
     id            String   @id @default(uuid())   // Use UUID for id as a string
-    challangerId  String
-    challangedId  String
+    challengerId  String
+    challengedId  String
     date          DateTime
     bookedDate    DateTime
     reason        String
 
-    challanger    User     @relation("Challanger", fields: [challangerId], references: [id])
-    challanged    User     @relation("Challanged", fields: [challangedId], references: [id])
+    challenger    User     @relation("challenger", fields: [challengerId], references: [id])
+    challenged    User     @relation("Challenged", fields: [challengedId], references: [id])
 }
 
 model User {
@@ -28,6 +28,6 @@ model User {
     createdAt DateTime    @default(now())
     updatedAt DateTime    @updatedAt
 
-    vevsChallanged Vev[] @relation("Challanger")
-    vevsChallangedBy Vev[] @relation("Challanged")
+    vevsChallenged Vev[] @relation("challenger")
+    vevsChallengedBy Vev[] @relation("Challenged")
 }

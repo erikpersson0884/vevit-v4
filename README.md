@@ -24,6 +24,8 @@ docker run --name vevit-v4 -e POSTGRES_PASSWORD=secretpassword -e POSTGRES_USER=
 
 ```sh
 
+cd server
+
 # This command generates the migration file with the necessary SQL to create the tables in your PostgreSQL database.
 npx prisma migrate dev --name vevit4
 
@@ -53,8 +55,8 @@ docker stop vevit-v4
 ```typescript
 {
     id: number
-    challangerId: number
-    challangedId: number
+    challengerId: number
+    challengedId: number
     winnerId: number
     time: date
     bookedTime: date

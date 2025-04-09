@@ -1,0 +1,23 @@
+.filter {
+    cursor: pointer;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: max-content;
+    border: 1px solid #09cdda;
+    border-radius: 5px;
+
+    overflow: hidden;
+}
+
+.filter>div {
+    padding: .7rem;
+    border-inline: 1px solid #09cdda;
+}
+
+.filter>.active {
+    background-color: var(--secondary-background-color);
+    color: var(--text-color);
+}

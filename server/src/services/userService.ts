@@ -28,7 +28,7 @@ export class UserService implements IUserService {
 
     async createUser(username: string, password: string): Promise<IUser> {
         if (await this.checkIfUserExists(username)) {
-            throw new UserAlreadyExistsError(`User with username "${username}" already exists`);
+            throw new UserAlreadyExistsError(`User with username ${username} already exists`);
         }
         const user: IUser = await prisma.user.create({
             data: {

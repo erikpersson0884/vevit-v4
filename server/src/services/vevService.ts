@@ -12,17 +12,17 @@ export class VevService {
     public async getAllVevs(): Promise<IVev[]> {
         return await prisma.vev.findMany();
     }
-    public async createVev(challangerId: string, challangedId: string, date: Date, reason: string): Promise<IVev> {
-        if (!this.userService.checkIfUserExists(challangerId) || !this.userService.checkIfUserExists(challangedId)) {
-            throw new UserNotFoundError("Tried to create vev with non-existing user id, " + challangerId + " or " + challangedId);
+    public async createVev(challengerId: string, challengedId: string, date: Date, reason: string): Promise<IVev> {
+        if (!this.userService.checkIfUserExists(challengerId) || !this.userService.checkIfUserExists(challengedId)) {
+            throw new UserNotFoundError("Tried to create vev with non-existing user id, " + challengerId + " or " + challengedId);
         }
         const bookedDate = new Date();
 
         const newVev = await prisma.vev.create({
             data: {
                 id: uuidv4(),
-                challangerId,
-                challangedId,
+                challengerId,
+                challengedId,
                 date,
                 bookedDate,
                 reason
@@ -39,15 +39,15 @@ export class VevService {
 
     public async updateVev(
         id: string, 
-        challangerId: string, 
-        challangedId: string, 
+        challengerId: string, 
+        challengedId: string, 
         date: Date
     ): Promise<IVev | null> {
         const updatedVev = await prisma.vev.update({
             where: { id },
             data: {
-                challangerId,
-                challangedId,
+                challengerId,
+                challengedId,
                 date
             }
         });
