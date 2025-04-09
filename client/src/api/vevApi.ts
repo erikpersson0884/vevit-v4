@@ -20,10 +20,9 @@ export const fetchVevById = async (id: string) => {
     }
 }
 
-export const createVev = async (challengerId: string, challengedId: string, reason: string) => {
+export const createVev = async (challengedId: string, reason: string) => {
     try {
         const body = {
-            challengerId,
             challengedId,
             reason
         };

@@ -6,22 +6,23 @@ import VevItem from './vevItem/VevItem';
 import UserFilter from '../../components/Filter/userFilter/UserFilter';
 import TimeFilter from '../../components/Filter/timeFilter/TimeFilter'; 
 
-const MainPage: React.FC = () => {
-    const { filteredVevs, vevs } = useVevContext();
+import CreateVevPopup from '../../components/createVevPopup/CreateVevPopup';
 
-    const handleCreateVev = () => {
-        console.log(vevs.length);
-    }
+const MainPage: React.FC = () => {
+    const { filteredVevs } = useVevContext();
+    const [ showCreateVevPopup, setShowCreateVevPopup ] = React.useState(false);
 
     return (
         <div className='main-page'>
 
             <div className='filter-container'>
                 <UserFilter />
-                <button className='create-vev-button' onClick={handleCreateVev}>Skapa vev</button>
+                <button className='create-vev-button' onClick={() => setShowCreateVevPopup(true)}>Skapa vev</button>
             </div>
             
             <TimeFilter />
+
+            <CreateVevPopup isOpen={showCreateVevPopup} onClose={() => setShowCreateVevPopup(false)}/>
             
             {filteredVevs.length > 0 && (
                 <ul className='vev-list no-ul-formatting'>

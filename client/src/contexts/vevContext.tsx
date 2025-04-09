@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { fetchVevs } from '../api/vevApi';
+import { fetchVevs, createVev as createVevApiCall } from '../api/vevApi';
 import { useUsersContext } from './usersContext';
 
 interface VevContextProps {
@@ -7,6 +7,7 @@ interface VevContextProps {
     setVevs: React.Dispatch<React.SetStateAction<IVev[]>>;
     filteredVevs: IVev[];
     setFilteredVevs: React.Dispatch<React.SetStateAction<IVev[]>>;
+    createVev: (challangedId: string, date: string) => Promise<boolean>;
 }
 
 const VevContext = createContext<VevContextProps | undefined>(undefined);
@@ -44,9 +45,26 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setFilteredVevs(vevs);
     }, [vevs]);
 
+    const createVev = async (challangedId: string, date: string): Promise<boolean> => {
+        try {
+            await createVevApiCall(challangedId, date)
+
+            return true;
+        } catch (error) {
+            console.error('Error creating VEV:', error);
+            return false;
+        }
+    };
+
 
     return (
-        <VevContext.Provider value={{ vevs, setVevs, filteredVevs, setFilteredVevs }}>
+        <VevContext.Provider value={{ 
+            vevs, 
+            setVevs, 
+            filteredVevs, 
+            setFilteredVevs,
+            createVev
+        }}>
             {children}
         </VevContext.Provider>
     );

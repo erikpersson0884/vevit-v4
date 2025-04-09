@@ -16,6 +16,10 @@ body {
     min-height: 100vh;
 }
 
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+}
+
 button {
     background-color: var(--secondary-background-color);
     color: #000;
@@ -24,4 +28,21 @@ button {
 
     border: 1px solid #09cdda;
     border-radius: 5px;
+}
+
+button img {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
+    min-width: 2rem;
+}
+
+input, select {
+    background-color: transparent;
+    color: var(--text-color);
+
+    padding: .4rem 1rem;
+    border-radius: .3rem;
 }
