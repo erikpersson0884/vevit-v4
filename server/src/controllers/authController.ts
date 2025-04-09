@@ -1,16 +1,14 @@
-// import { Request, Response } from "express";
-// import AuthService from "../services/authService";
+import { Request, Response } from "express";
+import { createAuthService } from "../services/authService";
 
-// export async function login(req: Request, res: Response) {
-//   try {
-//     const { username, password } = req.body;
-//     const token = await AuthService.loginUser(username, password);
-//     res.json({ token });
-//   } catch (err: any) {
-//     res.status(401).json({ error: err.message });
-//   }
-// }
+const authService = createAuthService();
 
-// export function protectedRoute(req: Request, res: Response) {
-//   res.json({ message: "Access granted", user: req.user });
-// }
+export async function login(req: Request, res: Response) {
+    try {
+        const { username, password } = req.body;
+        const token = await authService.loginUser(username, password);
+        res.json({ token });
+    } catch (err: any) {
+        res.status(401).json({ error: err.message });
+    }
+}

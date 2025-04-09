@@ -26,6 +26,13 @@ export class UserService implements IUserService {
         return user;
     }
 
+    async getUserByUsername(username: string): Promise<IUser | null> {
+        const user = await prisma.user.findUnique({
+            where: { username: username },
+        });
+        return user;
+    }
+
     async createUser(username: string, password: string): Promise<IUser> {
         if (await this.checkIfUserExists(username)) {
             throw new UserAlreadyExistsError(`User with username ${username} already exists`);
