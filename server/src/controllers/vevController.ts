@@ -1,83 +1,61 @@
 import VevService from "../services/vevService";
-
 import { Request, Response } from "express";
-
 import { IVevController } from "../models/controllers/IVevController";
-import { IVev } from "../models/IVev";
 
-export class VevController implements IVevController {
-    private vevService: VevService;
+const vevService = new VevService();
 
-    constructor(vevService: VevService) {
-        this.vevService = vevService;
-    }
+export const createVevController = (service = vevService): IVevController => ({
+    getAllVevs: async (req: Request, res: Response): Promise<void> => {
+        const vevs = await service.getAllVevs();
+        res.status(200).json(vevs);
+    },
 
-    public getAllVevs = async (req: Request, res: Response): Promise<void> => {
-        try {
-            const vevs = await this.vevService.getAllVevs();
-            res.status(200).json(vevs);
-        } catch (error) {
-            res.status(500).json({ error: "Internal server error" });
+    createVev: async (req: Request, res: Response): Promise<void> => {
+        const { challangerId, challangedId, date, reason } = req.body;
+        if (!challangerId || !challangedId || !date || !reason) {
+            res.status(400).json({ error: "All fields are required" });
+            return;
         }
-    };
-
-    public createVev = async (req: Request, res: Response): Promise<void> => {
-        try {
-            const { challangerId, challangedId, date } = req.body;
-            const vev = await this.vevService.createVev(challangerId, challangedId, date);
-            res.status(201).json(vev);
-        } catch (error) {
-            res.status(500).json({ error: "Internal server error" });
+        
+        if (challangerId === challangedId) {
+            res.status(400).json({ error: "Challanger and Challanged cannot be the same" });
+            return;
         }
-    };
 
-    public getVevById = async (req: Request, res: Response): Promise<void> => {
-        try {
-            const { id } = req.params;
-            const vev = await this.vevService.getVevById(id);
-            if (!vev) {
-                res.status(404).json({ error: "Vev not found" });
-                return;
-            }
-            res.status(200).json(vev);
-        } catch (error) {
-            res.status(500).json({ error: "Internal server error" });
+        const vev = await service.createVev(challangerId, challangedId, date, reason);
+        res.status(201).json(vev);
+    },
+
+    getVevById: async (req: Request, res: Response): Promise<void> => {
+        const { id } = req.params;
+        const vev = await service.getVevById(id);
+        if (!vev) {
+            res.status(404).json({ error: "Vev not found" });
+            return;
         }
-    };
+        res.status(200).json(vev);
+    },
 
-    public updateVev = async (req: Request, res: Response): Promise<void> => {
-        try {
-            const { id } = req.params;
-            const { challangerId, challangedId, date } = req.body;
-            const vev = await this.vevService.updateVev(id, challangerId, challangedId, date);
-            if (!vev) {
-                res.status(404).json({ error: "Vev not found" });
-                return;
-            }
-            res.status(200).json(vev);
-        } catch (error) {
-            res.status(500).json({ error: "Internal server error" });
+    updateVev: async (req: Request, res: Response): Promise<void> => {
+        const { id } = req.params;
+        const { challangerId, challangedId, date } = req.body;
+        const vev = await service.updateVev(id, challangerId, challangedId, date);
+        if (!vev) {
+            res.status(404).json({ error: "Vev not found" });
+            return;
         }
-    };
+        res.status(200).json(vev);
+    },
 
-    public deleteVev = async (req: Request, res: Response): Promise<void> => {
-        try {
-            const { id } = req.params;
-            const vev = await this.vevService.deleteVev(id);
-            if (!vev) {
-                res.status(404).json({ error: `Vev not found, id: ${id}` });
-                return;
-            }
-            res.status(200).json(vev);
-        } catch (error) {
-            res.status(500).json({ error: "Internal server error" });
+    deleteVev: async (req: Request, res: Response): Promise<void> => {
+        const { id } = req.params;
+        const vev = await service.deleteVev(id);
+        if (!vev) {
+            res.status(404).json({ error: `Vev not found, id: ${id}` });
+            return;
         }
-    };
+        res.status(200).json(vev);
+    },
+});
 
-}
-
-export function createVevController(vevService: VevService): IVevController {
-    return new VevController(vevService);
-}
-
-export default VevController;
+export default createVevController;

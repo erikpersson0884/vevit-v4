@@ -1,11 +1,13 @@
 import IUser from '../IUser';
 
 export interface IUserService {
-    getAllUsers(): IUser[];
-    createUser(name: string, password: string): IUser;
-    getUserById(id: number): IUser | null;
-    updateUser(id: number, newUsername?: string, newPassword?: string): IUser | null;
-    deleteUser(id: number): IUser | null;
+    checkIfUserExists(id: string): Promise<boolean>;
+    
+    getAllUsers(): Promise<IUser[]>;
+    createUser(name: string, password: string): Promise<IUser>;
+    getUserById(id: string): Promise<IUser | null>;
+    updateUser(id: string, newUsername?: string, newPassword?: string): Promise<IUser | null>;
+    deleteUser(id: string): Promise<IUser | null>;
 }
 
 export default IUserService;

@@ -1,11 +1,11 @@
-import { Router } from "express";
-import { login, register, protectedRoute } from "../controllers/auth.controller";
-import { authenticateToken } from "../middleware/auth.middleware";
+// import { Router } from "express";
+// import { login, protectedRoute } from "../controllers/authController";
+// // import { authenticateToken } from "../middleware/auth.middleware";
 
-const router = Router();
+// const router = Router();
 
-router.post("/register", register);
-router.post("/login", login);
-router.get("/protected", authenticateToken, protectedRoute);
+// // router.post("/register", register);
+// router.post("/login", login);
+// // router.get("/protected", authenticateToken, protectedRoute);
 
-export default router;
+// export default router;

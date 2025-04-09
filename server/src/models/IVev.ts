@@ -5,6 +5,7 @@ export interface IVev {
     challangedId: string;
     date: Date;
     bookedDate: Date;
+    reason: string;
 }
 
 export default IVev;

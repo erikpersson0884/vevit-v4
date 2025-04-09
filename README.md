@@ -1,6 +1,50 @@
 # vevIT-v4
 
 
+# Setup
+
+## clone the repo
+
+```sh
+
+git clone 
+cd vevIT-v4
+
+# Install dependencies
+npm install
+```
+
+## Set up database
+
+```sh
+docker run --name vevit-v4 -e POSTGRES_PASSWORD=secretpassword -e POSTGRES_USER=myuser -e POSTGRES_DB=mydb -p 5432:5432 -d postgres
+
+
+```
+
+```sh
+
+# This command generates the migration file with the necessary SQL to create the tables in your PostgreSQL database.
+npx prisma migrate dev --name vevit4
+
+# This command will apply the generated migration to your database:
+npx prisma migrate dev
+```
+
+# Usage 
+```sh
+
+
+# Start the database
+docker start vevit-v4
+
+# Stop the database
+docker stop vevit-v4
+
+
+```
+
+
 # Server
 
 ## Types
@@ -41,7 +85,7 @@ GET /api/vev/:id
 Response:
 ```json
 {
-    data
+    
 }
 ```
 

@@ -1,49 +1,77 @@
 import { IUser } from '../models/IUser';
 import { IUserService } from '../models/services/IUserService';
+import prisma from "../lib/prisma";
+import { UserNotFoundError } from '../errors/UserNotFoundError';
+import { UserAlreadyExistsError } from '../errors/UserAlreadyExistsError';
+
 
 export class UserService implements IUserService {
-    private users: IUser[] = [];
-    private nextId = this.users.length > 0 ? Math.max(...this.users.map(user => user.id)) + 1 : 1;
 
-
-    getAllUsers(): IUser[] {
-        return this.users;
+    public async checkIfUserExists(username: string): Promise<boolean> {
+        let userExists = await prisma.user.findFirst({
+            where: { username: username },
+        })
+        return userExists !== null;
     }
 
-    getUserById(id: number): IUser | null {
-        return this.users.find(user => user.id === id) || null;
+    async getAllUsers(): Promise<IUser[]> {
+        const users: IUser[] = await prisma.user.findMany();
+        return users;
     }
 
-    createUser(username: string, password: string): IUser {
-        const newUser: IUser = { 
-            id: this.nextId++, 
-            username: username,
-            password: password,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        };
-        this.users.push(newUser);
-        return newUser;
+    async getUserById(userId: string): Promise<IUser | null> {
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+        });
+        return user;
     }
 
-    updateUser(id: number, newUsername?: string, newPassword?: string): IUser | null {
-        const user = this.getUserById(id);
+    async createUser(username: string, password: string): Promise<IUser> {
+        if (await this.checkIfUserExists(username)) {
+            throw new UserAlreadyExistsError(`User with username "${username}" already exists`);
+        }
+        const user: IUser = await prisma.user.create({
+            data: {
+                username,
+                password,
+            },
+        });
+    
+        return user;
+    }
+
+    async updateUser(id: string, newUsername?: string, newPassword?: string): Promise<IUser> {
+        const user: IUser | null = await this.getUserById(id);
 
         if (user) {
             user.username = newUsername || user.username;
             user.password = newPassword || user.password;
             user.updatedAt = new Date();
-            return user;
-        }
-        return null;
+
+            return prisma.user.update({
+                where: { id },
+                data: {
+                    username: user.username,
+                    password: user.password,
+                    updatedAt: user.updatedAt,
+                },
+            });
+        } else throw new UserNotFoundError(`User with id ${id} not found`);
     }
 
-    deleteUser(id: number): IUser | null {
-        const index = this.users.findIndex(user => user.id === id);
-        if (index !== -1) {
-            this.users.splice(index, 1);
-            return this.users[index];
+    async deleteUser(userId: string): Promise<IUser> {
+        if (await this.checkIfUserExists(userId)) {
+            const user: IUser | null = await this.getUserById(userId);
+            if (user) {
+                return prisma.user.delete({
+                    where: { id: userId },
+                });
+            } else throw new UserNotFoundError(`User with id ${userId} not found`);
         }
-        return null;
+        else throw new UserNotFoundError(`User with id ${userId} not found`);
     }
+}
+
+export const createUserService = () => {
+    return new UserService();
 }
