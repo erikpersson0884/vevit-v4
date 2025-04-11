@@ -16,8 +16,9 @@ class authService implements IAuthService {
         // const match = await bcrypt.compare(password, user.password);
         const match = password === user.password;
         if (!match) throw new Error("Invalid credentials");
-
-        return jwt.sign({ username }, this.JWT_SECRET, { expiresIn: "1h" });
+        const userId = user.id;
+        
+        return jwt.sign({ userId }, this.JWT_SECRET, { expiresIn: "1h" });
     }
 }
 
