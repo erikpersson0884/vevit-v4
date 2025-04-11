@@ -10,7 +10,7 @@ router.get("/me", authMiddleware, userController.getCurrentUser); // Assuming yo
 router.get("/", userController.getAllUsers);
 router.get("/:id", userController.getUserById); // Assuming you want to get a user by ID
 router.post("/", userController.createUser);
-router.patch("/:id", userController.updateUser);
-router.delete("/:id", userController.deleteUser);
+router.patch("/:id", authMiddleware, userController.updateUser);
+router.delete("/:id", authMiddleware, userController.deleteUser);
 
 export default router;

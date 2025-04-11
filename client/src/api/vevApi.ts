@@ -26,9 +26,7 @@ export const createVev = async (challengedId: string, reason: string) => {
             challengedId,
             reason
         };
-
         const response = await api.post('/vev', body);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Error creating vev:', error);

@@ -2,6 +2,7 @@ import React from 'react';
 import './mainPage.css';
 
 import { useVevContext } from '../../contexts/vevContext';
+
 import VevItem from './vevItem/VevItem';
 import UserFilter from '../../components/Filter/userFilter/UserFilter';
 import TimeFilter from '../../components/Filter/timeFilter/TimeFilter'; 

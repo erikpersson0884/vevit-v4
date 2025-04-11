@@ -6,16 +6,17 @@ import closeIcon from '../../assets/close.svg';
 interface PopupWindowProps {
     children: React.ReactNode;
     isOpen: boolean;
-    onClose: () => void;
+    onAccept?: () => any;
+    onCancel?: () => any;
+    onClose: () => any;
 
     title?: string;
     buttonText?: string;
-    onClick?: () => void;
 
     className?: string;
 }
 
-const PopupWindow: React.FC<PopupWindowProps> = ({ isOpen, onClose, onClick = onClose, title, children, className }) => {
+const PopupWindow: React.FC<PopupWindowProps> = ({ isOpen, onClose, onAccept = onClose, onCancel = onClose, title, buttonText, children, className }) => {
     if (!isOpen) return null;
 
     return (
@@ -33,8 +34,8 @@ const PopupWindow: React.FC<PopupWindowProps> = ({ isOpen, onClose, onClick = on
                     </div>
 
                     <div className='popup-footer'>
-                        <button className="popup-button" onClick={onClick}>Skapa</button>
-                        <button className="popup-button" onClick={onClose}>Avbryt</button>
+                        <button className="popup-button" onClick={onAccept}>{buttonText ? buttonText : 'Skapa'}</button>
+                        <button className="popup-button" onClick={onCancel}>Avbryt</button>
                     </div>
                 </div>
             </div>

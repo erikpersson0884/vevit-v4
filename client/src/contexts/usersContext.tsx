@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { fetchUsers } from '../api/userApi';
+import userApi from '../api/userApi';
 import { useEffect } from 'react';
 
 interface UsersContextType {
@@ -17,7 +17,7 @@ export const UsersProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const loadUsers = async () => {
             try {
-                const fetchedUsers = await fetchUsers();
+                const fetchedUsers = await userApi.fetchUsers();
                 setUsers(fetchedUsers);
                 setLoadingUsers(false);
             } catch (error) {
