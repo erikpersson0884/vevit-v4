@@ -24,3 +24,13 @@
     color: red;
     font-size: 0.8rem;
 }
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.changed-input {
+    border: 1px solid orange
+}

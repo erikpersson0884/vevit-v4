@@ -6,6 +6,7 @@ interface UsersContextType {
     loadingUsers: boolean;
     users: IUser[];
     getUserById: (id: string) => IUser;
+    updateUser: (userId: string, username: string, password: string) => Promise<boolean>;
 }
 
 const UsersContext = createContext<UsersContextType | undefined>(undefined);
@@ -14,18 +15,18 @@ export const UsersProvider = ({ children }: { children: ReactNode }) => {
     const [ users, setUsers ] = useState<IUser[]>([]);
     const [ loadingUsers, setLoadingUsers ] = useState<boolean>(true);
 
-    useEffect(() => {
-        const loadUsers = async () => {
-            try {
-                const fetchedUsers = await userApi.fetchUsers();
-                setUsers(fetchedUsers);
-                setLoadingUsers(false);
-            } catch (error) {
-                console.error('Failed to fetch users:', error);
-            }
-        };
+    const fetchUsers = async () => {
+        try {
+            const fetchedUsers = await userApi.fetchUsers();
+            setUsers(fetchedUsers);
+            setLoadingUsers(false);
+        } catch (error) {
+            console.error('Failed to fetch users:', error);
+        }
+    };
 
-        loadUsers();
+    useEffect(() => {
+        fetchUsers();
     }, []);
 
     const getUserById = (id: string) => {
@@ -34,8 +35,20 @@ export const UsersProvider = ({ children }: { children: ReactNode }) => {
         else throw new Error(`User with id ${id} not found`);
     }
 
+    const updateUser = async (userId: string, username: string, password: string): Promise<boolean> => {
+        try {
+            await userApi.updateUser(userId, username, password);
+            fetchUsers(); // Refresh the users list after updating
+            return true;
+        } catch (error) {
+            console.error('Failed to update user:', error);
+            return false;
+        }
+    }
+
+
     return (
-        <UsersContext.Provider value={{ loadingUsers, users, getUserById}}>
+        <UsersContext.Provider value={{ loadingUsers, users, getUserById, updateUser }}>
             {children}
         </UsersContext.Provider>
     );

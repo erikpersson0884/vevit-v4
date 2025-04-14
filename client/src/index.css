@@ -24,10 +24,10 @@ button {
     background-color: var(--secondary-background-color);
     color: #000;
 
-    font-size: 1rem;
+    font-size: 1.4rem;
 
     padding: .3rem .5rem;
-    border: 1px solid #09cdda;
+    border: 2px solid #09cdda;
     border-radius: 5px;
 }
 

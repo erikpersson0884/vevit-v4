@@ -8,15 +8,15 @@ interface AuthContextType {
     login: (username: string, password: string) => Promise<boolean>;
     logout: () => void;
 
-    showLoginPopup: boolean;
-    setShowLoginPopup: React.Dispatch<React.SetStateAction<boolean>>;
+    showAuthPopup: boolean;
+    setShowAuthPopup: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [ currentUser, setCurrentUser ] = useState<IUser | null>(null);
-    const [ showLoginPopup, setShowLoginPopup ] = React.useState(false);
+    const [ showAuthPopup, setShowAuthPopup ] = React.useState(false);
 
     React.useEffect(() => {
         const fetchUser = async () => {
@@ -54,7 +54,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     return (
-        <AuthContext.Provider value={{ currentUser, login, logout, showLoginPopup, setShowLoginPopup }}>
+        <AuthContext.Provider value={{ currentUser, login, logout, showAuthPopup, setShowAuthPopup }}>
             {children}
         </AuthContext.Provider>
     );

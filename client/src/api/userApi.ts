@@ -55,7 +55,7 @@ export const userApi = {
                 username,
                 password,
             }
-            const response = await api.put(`/user/${userId}`, body);
+            const response = await api.patch(`/user/${userId}`, body);
             return response.data;
         } catch (error) {
             console.error('Error updating user:', error);
