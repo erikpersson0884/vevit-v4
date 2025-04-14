@@ -2,6 +2,7 @@ import React from 'react';
 import './mainPage.css';
 
 import { useVevContext } from '../../contexts/vevContext';
+import { useAuthContext } from '../../contexts/authContext';
 
 import VevItem from './vevItem/VevItem';
 import UserFilter from '../../components/Filter/userFilter/UserFilter';
@@ -11,6 +12,7 @@ import CreateVevPopup from '../../components/createVevPopup/CreateVevPopup';
 
 const MainPage: React.FC = () => {
     const { filteredVevs } = useVevContext();
+    const { currentUser } = useAuthContext();
     const [ showCreateVevPopup, setShowCreateVevPopup ] = React.useState(false);
 
     return (
@@ -18,7 +20,13 @@ const MainPage: React.FC = () => {
 
             <div className='filter-container'>
                 <UserFilter />
-                <button className='create-vev-button' onClick={() => setShowCreateVevPopup(true)}>Skapa vev</button>
+
+                {currentUser && (
+                    <button 
+                        className='create-vev-button' 
+                        onClick={() => setShowCreateVevPopup(true)}
+                    >Skapa vev</button>
+                )}
             </div>
             
             <TimeFilter />

@@ -13,8 +13,12 @@ const CreateVevPopup: React.FC<CreateVevPopupProps> = ({isOpen, onClose}) => {
     const { users } = useUsersContext();
     const { createVev } = useVevContext();
 
-    const [ selectedUser, setSelectedUser ] = useState(users[0]?.id || '');
-    const [ selectedTime, setSelectedTime ] = useState('');
+    const [ selectedUser, setSelectedUser ] = useState<string>(users[0]?.id || '');
+    const [ selectedDate, setSelectedDate ] = useState<string>('');
+    const [ selectedTime, setSelectedTime ] = useState<string>('');
+    const [ reason, setReason ] = useState('');
+
+    const [ errorText, setErrorText ] = useState<string | null>('');
 
     const handleUserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedUser(event.target.value);
@@ -22,12 +26,40 @@ const CreateVevPopup: React.FC<CreateVevPopupProps> = ({isOpen, onClose}) => {
     const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedTime(event.target.value);
     }
+    const handleReasonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setReason(event.target.value);
+    };
 
     const handleSubmit = async () => {
-        await createVev(selectedUser, selectedTime);
+        if (!selectedUser) {
+            setErrorText("Välj en utmanare");
+            return;
+        } else if (!selectedDate) {
+            setErrorText("Välj ett datum");
+            return;
+        } else if (!selectedTime) {
+            setErrorText("Välj en tid");
+            return;
+        } else if (!reason) {
+            setErrorText("Ange en anledning");
+            return;
+        }
 
-        onClose();
+        const dateTime: string = (new Date(`${selectedDate}T${selectedTime}`)).toString();
+        const successfullCreation = await createVev(selectedUser, dateTime, reason);
+
+        if (!successfullCreation) {
+            setErrorText("Det gick inte att skapa vev");
+            return;
+        } else handleClose();
     };
+
+    const handleClose = () => {
+        setErrorText('');
+        setSelectedUser(users[0]?.id || '');
+        setSelectedTime('');
+        onClose();
+    }
         
 
     return (
@@ -35,13 +67,14 @@ const CreateVevPopup: React.FC<CreateVevPopupProps> = ({isOpen, onClose}) => {
             title="Skapa vev"
             buttonText="Create"
             isOpen={isOpen}
-            onClose={onClose}
-            onClick={handleSubmit}
+            onClose={handleClose}
+            onAccept={handleSubmit}
             className="create-vev-popup"
         >
             <div className="input-container">
-                <label htmlFor="pickChallanged">Pick Challenged</label>
+                <label htmlFor="pickChallanged">Utmanare</label>
                 <select id="pickChallanged" name="pickChallanged" onChange={handleUserChange} value={selectedUser}>
+                        <option value="" disabled>Select a user</option>
                         {users.map((user) => (
                             <option key={user.id} value={user.id}>
                                 {user.username}
@@ -51,9 +84,22 @@ const CreateVevPopup: React.FC<CreateVevPopupProps> = ({isOpen, onClose}) => {
             </div>
 
             <div className="input-container">
-                <label htmlFor="pickTime">Pick Time</label>
-                <input type="datetime-local" id="pickTime" name="pickTime" onChange={handleTimeChange} value={selectedTime} />
+                <label htmlFor="pickDate">Välj datum</label>
+                <input type="date" id="pickDate" name="pickDate" onChange={(e) => setSelectedDate(e.target.value)} value={selectedDate} />
             </div>
+
+            <div className="input-container">
+                <label htmlFor="pickTime">Välj tid</label>
+                <input type="time" id="pickTime" name="pickTime" onChange={handleTimeChange} value={selectedTime} />
+            </div>
+
+
+            <div className="input-container">
+                <label htmlFor="reasonInput">Anledning</label>
+                <input type="text" id="reasonInput" name="reasonInput" placeholder="Anledning" onChange={handleReasonChange} value={reason}/>
+            </div>
+
+            {errorText && <p className="error-message">{errorText}</p>}
         </PopupWindow>
     );
 }

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { fetchVevs, createVev as createVevApiCall } from '../api/vevApi';
+import { fetchVevs as fetchVevApiCall, createVev as createVevApiCall } from '../api/vevApi';
 import { useUsersContext } from './usersContext';
 
 interface VevContextProps {
@@ -7,48 +7,37 @@ interface VevContextProps {
     setVevs: React.Dispatch<React.SetStateAction<IVev[]>>;
     filteredVevs: IVev[];
     setFilteredVevs: React.Dispatch<React.SetStateAction<IVev[]>>;
-    createVev: (challangedId: string, date: string) => Promise<boolean>;
+    createVev: (challangedId: string, date: string, reason: string) => Promise<boolean>;
 }
 
 const VevContext = createContext<VevContextProps | undefined>(undefined);
 
 export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const { getUserById } = useUsersContext();
-
     const [vevs, setVevs] = useState<IVev[]>([]);
     const [filteredVevs, setFilteredVevs] = useState<IVev[]>([]);
 
+    const fetchVevs = async () => {
+        try {
+            const data: IVev[] = await fetchVevApiCall();
+            setVevs(data);
+            
+        } catch (error) {
+            console.error('Error fetching vevs:', error);
+        }
+    };
 
     React.useEffect(() => {
-        const fetchVevsData = async () => {
-            try {
-                // const data: IVevDTO[] = await fetchVevs();
-                // const transformedData: IVev[] = data.map((vev) => {
-                //     const challenger: IUser = getUserById(vev.challengerId);
-                //     const challenged: IUser = getUserById(vev.challengedId);
-                //     return { ...vev, challenger, challenged };
-                // });
-                // setVevs(transformedData);
-                // setFilteredVevs(transformedData);
-
-                const data: IVev[] = await fetchVevs();
-                setVevs(data);
-                
-            } catch (error) {
-                console.error('Error fetching vevs:', error);
-            }
-        };
-        fetchVevsData();
+        fetchVevs();
     }, []);
 
     React.useEffect(() => {
         setFilteredVevs(vevs);
     }, [vevs]);
 
-    const createVev = async (challangedId: string, date: string): Promise<boolean> => {
+    const createVev = async (challangedId: string, date: string, reason: string): Promise<boolean> => {
         try {
-            await createVevApiCall(challangedId, date)
-
+            await createVevApiCall(challangedId, date, reason)
+            fetchVevs();
             return true;
         } catch (error) {
             console.error('Error creating VEV:', error);

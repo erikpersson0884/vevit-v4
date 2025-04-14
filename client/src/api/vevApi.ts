@@ -20,10 +20,11 @@ export const fetchVevById = async (id: string) => {
     }
 }
 
-export const createVev = async (challengedId: string, reason: string) => {
+export const createVev = async (challengedId: string, date: string, reason: string) => {
     try {
         const body = {
             challengedId,
+            date,
             reason
         };
         const response = await api.post('/vev', body);
