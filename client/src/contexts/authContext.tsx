@@ -5,7 +5,7 @@ import { setAuthToken } from '../api/axiosInstance';
 
 interface AuthContextType {
     currentUser: IUser | null;
-    login: (username: string, password: string) => void;
+    login: (username: string, password: string) => Promise<boolean>;
     logout: () => void;
 
     showLoginPopup: boolean;
@@ -28,29 +28,29 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 console.error('Failed to fetch current user', error);
             }
         };
-        if (localStorage.getItem('token')) {
+        if (localStorage.getItem('authToken')) {
             fetchUser();
         }
     }, []);
 
-    const login = async (username: string, password: string) => {
+    const login = async (username: string, password: string): Promise<boolean> => {
         try {
             const token: string = await authApi.login(username, password);
             if (token) {
                 setAuthToken(token); // Set the token in axios instance
                 const user = await userApi.getCurrentUser(); // Fetch the current user after login
                 setCurrentUser(user);
-                console.log('Login successful', user);
-            } else {
-                console.error('Login failed: No token received');
+                return true;
             }
         } catch (error: unknown) {
             console.error('Login failed', error);
         }
+        return false;
     };
 
     const logout = () => {
         setCurrentUser(null);
+        localStorage.removeItem('authToken'); 
     };
 
     return (

@@ -11,3 +11,8 @@
     flex-direction: column;
     align-items: left;
 }
+
+.login-popup .error-message {
+    color: red;
+    font-size: 0.8rem;
+}

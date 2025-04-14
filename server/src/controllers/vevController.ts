@@ -1,6 +1,7 @@
 import VevService from "../services/vevService";
 import { Request, Response } from "express";
 import { IVevController } from "../models/controllers/IVevController";
+import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
 
 const vevService = new VevService();
 
@@ -10,8 +11,9 @@ export const createVevController = (service = vevService): IVevController => ({
         res.status(200).json(vevs);
     },
 
-    createVev: async (req: Request, res: Response): Promise<void> => {
-        let { challengerId, challengedId, date, reason } = req.body;
+    createVev: async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+        let { challengedId, date, reason } = req.body;
+        const challengerId = req.user.id; // Assuming the user ID is stored in req.userId after authentication
         if (!challengerId || !challengedId || !date || !reason) {
             res.status(400).json({ error: "All fields are required" });
             return;
@@ -33,7 +35,7 @@ export const createVevController = (service = vevService): IVevController => ({
         res.status(200).json(vev);
     },
 
-    updateVev: async (req: Request, res: Response): Promise<void> => {
+    updateVev: async (req: AuthenticatedRequest, res: Response): Promise<void> => {
         const { id } = req.params;
         const { challengerId, challengedId, date } = req.body;
         const vev = await service.updateVev(id, challengerId, challengedId, date);
@@ -44,7 +46,7 @@ export const createVevController = (service = vevService): IVevController => ({
         res.status(200).json(vev);
     },
 
-    deleteVev: async (req: Request, res: Response): Promise<void> => {
+    deleteVev: async (req: AuthenticatedRequest, res: Response): Promise<void> => {
         const { id } = req.params;
         const vev = await service.deleteVev(id);
         if (!vev) {

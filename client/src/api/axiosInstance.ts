@@ -34,7 +34,7 @@ const token: string | null = localStorage.getItem('authToken');
 if (token && isTokenValid(token)) {
     setAuthToken(token);
 } else {
-    localStorage.removeItem('authToken');
+    // localStorage.removeItem('authToken');
 }
 
 export default api;

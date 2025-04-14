@@ -13,16 +13,28 @@ export const LoginPopup: React.FC<LoginPopupProps> = ({ isOpen, onClose }) => {
     const { login } = useAuthContext();
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [ showError, setShowError ] = useState(false);
 
     const handleLogin = async () => {
-        await login(username, password);
-        onClose();
+        const successfullLogin: boolean = await login(username, password);
+        if (!successfullLogin) {
+            setShowError(true);
+            return;
+        }
+        handleClose();
     }
+
+    const handleClose = () => {
+        setUsername('');
+        setPassword('');
+        setShowError(false);
+        onClose();
+    };
 
     return (
         <PopupWindow 
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={handleClose}
             onAccept={handleLogin}
             title="Logga in"
             buttonText="Logga in"
@@ -50,6 +62,8 @@ export const LoginPopup: React.FC<LoginPopupProps> = ({ isOpen, onClose }) => {
                         required
                     />
                 </div>
+
+                {showError && <p className="error-message">Felaktigt användarnamn eller lösenord</p>}
         </PopupWindow>
     );
 };

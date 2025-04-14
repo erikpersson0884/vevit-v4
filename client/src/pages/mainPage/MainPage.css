@@ -1,4 +1,10 @@
 
+.main-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .main-page .filter-container {
     display: flex;
     justify-content: space-between;
