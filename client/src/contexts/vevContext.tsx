@@ -19,6 +19,9 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const fetchVevs = async () => {
         try {
             const data: IVev[] = await fetchVevApiCall();
+            data.forEach(vev => {
+                vev.date = new Date(vev.date);
+            });
             setVevs(data);
             
         } catch (error) {

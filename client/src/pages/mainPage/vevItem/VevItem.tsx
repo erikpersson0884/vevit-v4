@@ -5,9 +5,10 @@ import { useUsersContext } from '../../../contexts/usersContext';
 
 interface vevItemProps {
     vev: IVev;
+    className?: string;
 }
 
-const VevItem: React.FC<vevItemProps> = ({vev}) => {
+const VevItem: React.FC<vevItemProps> = ({vev, className}) => {
     const { getUserById } = useUsersContext();
 
     try {
@@ -15,7 +16,7 @@ const VevItem: React.FC<vevItemProps> = ({vev}) => {
         const challenged = getUserById(vev.challengedId);
 
         return (
-            <li className='vev-item'>
+            <li className={`vev-item ${className}`}>
                 <p>{challenger.username}</p>
                 <p>{challenged.username}</p>
                 <p>{new Date(vev.date).toLocaleString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(' ', ' ')}</p>

@@ -17,3 +17,7 @@
     padding: .7rem;
 
 }
+
+.colored {
+    background-color: rgba(0, 0, 0, 0.401);
+}

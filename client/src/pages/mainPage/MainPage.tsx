@@ -6,7 +6,7 @@ import { useAuthContext } from '../../contexts/authContext';
 
 import VevItem from './vevItem/VevItem';
 import UserFilter from '../../components/Filter/userFilter/UserFilter';
-import TimeFilter from '../../components/Filter/timeFilter/TimeFilter'; 
+import TimeFilter from '../../components/Filter/timeFilter/TimeFilter';
 
 import CreateVevPopup from '../../components/createVevPopup/CreateVevPopup';
 
@@ -44,8 +44,12 @@ const MainPage: React.FC = () => {
                     
                     <hr />
 
-                    {filteredVevs.map((vev) => (
-                        <VevItem key={vev.id} vev={vev} />
+                    {filteredVevs.map((vev, index) => (
+                        <VevItem 
+                            key={vev.id} 
+                            vev={vev} 
+                            className={index % 2 === 0 ? 'colored' : ''}
+                        />
                     ))} 
                 </ul>
             )}

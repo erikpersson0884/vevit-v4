@@ -64,7 +64,12 @@ const ProfilePopup: React.FC<ProfilePopupProps> = ({ isOpen, onClose }) => {
 
             <div className='input-container'>
                 <label htmlFor="password">Password:</label>
-                <input type="password" id="password" value={password} readOnly />
+                <input 
+                    type="password" 
+                    id="password" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)}
+                />
             </div>
 
             { errorText && <p className='error-message'>{errorText}</p> }
