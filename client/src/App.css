@@ -8,6 +8,9 @@
     font-family: Inter;
     font-size: 18px;
 
+    display: flex;
+    flex-direction: column;
+
     box-sizing: border-box;
     min-height: 100vh;
     padding: .3rem;
