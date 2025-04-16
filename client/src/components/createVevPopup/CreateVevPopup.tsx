@@ -65,16 +65,16 @@ const CreateVevPopup: React.FC<CreateVevPopupProps> = ({isOpen, onClose}) => {
     return (
         <PopupWindow
             title="Skapa vev"
-            buttonText="Create"
+            buttonText="Boka"
             isOpen={isOpen}
             onClose={handleClose}
             onAccept={handleSubmit}
             className="create-vev-popup"
         >
             <div className="input-container">
-                <label htmlFor="pickChallanged">Utmanare</label>
+                <label htmlFor="pickChallanged">Utmana</label>
                 <select id="pickChallanged" name="pickChallanged" onChange={handleUserChange} value={selectedUser}>
-                        <option value="" disabled>Select a user</option>
+                        <option value="" disabled>Person att utmana</option>
                         {users.map((user) => (
                             <option key={user.id} value={user.id}>
                                 {user.username}

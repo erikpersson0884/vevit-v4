@@ -47,3 +47,7 @@ input, select {
     padding: .4rem 1rem;
     border-radius: .3rem;
 }
+
+option {
+    background-color: #363636;
+}

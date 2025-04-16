@@ -1,0 +1,33 @@
+
+.page-footer {
+    text-align: center;
+}
+
+.page-footer a {
+    color: var(--primary-color);
+
+    text-decoration: none;
+}
+
+.page-footer a {
+    text-decoration: none;
+    position: relative;
+}
+
+.page-footer a::after {
+    background-color: var(--primary-color); 
+
+    content: '';
+    
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+
+    transition: width 0.3s ease;
+}
+
+.page-footer a:hover::after {
+    width: 100%;
+}
