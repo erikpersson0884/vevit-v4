@@ -1,23 +1,22 @@
-// userController.ts
 import { Request, Response } from "express";
-import { UserService } from "../services/userService";
+import { createUserService } from "../services/userService";
 import { IUserController } from "../models/controllers/IUserController";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
 import { IUser } from "../models/IUser";
-import { UserResponseSchema } from '../models/dtos/UserDTOs';
+import { UserResponseSchema, UserResponseArraySchema } from '../models/dtos/UserDTOs';
 import { sendValidatedResponse } from "../middleware/validateResponseMiddleware";
 
-const userService = new UserService();
+const userService = createUserService();
 
 export const createUserController = (service = userService): IUserController => ({
     getAllUsers: async (req: Request, res: Response) => {
-        const users = await service.getAllUsers();
-        sendValidatedResponse(res, UserResponseSchema, users);
+        const users: IUser[] = await service.getAllUsers();
+        sendValidatedResponse(res, UserResponseArraySchema, users);
     },
 
     getUserById: async (req: Request, res: Response) => {
         const userId: string = req.params.id;
-        const user = await service.getUserById(userId);
+        const user: IUser | null = await service.getUserById(userId);
         if (user) {
             sendValidatedResponse(res, UserResponseSchema, user);
         }
@@ -25,7 +24,7 @@ export const createUserController = (service = userService): IUserController => 
     },
 
     getCurrentUser: (req: AuthenticatedRequest, res: Response) => {
-        const user = req.user;
+        const user: IUser = req.user;
         if (user) sendValidatedResponse(res, UserResponseSchema, user);
     },
 
@@ -35,10 +34,10 @@ export const createUserController = (service = userService): IUserController => 
         sendValidatedResponse(res, UserResponseSchema, user);
     },
 
-    updateUser: (req: AuthenticatedRequest, res: Response) => {
+    updateUser: async (req: AuthenticatedRequest, res: Response) => {
         const user: IUser = req.user;
-        const { username, password } = req.body;
-        const updatedUser = service.updateUser(user.id, username, password);
+        const { username, password }: {username: string, password: string} = req.body;
+        const updatedUser: IUser = await service.updateUser(user.id, username, password);
         if (updatedUser) sendValidatedResponse(res, UserResponseSchema, updatedUser);
         else res.status(404).json({ error: `User with id ${user.id} not found` });
     },

@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
+import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
 
-import { IVevService } from "../models/services/IVevService";
-import { createVevController } from "../controllers/vevController";
-import { IVev } from "../models/IVev";
+import { IVevService } from "../../models/services/IVevService";
+import { createVevController } from "../../controllers/vevController";
+import { IVev } from "../../models/IVev";
 
 const mockService: IVevService = {
     getAllVevs: jest.fn(),
@@ -35,7 +36,14 @@ describe("Vev Controller", () => {
     it("should get all vevs", async () => {
         const req = {} as Request;
         const res = mockRes();
-        const mockVevs: IVev[] = [{id: "1", challengerId: "challenger1", challengedId: "challenged1", date: new Date(), bookedDate: new Date()}];
+        const mockVevs: IVev[] = [{
+            id: "1", 
+            challengerId: "challenger1", 
+            challengedId: "challenged1", 
+            date: new Date(), 
+            bookedDate: new Date(),
+            reason: "Test reason"
+        }];
 
         (mockService.getAllVevs as jest.Mock).mockResolvedValue(mockVevs);
 
@@ -53,13 +61,22 @@ describe("Vev Controller", () => {
                 challengedId: "challenged1",
                 date: new Date(),
             },
-        } as Request;
+            user: { id: "mockUserId" }, // Mock user property
+        } as AuthenticatedRequest;
         const res = mockRes();
-        const mockVev: IVev = {id: "1", challengerId: "challenger1", challengedId: "challenged1", date: new Date(), bookedDate: new Date()};
+
+        const mockVev: IVev = {
+            id: "1",
+            challengerId: "challenger1",
+            challengedId: "challenged1",
+            date: new Date(),
+            bookedDate: new Date(),
+            reason: "Test reason",
+        };
 
         (mockService.createVev as jest.Mock).mockResolvedValue(mockVev);
 
-        await createVev(req, res);
+        createVev(req, res);
 
         expect(mockService.createVev).toHaveBeenCalledWith(req.body.challengerId, req.body.challengedId, req.body.date);        
         expect(res.status).toHaveBeenCalledWith(201);
@@ -73,12 +90,12 @@ describe("Vev Controller", () => {
                 challengedId: "challenged1",
                 date: new Date(),
             },
-        } as Request;
+        } as AuthenticatedRequest;
         const res = mockRes();
 
         (mockService.createVev as jest.Mock).mockRejectedValue(new Error("Service error"));
 
-        await createVev(req, res);
+        createVev(req, res);
 
         expect(mockService.createVev).toHaveBeenCalledWith(req.body.challengerId, req.body.challengedId, req.body.date);        
         expect(res.status).toHaveBeenCalledWith(500);
@@ -86,13 +103,20 @@ describe("Vev Controller", () => {
     });
 
     it("should get a vev by ID", async () => {
-        const req = { params: { id: "1" } } as unknown as Request;
+        const req = { params: { id: "1" } } as unknown as AuthenticatedRequest;
         const res = mockRes();
-        const mockVev: IVev = {id: "1", challengerId: "challenger1", challengedId: "challenged1", date: new Date(), bookedDate: new Date()};
+        const mockVev: IVev = {
+            id: "1",
+            challengerId: "challenger1",
+            challengedId: "challenged1",
+            date: new Date(),
+            bookedDate: new Date(),
+            reason: "Test reason",
+        };
 
         (mockService.getVevById as jest.Mock).mockResolvedValue(mockVev);
 
-        await getVevById(req, res);
+        getVevById(req, res);
 
         expect(mockService.getVevById).toHaveBeenCalledWith(req.params.id);
         expect(res.status).toHaveBeenCalledWith(200);
@@ -120,9 +144,9 @@ describe("Vev Controller", () => {
                 challengedId: "challenged1",
                 date: new Date(),
             },
-        } as unknown as Request;
+        } as unknown as AuthenticatedRequest;
         const res = mockRes();
-        const mockVev: IVev = {id: "1", challengerId: "challenger1", challengedId: "challenged1", date: new Date(), bookedDate: new Date()};
+        const mockVev: IVev = {id: "1", challengerId: "challenger1", challengedId: "challenged1", date: new Date(), bookedDate: new Date(), reason: "Test reason"};
 
         (mockService.updateVev as jest.Mock).mockResolvedValue(mockVev);
 
@@ -141,12 +165,12 @@ describe("Vev Controller", () => {
                 challengedId: "challenged1",
                 date: new Date(),
             },
-        } as unknown as Request;
+        } as unknown as AuthenticatedRequest;
         const res = mockRes();
 
         (mockService.updateVev as jest.Mock).mockResolvedValue(null);
 
-        await updateVev(req, res);
+        updateVev(req, res);
 
         expect(mockService.updateVev).toHaveBeenCalledWith(req.params.id, req.body.challengerId, req.body.challengedId, req.body.date);        
         expect(res.status).toHaveBeenCalledWith(404);
@@ -154,9 +178,9 @@ describe("Vev Controller", () => {
     });
 
     it("should delete a vev", async () => {
-        const req = { params: { id: "1" } } as unknown as Request;
+        const req = { params: { id: "1" } } as unknown as AuthenticatedRequest;
         const res = mockRes();
-        const mockVev: IVev = {id: "1", challengerId: "challenger1", challengedId: "challenged1", date: new Date(), bookedDate: new Date()};
+        const mockVev: IVev = {id: "1", challengerId: "challenger1", challengedId: "challenged1", date: new Date(), bookedDate: new Date(), reason: "Test reason"};
 
         (mockService.deleteVev as jest.Mock).mockResolvedValue(mockVev);
 
@@ -169,7 +193,7 @@ describe("Vev Controller", () => {
 
     it("should return a 404 if vev not found for delete", async () => {
         const vevId = 3;
-        const req = { params: { id: vevId } } as unknown as Request;
+        const req = { params: { id: vevId } } as unknown as AuthenticatedRequest;
         const res = mockRes();
 
         (mockService.deleteVev as jest.Mock).mockResolvedValue(null);
@@ -181,7 +205,7 @@ describe("Vev Controller", () => {
     });
     
     it("should return 500 if delete service fails", async () => {
-        const req = { params: { id: "1" } } as unknown as Request;
+        const req = { params: { id: "1" } } as unknown as AuthenticatedRequest;
         const res = mockRes();
 
         (mockService.deleteVev as jest.Mock).mockRejectedValue(new Error("Service error"));

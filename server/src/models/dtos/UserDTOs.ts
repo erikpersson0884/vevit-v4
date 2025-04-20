@@ -29,7 +29,7 @@ export type CreateUserDTO = z.infer<typeof CreateUserSchema>;
 export const UserResponseSchema = z.object({
     id: z.string(),
     username: z.string(),
-    createdAt: z.date(), 
+    createdAt: z.date(),
     updatedAt: z.date(),
 });
 

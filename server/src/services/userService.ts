@@ -1,33 +1,40 @@
+import { PrismaClient } from "@prisma/client"; 
+import prisma from "../lib/prisma";
 import { IUser } from '../models/IUser';
 import { IUserService } from '../models/services/IUserService';
-import prisma from "../lib/prisma";
 import { UserNotFoundError } from '../errors/UserNotFoundError';
 import { UserAlreadyExistsError } from '../errors/UserAlreadyExistsError';
 
-
 export class UserService implements IUserService {
+    private prisma: PrismaClient;
+
+    constructor(prismaClient: PrismaClient) {
+        this.prisma = prismaClient;
+    }
 
     public async checkIfUserExists(username: string): Promise<boolean> {
-        let userExists = await prisma.user.findFirst({
+        let userExists = await this.prisma.user.findFirst({
             where: { username: username },
         })
+
+        console.log(userExists);
         return userExists !== null;
     }
 
     async getAllUsers(): Promise<IUser[]> {
-        const users: IUser[] = await prisma.user.findMany();
+        const users: IUser[] = await this.prisma.user.findMany();
         return users;
     }
 
     async getUserById(userId: string): Promise<IUser | null> {
-        const user: IUser | null = await prisma.user.findUnique({
+        const user: IUser | null = await this.prisma.user.findUnique({
             where: { id: userId },
         });
         return user;
     }
 
     async getUserByUsername(username: string): Promise<IUser | null> {
-        const user = await prisma.user.findUnique({
+        const user = await this.prisma.user.findUnique({
             where: { username: username },
         });
         return user;
@@ -37,13 +44,12 @@ export class UserService implements IUserService {
         if (await this.checkIfUserExists(username)) {
             throw new UserAlreadyExistsError(`User with username ${username} already exists`);
         }
-        const user: IUser = await prisma.user.create({
+        const user: IUser = await this.prisma.user.create({
             data: {
                 username,
                 password,
             },
         });
-    
         return user;
     }
 
@@ -55,7 +61,7 @@ export class UserService implements IUserService {
             user.password = newPassword || user.password;
             user.updatedAt = new Date();
 
-            return prisma.user.update({
+            return this.prisma.user.update({
                 where: { id },
                 data: {
                     username: user.username,
@@ -70,7 +76,7 @@ export class UserService implements IUserService {
         if (await this.checkIfUserExists(userId)) {
             const user: IUser | null = await this.getUserById(userId);
             if (user) {
-                return prisma.user.delete({
+                return this.prisma.user.delete({
                     where: { id: userId },
                 });
             } else throw new UserNotFoundError(`User with id ${userId} not found`);
@@ -79,6 +85,6 @@ export class UserService implements IUserService {
     }
 }
 
-export const createUserService = () => {
-    return new UserService();
+export const createUserService = (prismaClient: PrismaClient = prisma): UserService => {
+    return new UserService(prismaClient);
 }
