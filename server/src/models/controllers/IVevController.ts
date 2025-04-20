@@ -6,6 +6,7 @@ export interface IVevController {
     createVev: (req: AuthenticatedRequest, res: Response) => void;
     getVevById: (req: Request, res: Response) => void;
     updateVev: (req: AuthenticatedRequest, res: Response) => void;
+    setVevWinner: (req: AuthenticatedRequest, res: Response) => void;
     deleteVev: (req: AuthenticatedRequest, res: Response) => void;
 }
 

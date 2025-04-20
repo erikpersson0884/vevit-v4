@@ -16,9 +16,11 @@ model Vev {
     date          DateTime
     bookedDate    DateTime
     reason        String
+    winnerId      String?
 
     challenger    User     @relation("challenger", fields: [challengerId], references: [id])
     challenged    User     @relation("Challenged", fields: [challengedId], references: [id])
+    winner        User?    @relation("winner", fields: [winnerId], references: [id])
 }
 
 model User {
@@ -30,4 +32,5 @@ model User {
 
     vevsChallenged Vev[] @relation("challenger")
     vevsChallengedBy Vev[] @relation("Challenged")
+    vevsWon        Vev[] @relation("winner")
 }

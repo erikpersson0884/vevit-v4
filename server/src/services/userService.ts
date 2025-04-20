@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client"; 
-import prisma from "../lib/prisma";
+import prismaClient from "../lib/prisma";
 import { IUser } from '../models/IUser';
 import { IUserService } from '../models/services/IUserService';
 import { UserNotFoundError } from '../errors/UserNotFoundError';
@@ -85,6 +85,6 @@ export class UserService implements IUserService {
     }
 }
 
-export const createUserService = (prismaClient: PrismaClient = prisma): UserService => {
-    return new UserService(prismaClient);
+export const createUserService = (prisma: PrismaClient = prismaClient): IUserService => {
+    return new UserService(prisma);
 }

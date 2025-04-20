@@ -37,7 +37,7 @@ export const createUserController = (service = userService): IUserController => 
     updateUser: async (req: AuthenticatedRequest, res: Response) => {
         const user: IUser = req.user;
         const { username, password }: {username: string, password: string} = req.body;
-        const updatedUser: IUser = await service.updateUser(user.id, username, password);
+        const updatedUser: IUser | null = await service.updateUser(user.id, username, password);
         if (updatedUser) sendValidatedResponse(res, UserResponseSchema, updatedUser);
         else res.status(404).json({ error: `User with id ${user.id} not found` });
     },
