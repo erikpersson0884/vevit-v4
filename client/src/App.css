@@ -37,3 +37,14 @@
 .changed-input {
     border: 1px solid orange
 }
+
+.close-button {
+    background-color: var(--secondary-background-color);
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    border: none;
+    border-radius: 0;
+}
