@@ -8,6 +8,7 @@ import { UserNotFoundError } from '../errors/UserNotFoundError';
 import { NotAllowedToUpdateError } from '../errors/NotAllowedToUpdateError';
 import { IVevService } from '../models/services/IVevService';
 import { VevNotFoundError } from '../errors/VevNotFoundError';
+import { UpdateFailedError } from '../errors/UpdateFailedError';
 
 
 export class VevService implements IVevService {
@@ -61,18 +62,20 @@ export class VevService implements IVevService {
 
     public async updateVev(
         id: string, 
-        challengerId: string, 
-        challengedId: string, 
-        date: Date
-    ): Promise<IVev | null> {
+        date?: Date,
+        winnerId?: string,
+        reason?: string
+    ): Promise<IVev | null> 
+    {
         const updatedVev = await this.prisma.vev.update({
             where: { id },
             data: {
-                challengerId,
-                challengedId,
-                date
+                date,
+                winnerId,
+                reason
             }
         });
+
         return updatedVev;
     }
 
@@ -98,7 +101,9 @@ export class VevService implements IVevService {
                 winnerId
             }
         });
-
+        if (updatedVev.winnerId !== winnerId) {
+            throw new UpdateFailedError(`Failed to update Vev with id ${id} to set winnerId to ${winnerId}`);
+        }
         return updatedVev;
     }
 

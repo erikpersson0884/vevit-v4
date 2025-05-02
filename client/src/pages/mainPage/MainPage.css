@@ -13,11 +13,14 @@
 }
 
 .filter-container button {
-    height: 100%;
-    padding: .7rem;
-
+    padding: .5rem;
 }
 
-.colored {
+.colored-1 {
     background-color: rgba(0, 0, 0, 0.401);
+}
+
+.colored-2 {
+    background-color: rgba(189, 189, 189, 0.601);
+    color: #000;
 }

@@ -6,12 +6,14 @@ declare global {
         challengedId: string;
         date: Date;
         reason: string;
+        winner: string | null;
     }
 
     interface IUser {
         id: string;
         username: string;
-        password: string;
+        createdAt: Date;
+        updatedAt: Date;
     }
 
     interface IFilterOption<T> {

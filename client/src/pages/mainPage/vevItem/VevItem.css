@@ -1,12 +1,48 @@
+
 .vev-item {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    gap: 1rem;
 
-    padding: .5rem .5rem;
+    padding: 1rem .5rem;
 }
 
-.vev-item p {
+.vev-item .username {
+    text-transform: capitalize;
+}
+
+.vev-item-preview {
+    flex-direction: row;
+}
+.vev-item-preview p {
     flex: 1;
 }
+
+.vev-item-detailed {
+    flex-direction: column;
+
+    position: relative;
+}
+
+.vev-item-detailed p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    width: 100%;
+}
+
+.vev-item-detailed p span {
+    flex: 1;
+}
+
+/* .vev-item-detailed .vev-item-edit {
+    position: absolute;
+
+    top: 1rem;
+    right: 1rem;
+
+    aspect-ratio: 1/1;
+} */

@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { fetchVevs as fetchVevApiCall, createVev as createVevApiCall } from '../api/vevApi';
-import { useUsersContext } from './usersContext';
+import vevApi from '../api/vevApi';
 
 interface VevContextProps {
     vevs: IVev[];
@@ -8,6 +7,12 @@ interface VevContextProps {
     filteredVevs: IVev[];
     setFilteredVevs: React.Dispatch<React.SetStateAction<IVev[]>>;
     createVev: (challangedId: string, date: string, reason: string) => Promise<boolean>;
+    updateVev: (vevId: string, date: Date, winnerId: string | null, reason: string | null) => Promise<boolean>;
+    updateVevWinner: (vevId: string, winnerId: string | null) => Promise<boolean>;
+    deleteVev: (vevId: string) => Promise<boolean>;
+
+    selectedVevToUpdate: IVev | null;
+    setSelectedVevToUpdate: React.Dispatch<React.SetStateAction<IVev | null>>;
 }
 
 const VevContext = createContext<VevContextProps | undefined>(undefined);
@@ -15,10 +20,11 @@ const VevContext = createContext<VevContextProps | undefined>(undefined);
 export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [vevs, setVevs] = useState<IVev[]>([]);
     const [filteredVevs, setFilteredVevs] = useState<IVev[]>([]);
+    const [ selectedVevToUpdate, setSelectedVevToUpdate ] = useState<IVev | null>(null);
 
     const fetchVevs = async () => {
         try {
-            const data: IVev[] = await fetchVevApiCall();
+            const data: IVev[] = await vevApi.fetchVevs();
             data.forEach(vev => {
                 vev.date = new Date(vev.date);
             });
@@ -37,13 +43,62 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setFilteredVevs(vevs);
     }, [vevs]);
 
+    const getVevById = (id: string): IVev | undefined => {
+        return vevs.find(vev => vev.id == id)
+    }
+
     const createVev = async (challangedId: string, date: string, reason: string): Promise<boolean> => {
         try {
-            await createVevApiCall(challangedId, date, reason)
+            await vevApi.createVev(challangedId, date, reason)
             fetchVevs();
             return true;
         } catch (error) {
             console.error('Error creating VEV:', error);
+            return false;
+        }
+    };
+
+    const updateVev = async (
+        vevId: string, 
+        date: Date, 
+        winnerId: string | null, 
+        reason: string | null
+    ) => {
+        try {
+            const vevToUpdate = getVevById(vevId);
+            if (!vevToUpdate) throw new Error("Tried to update a vev that did not exist")
+            
+            const success = await vevApi.updateVev(vevId, date, winnerId, reason);
+            fetchVevs();
+            return success;
+        }
+        catch (error) {
+            console.error('Error updating VEV:', error);
+            return false;
+        }
+    };
+
+    const updateVevWinner = async (
+        vevId: string,
+        winnerId: string | null
+    ) => {
+        try {
+            const successfull = await vevApi.updateWinner(vevId, winnerId)
+            return successfull
+        }
+        catch (error) {
+            console.error('Error updating vev winner', error)
+            return false;
+        }
+    }
+
+    const deleteVev = async (vevId: string) => {
+        try {
+            const success = await vevApi.deleteVev(vevId);
+            fetchVevs();
+            return success;
+        } catch (error) {
+            console.error('Error deleting VEV:', error);
             return false;
         }
     };
@@ -55,7 +110,12 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             setVevs, 
             filteredVevs, 
             setFilteredVevs,
-            createVev
+            createVev,
+            updateVev,
+            updateVevWinner,
+            deleteVev,
+            selectedVevToUpdate,
+            setSelectedVevToUpdate
         }}>
             {children}
         </VevContext.Provider>

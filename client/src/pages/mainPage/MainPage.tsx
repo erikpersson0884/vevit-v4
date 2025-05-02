@@ -26,7 +26,9 @@ const MainPage: React.FC = () => {
                     <button 
                         className='create-vev-button' 
                         onClick={() => setShowCreateVevPopup(true)}
-                    >Skapa vev</button>
+                    >
+                        Skapa vev
+                    </button>
                 )}
             </div>
             
@@ -48,7 +50,7 @@ const MainPage: React.FC = () => {
                         <VevItem 
                             key={vev.id} 
                             vev={vev} 
-                            className={index % 2 === 0 ? 'colored' : ''}
+                            className={index % 2 === 0 ? 'colored-1' : 'colored-2'}
                         />
                     ))} 
                 </ul>

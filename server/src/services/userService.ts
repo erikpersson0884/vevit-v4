@@ -16,8 +16,6 @@ export class UserService implements IUserService {
         let userExists = await this.prisma.user.findFirst({
             where: { username: username },
         })
-
-        console.log(userExists);
         return userExists !== null;
     }
 

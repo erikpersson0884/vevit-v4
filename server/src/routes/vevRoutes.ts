@@ -19,6 +19,7 @@ router.patch("/:id", authMiddleware, (req, res) => {
     const authenticatedReq = req as AuthenticatedRequest; // Explicitly cast req
     vevController.updateVev(authenticatedReq, res);
 });
+
 router.patch("/winner/:id", authMiddleware, (req, res) => {
     const authenticatedReq = req as AuthenticatedRequest; // Explicitly cast req
     vevController.setVevWinner(authenticatedReq, res);

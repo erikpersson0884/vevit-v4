@@ -99,8 +99,9 @@ const AuthPopup: React.FC = () => {
                 buttonText="Logga ut"
                 className="auth-popup"
             >
-                <p>{`Inloggad som ${currentUser.username}`}</p>
-                {/* <p>Vill du uppdatera dina uppgifter?</p> */}
+                <p>{`Inloggad som: ${currentUser.username}`}</p>
+                <p>{`Skapad: ${new Date(currentUser.createdAt).toLocaleDateString('sv-SE', { year: 'numeric', month: 'long', day: 'numeric' })}`}</p>
+
                 <p className="link" onClick={() => setPopupType(PopupType.UPDATE)}>Uppdatera uppgifter</p>
             </PopupWindow>
         );

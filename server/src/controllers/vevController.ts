@@ -39,8 +39,8 @@ export const createVevController = (service = vevService): IVevController => ({
 
     updateVev: async (req: AuthenticatedRequest, res: Response): Promise<void> => {
         const { id } = req.params;
-        const { challengerId, challengedId, date } = req.body;
-        const vev = await service.updateVev(id, challengerId, challengedId, date);
+        const { date, winnerId, reason }: {date?: Date, winnerId?: string, reason?: string} = req.body;
+        const vev = await service.updateVev(id, date, winnerId, reason);
         if (!vev) {
             res.status(404).json({ error: "Vev not found" });
             return;
