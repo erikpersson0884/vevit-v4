@@ -1,5 +1,5 @@
 import { ZodSchema } from 'zod';
-import { Request, Response, NextFunction, RequestHandler } from 'express';
+import { RequestHandler } from 'express';
 
 export const validateRequest = (schema: ZodSchema): RequestHandler => {
     return (req, res, next) => {
@@ -13,4 +13,3 @@ export const validateRequest = (schema: ZodSchema): RequestHandler => {
         next();
     };
 };
-

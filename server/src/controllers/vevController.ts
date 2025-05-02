@@ -50,7 +50,7 @@ export const createVevController = (service = vevService): IVevController => ({
 
     setVevWinner: async (req: AuthenticatedRequest, res: Response): Promise<void> => {
         const { id } = req.params;
-        const { winnerId } = req.body;
+        const { winnerId }: { winnerId: string} = req.body;
 
         if (!service.checkIfUserInVev(req.user.id, id)) {
             throw new NotAllowedToUpdateError(`User with id ${winnerId} is not part of the Vev with id ${id} and therefore cannot set a winner`);

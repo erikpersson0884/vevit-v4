@@ -35,10 +35,20 @@ export class VevService implements IVevService {
     }
 
 
-    public async createVev(challengerId: string, challengedId: string, date: Date, reason: string): Promise<IVev> {
-        if (!this.userService.checkIfUserExists(challengerId) || !this.userService.checkIfUserExists(challengedId)) {
+    public async createVev(
+        challengerId: string, 
+        challengedId: string, 
+        date: Date, 
+        reason: string
+    ): Promise<IVev> {
+
+        if (
+            !this.userService.checkIfUserExists(challengerId) || 
+            !this.userService.checkIfUserExists(challengedId)
+        ) {
             throw new UserNotFoundError("Tried to create vev with non-existing user id, " + challengerId + " or " + challengedId);
         }
+
         const bookedDate = new Date();
 
         const newVev = await this.prisma.vev.create({
@@ -79,7 +89,7 @@ export class VevService implements IVevService {
         return updatedVev;
     }
 
-    public async setVevWinner(id: string, winnerId: string): Promise<IVev | null> {
+    public async setVevWinner(id: string, winnerId: string | null): Promise<IVev | null> {
         const vev = await this.getVevById(id);
         if (!vev) {
             throw new VevNotFoundError(`Vev with id ${id} not found`);
@@ -87,11 +97,13 @@ export class VevService implements IVevService {
         if (vev.date > new Date()) {
             throw new NotAllowedToUpdateError(`Vev with id ${id} is in the future and cannot have a winner yet`);
         }
-        if (!this.userService.checkIfUserExists(winnerId)) {
-            throw new UserNotFoundError(`User with id ${winnerId} not found`);
-        }
-        if (!this.checkIfUserInVev(winnerId, id)) {
-            throw new NotAllowedToUpdateError(`User with id ${winnerId} is not part of the Vev with id ${id} and therefore cannot be set as winner`);
+        if (winnerId !== null){ // if winnerId is null, we don't need to check if the user exists or if they are in the Vev
+            if (!this.userService.checkIfUserExists(winnerId)) {
+                throw new UserNotFoundError(`User with id ${winnerId} not found`);
+            }
+            if (!this.checkIfUserInVev(winnerId, id)) {
+                throw new NotAllowedToUpdateError(`User with id ${winnerId} is not part of the Vev with id ${id} and therefore cannot be set as winner`);
+            }
         }
 
 
