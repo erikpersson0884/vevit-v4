@@ -66,7 +66,7 @@ export const vevApi = {
                 winnerId
             }
             const response = await api.patch(`/vev/winner/${vevId}`, body);
-            return response.data.success;
+            return response.data;
         } catch (error) {
             console.error(`Error updating vev with id ${vevId}:`, error);
             throw error;

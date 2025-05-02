@@ -6,7 +6,7 @@ declare global {
         challengedId: string;
         date: Date;
         reason: string;
-        winner: string | null;
+        winnerId: string | null;
     }
 
     interface IUser {

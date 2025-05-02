@@ -63,7 +63,9 @@ const VevItem: React.FC<vevItemProps> = ({vev, className}) => {
                         <>
                             <p>
                                 <span>Vinnare:</span>
-                                <span className={` ${vev.winner ? "username" : ""}`}>{vev.winner ? vev.winner : "---"}</span>
+                                <span className={` ${vev.winnerId ? "username" : ""}`}>
+                                    {vev.winnerId ? getUserById(vev.winnerId).username : "---"}
+                                </span>
                             </p>
                             <button 
                                 className='vev-item-button' 
@@ -77,8 +79,8 @@ const VevItem: React.FC<vevItemProps> = ({vev, className}) => {
         )}
         else return (
             <li className={`vev-item vev-item-preview ${className}`} onClick={toggleExpanded}>
-                <p>{challenger.username}</p>
-                <p>{challenged.username}</p>
+                <p className='username'>{challenger.username}</p>
+                <p className='username'>{challenged.username}</p>
                 <p>{new Date(vev.date).toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' })}</p>
             </li>
         );

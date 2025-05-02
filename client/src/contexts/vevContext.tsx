@@ -83,8 +83,8 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         winnerId: string | null
     ) => {
         try {
-            const successfull = await vevApi.updateWinner(vevId, winnerId)
-            return successfull
+            await vevApi.updateWinner(vevId, winnerId)
+            return true;
         }
         catch (error) {
             console.error('Error updating vev winner', error)

@@ -8,12 +8,12 @@ const UpdateVevPopup = () => {
     const { updateVevWinner, selectedVevToUpdate, setSelectedVevToUpdate } = useVevContext();
     const { getUserById } = useUsersContext();
 
-    const [ winnerId, setWinnerId ] = useState<string |null>(null);
+    const [ winnerId, setWinnerId ] = useState<string>("");
     const [ errorText, setErrorText ] = useState<string | null>(null);
 
     useEffect(() => {
         if (selectedVevToUpdate) {
-            setWinnerId(selectedVevToUpdate.winner || null);
+            setWinnerId(selectedVevToUpdate.winnerId || "");
 
             console.log("selectedVevToUpdate", selectedVevToUpdate.date);
         } 
@@ -22,13 +22,23 @@ const UpdateVevPopup = () => {
 
     const handleUpdate = async () => {
         if (selectedVevToUpdate) {
-            const success = await updateVevWinner(selectedVevToUpdate.id, winnerId)
-            setSelectedVevToUpdate(null); 
+            const success = await updateVevWinner(
+                selectedVevToUpdate.id, 
+                (winnerId !== "" ? winnerId : null)
+            )
+
+            if (success) {
+                selectedVevToUpdate.winnerId = winnerId;
+                handleClose()
+            }
+            
+            else setErrorText("Det gick inte att uppdatera vinnaren")
         }
     };
 
     const handleClose = () => {
         setSelectedVevToUpdate(null);
+        setErrorText(null)
     }
 
     if (!selectedVevToUpdate) return null;
@@ -43,7 +53,7 @@ const UpdateVevPopup = () => {
             <div>
                 <label htmlFor="winner-select">Vinnare</label>
                 <select
-                    value={winnerId || ""}
+                    value={winnerId}
                     onChange={(e) => setWinnerId(e.target.value)}
                     id="winner-select"
                 >
@@ -54,7 +64,7 @@ const UpdateVevPopup = () => {
             </div>
 
             {
-                errorText && <p className="error">{errorText}</p>
+                errorText && <p className="error-message">{errorText}</p>
             }
         </PopupWindow>
     );
