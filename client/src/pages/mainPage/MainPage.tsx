@@ -38,11 +38,11 @@ const MainPage: React.FC = () => {
             
             {filteredVevs.length > 0 && (
                 <ul className='vev-list no-ul-formatting'>
-                    <li className='vev-item'>
+                    <header>
                         <p>Utmanare</p>
                         <p>Utmanad</p>
                         <p>Datum</p>
-                    </li>
+                    </header>
                     
                     <hr />
 

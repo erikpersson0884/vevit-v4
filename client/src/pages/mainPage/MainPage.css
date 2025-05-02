@@ -16,6 +16,22 @@
     padding: .5rem;
 }
 
+.vev-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.vev-list header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.vev-list hr {
+    width: 100%;
+}
+
 .colored-1 {
     background-color: rgba(0, 0, 0, 0.401);
 }

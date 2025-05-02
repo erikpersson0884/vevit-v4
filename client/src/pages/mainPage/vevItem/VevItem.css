@@ -1,11 +1,31 @@
 
 .vev-item {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
+    flex-direction: column;
 
-    padding: 1rem .5rem;
+    cursor: pointer;
+}
+
+.vev-item-preview {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    box-sizing: border-box;
+    padding: .5rem 1rem;
+}
+
+.vev-item-detailed {
+    height: 0;
+    padding-inline: 1rem;
+
+    overflow: hidden;
+    transition: all 1s ease-in-out;
+}
+
+.expanded-vev-item {
+    height: max-content;
+    overflow: visible;
 }
 
 .vev-item .username {
@@ -46,3 +66,4 @@
 
     aspect-ratio: 1/1;
 } */
+
