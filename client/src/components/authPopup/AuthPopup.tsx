@@ -1,6 +1,6 @@
 import { useAuthContext } from "../../contexts/authContext";
 import { useState, useEffect } from "react";
-import PopupWindow from "../popupWindow/PopupWindow";
+import ActionPopupWindow from "../actionPopupWindow/actionPopupWindow";
 import { useUsersContext } from "../../contexts/usersContext";
 import './AuthPopup.css';
 
@@ -49,7 +49,7 @@ const AuthPopup: React.FC = () => {
     
     const handleUpdate = async () => {
         if (!currentUser) return;
-        if (currentUser.username == username && currentUser.password == password) {
+        if (currentUser.username == username && password !== '') {
             setErrorText('Inga ändringar gjorda');
             return;
         }
@@ -91,25 +91,25 @@ const AuthPopup: React.FC = () => {
 
     if (popupType === PopupType.PROFILE && currentUser) {
         return (
-            <PopupWindow 
+            <ActionPopupWindow 
                 isOpen={showAuthPopup}
                 onClose={handleClose}
                 onAccept={handleAccept}
                 title="Konto"
-                buttonText="Logga ut"
+                acceptButtonText="Logga ut"
                 className="auth-popup"
             >
                 <p>{`Inloggad som: ${currentUser.username}`}</p>
                 <p>{`Skapad: ${new Date(currentUser.createdAt).toLocaleDateString('sv-SE', { year: 'numeric', month: 'long', day: 'numeric' })}`}</p>
 
                 <p className="link" onClick={() => setPopupType(PopupType.UPDATE)}>Uppdatera uppgifter</p>
-            </PopupWindow>
+            </ActionPopupWindow>
         );
     }
 
 
     return (
-        <PopupWindow 
+        <ActionPopupWindow 
             isOpen={showAuthPopup}
             onClose={handleClose}
             onAccept={handleAccept}
@@ -122,7 +122,7 @@ const AuthPopup: React.FC = () => {
                 ? "Uppdatera konto"
                 : "Konto"
             }
-            buttonText={
+            acceptButtonText={
             popupType === PopupType.LOGIN
                 ? "Logga in"
                 : popupType === PopupType.REGISTER
@@ -180,7 +180,7 @@ const AuthPopup: React.FC = () => {
             </p>
 
             {errorText && <p className="error-message">{errorText}</p>}
-        </PopupWindow>
+        </ActionPopupWindow>
     );
 }
 

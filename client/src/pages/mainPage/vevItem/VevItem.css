@@ -28,10 +28,6 @@
     overflow: visible;
 }
 
-.vev-item .username {
-    text-transform: capitalize;
-}
-
 .vev-item-preview {
     flex-direction: row;
 }

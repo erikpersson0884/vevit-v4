@@ -1,4 +1,4 @@
-import PopupWindow from "../popupWindow/PopupWindow";
+import ActionPopupWindow from "../actionPopupWindow/actionPopupWindow";
 import { useUsersContext } from "../../contexts/usersContext";
 import { useVevContext } from "../../contexts/vevContext";
 import { useState } from "react";
@@ -63,9 +63,9 @@ const CreateVevPopup: React.FC<CreateVevPopupProps> = ({isOpen, onClose}) => {
         
 
     return (
-        <PopupWindow
+        <ActionPopupWindow
             title="Skapa vev"
-            buttonText="Boka"
+            acceptButtonText="Boka"
             isOpen={isOpen}
             onClose={handleClose}
             onAccept={handleSubmit}
@@ -100,7 +100,7 @@ const CreateVevPopup: React.FC<CreateVevPopupProps> = ({isOpen, onClose}) => {
             </div>
 
             {errorText && <p className="error-message">{errorText}</p>}
-        </PopupWindow>
+        </ActionPopupWindow>
     );
 }
 

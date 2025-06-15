@@ -5,6 +5,7 @@ import Footer from './layout/footer/Footer'
 import MainPage from './pages/mainPage/MainPage'
 import AuthPopup from './components/authPopup/AuthPopup';
 import UpdateVevPopup from './components/updateVevPopup/UpdateVevPopup';
+import VevPopup from './components/vevPopup/VevPopup';
 
 function App() {
     return (
@@ -12,6 +13,7 @@ function App() {
             <Header />
             <AuthPopup />
             <UpdateVevPopup />
+            <VevPopup />
             <MainPage />
             <Footer />
         </>

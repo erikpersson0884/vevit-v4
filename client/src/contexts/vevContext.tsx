@@ -11,16 +11,16 @@ interface VevContextProps {
     updateVevWinner: (vevId: string, winnerId: string | null) => Promise<boolean>;
     deleteVev: (vevId: string) => Promise<boolean>;
 
-    selectedVevToUpdate: IVev | null;
-    setSelectedVevToUpdate: React.Dispatch<React.SetStateAction<IVev | null>>;
+    selectedVev: IVev | null;
+    setSelectedVev: React.Dispatch<React.SetStateAction<IVev | null>>;
 }
 
 const VevContext = createContext<VevContextProps | undefined>(undefined);
 
 export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [vevs, setVevs] = useState<IVev[]>([]);
-    const [filteredVevs, setFilteredVevs] = useState<IVev[]>([]);
-    const [ selectedVevToUpdate, setSelectedVevToUpdate ] = useState<IVev | null>(null);
+    const [ vevs, setVevs ] = useState<IVev[]>([]);
+    const [ filteredVevs, setFilteredVevs ] = useState<IVev[]>([]);
+    const [ selectedVev, setSelectedVev ] = useState<IVev | null>(null);
 
     const fetchVevs = async () => {
         try {
@@ -114,8 +114,8 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             updateVev,
             updateVevWinner,
             deleteVev,
-            selectedVevToUpdate,
-            setSelectedVevToUpdate
+            selectedVev,
+            setSelectedVev
         }}>
             {children}
         </VevContext.Provider>

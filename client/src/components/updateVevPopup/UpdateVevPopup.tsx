@@ -1,34 +1,34 @@
-import PopupWindow from "../popupWindow/PopupWindow";
+import ActionPopupWindow from "../actionPopupWindow/actionPopupWindow";
 import { useVevContext } from "../../contexts/vevContext";
 import { useUsersContext } from "../../contexts/usersContext";
 import { useState, useEffect } from "react";
 
 
 const UpdateVevPopup = () => {
-    const { updateVevWinner, selectedVevToUpdate, setSelectedVevToUpdate } = useVevContext();
+    const { updateVevWinner, selectedVev, setSelectedVev } = useVevContext();
     const { getUserById } = useUsersContext();
 
     const [ winnerId, setWinnerId ] = useState<string>("");
     const [ errorText, setErrorText ] = useState<string | null>(null);
 
     useEffect(() => {
-        if (selectedVevToUpdate) {
-            setWinnerId(selectedVevToUpdate.winnerId || "");
+        if (selectedVev) {
+            setWinnerId(selectedVev.winnerId || "");
 
-            console.log("selectedVevToUpdate", selectedVevToUpdate.date);
+            console.log("selectedVev", selectedVev.date);
         } 
-    }, [selectedVevToUpdate]);
+    }, [selectedVev]);
 
 
     const handleUpdate = async () => {
-        if (selectedVevToUpdate) {
+        if (selectedVev) {
             const success = await updateVevWinner(
-                selectedVevToUpdate.id, 
+                selectedVev.id, 
                 (winnerId !== "" ? winnerId : null)
             )
 
             if (success) {
-                selectedVevToUpdate.winnerId = winnerId;
+                selectedVev.winnerId = winnerId;
                 handleClose()
             }
             
@@ -37,18 +37,18 @@ const UpdateVevPopup = () => {
     };
 
     const handleClose = () => {
-        setSelectedVevToUpdate(null);
+        setSelectedVev(null);
         setErrorText(null)
     }
 
-    if (!selectedVevToUpdate) return null;
+    if (!selectedVev) return null;
     return (
-        <PopupWindow 
+        <ActionPopupWindow 
             onClose={() => handleClose()}
             onAccept={() => handleUpdate()}
             title="Uppdatera Vev"
-            isOpen={!!selectedVevToUpdate}
-            buttonText="Uppdatera"
+            isOpen={!!selectedVev}
+            acceptButtonText="Uppdatera"
         >
             <div>
                 <label htmlFor="winner-select">Vinnare</label>
@@ -58,15 +58,15 @@ const UpdateVevPopup = () => {
                     id="winner-select"
                 >
                     <option value="">Ingen</option>
-                    <option value={selectedVevToUpdate.challengerId}>{getUserById(selectedVevToUpdate.challengerId).username}</option>
-                    <option value={selectedVevToUpdate.challengedId}>{getUserById(selectedVevToUpdate.challengedId).username}</option>
+                    <option value={selectedVev.challengerId}>{getUserById(selectedVev.challengerId).username}</option>
+                    <option value={selectedVev.challengedId}>{getUserById(selectedVev.challengedId).username}</option>
                 </select>
             </div>
 
             {
                 errorText && <p className="error-message">{errorText}</p>
             }
-        </PopupWindow>
+        </ActionPopupWindow>
     );
 }
 

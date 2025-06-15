@@ -27,7 +27,7 @@ const MainPage: React.FC = () => {
                         className='create-vev-button' 
                         onClick={() => setShowCreateVevPopup(true)}
                     >
-                        Skapa vev
+                        Boka vev
                     </button>
                 )}
             </div>
@@ -46,13 +46,15 @@ const MainPage: React.FC = () => {
                     
                     <hr />
 
-                    {filteredVevs.map((vev, index) => (
-                        <VevItem 
-                            key={vev.id} 
-                            vev={vev} 
-                            className={index % 2 === 0 ? 'colored-1' : 'colored-2'}
-                        />
-                    ))} 
+                    {[...filteredVevs]
+                        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                        .map((vev, index) => (
+                            <VevItem 
+                                key={vev.id} 
+                                vev={vev} 
+                                className={index % 2 === 0 ? 'colored-1' : 'colored-2'}
+                            />
+                        ))} 
                 </ul>
             )}
         </div>
