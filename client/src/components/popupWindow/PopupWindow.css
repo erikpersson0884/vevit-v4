@@ -5,8 +5,8 @@
     position: absolute;
     
     box-sizing: border-box;
-    width: max-content;
-    max-width: 95%;
+    width: 80%;
+    max-width: 20rem;
     padding: 1rem;
     padding-top: 3rem;
     border-radius: .5rem;
