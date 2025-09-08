@@ -1,65 +1,27 @@
 
 .vev-item {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 
     cursor: pointer;
-}
-
-.vev-item-preview {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
 
     box-sizing: border-box;
-    padding: .5rem 1rem;
-}
-
-.vev-item-detailed {
-    height: 0;
-    padding-inline: 1rem;
-
-    overflow: hidden;
-    transition: all 1s ease-in-out;
-}
-
-.expanded-vev-item {
-    height: max-content;
-    overflow: visible;
-}
-
-.vev-item-preview {
-    flex-direction: row;
-}
-.vev-item-preview p {
-    flex: 1;
-}
-
-.vev-item-detailed {
-    flex-direction: column;
-
-    position: relative;
-}
-
-.vev-item-detailed p {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-
     width: 100%;
+    padding: 1rem;
 }
 
-.vev-item-detailed p span {
+.vev-item p {
     flex: 1;
 }
 
-/* .vev-item-detailed .vev-item-edit {
-    position: absolute;
+.vev-item p:last-child {
+    text-align: right;
+}
 
-    top: 1rem;
-    right: 1rem;
+.vev-item:nth-child(odd) {
+    background-color: var(--primary-color);
+}
 
-    aspect-ratio: 1/1;
-} */
-
+.vev-item:nth-child(even) {
+    background-color: #2323239d;
+}

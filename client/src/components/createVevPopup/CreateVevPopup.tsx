@@ -1,4 +1,4 @@
-import ActionPopupWindow from "../actionPopupWindow/actionPopupWindow";
+import ActionPopupWindow from "../actionPopupWindow/ActionPopupWindow";
 import { useUsersContext } from "../../contexts/usersContext";
 import { useVevContext } from "../../contexts/vevContext";
 import { useState } from "react";
@@ -39,9 +39,6 @@ const CreateVevPopup: React.FC<CreateVevPopupProps> = ({isOpen, onClose}) => {
             return;
         } else if (!selectedTime) {
             setErrorText("Välj en tid");
-            return;
-        } else if (!reason) {
-            setErrorText("Ange en anledning");
             return;
         }
 
@@ -95,7 +92,7 @@ const CreateVevPopup: React.FC<CreateVevPopupProps> = ({isOpen, onClose}) => {
 
 
             <div className="input-container">
-                <label htmlFor="reasonInput">Anledning</label>
+                <label htmlFor="reasonInput">Anledning (valfritt)</label>
                 <input type="text" id="reasonInput" name="reasonInput" placeholder="Anledning" onChange={handleReasonChange} value={reason}/>
             </div>
 

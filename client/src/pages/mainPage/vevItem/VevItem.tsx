@@ -21,11 +21,9 @@ const VevItem: React.FC<vevItemProps> = ({vev, className}) => {
 
     return (
         <li className={`vev-item ${className}`} onClick={() => setSelectedVev(vev)}>
-            <div className={`vev-item-preview ${className}`} onClick={() => setSelectedVev(vev)}>
                 <p className='name'>{challenger.username}</p>
                 <p className='name'>{challenged.username}</p>
                 <p>{new Date(vev.date).toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' })}</p>
-            </div>
         </li>
     )}
 

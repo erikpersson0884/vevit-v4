@@ -32,7 +32,7 @@ const Filter: React.FC<FilterProps<any>> = ({ options, onFilterChange }) => {
                     className={`filter-option ${option.value === chosenOption.value ? "active" : ""}`}
                     onClick={() => handleOptionClick(option)}
                 >
-                    {option.label}
+                    <p>{option.label}</p>
                 </div>
             ))}
         </div>

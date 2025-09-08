@@ -6,7 +6,7 @@
     align-items: center;
 
     width: max-content;
-    border: 1px solid #09cdda;
+    border: .12rem solid var(--primary-color);
     border-radius: 5px;
 
     overflow: hidden;
@@ -14,10 +14,30 @@
 
 .filter>div {
     padding: .5rem;
-    border-inline: 1px solid #09cdda;
 }
+
+.filter > div:not(:last-child) {
+    border-right: 1px solid var(--primary-color);
+}
+
 
 .filter>.active {
     background-color: var(--secondary-background-color);
-    color: var(--text-color);
+}
+
+@media screen and (max-width: 600px) {
+    .filter {
+        flex-direction: column;
+    }
+
+    .filter > div:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid var(--primary-color);
+    }
+
+    .filter>div {
+        width: 100%;
+        text-align: center;
+    }
+    
 }

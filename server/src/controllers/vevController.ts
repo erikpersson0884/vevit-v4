@@ -13,15 +13,15 @@ export const createVevController = (service = vevService): IVevController => ({
     },
 
     createVev: async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-        let { challengedId, date, reason } = req.body;
+        let { challengedId, date: dateString, reason } = req.body;
         const challengerId = req.user.id; // Assuming the user ID is stored in req.userId after authentication
         
-        if (!challengerId || !challengedId || !date || !reason) {
+        if (!challengerId || !challengedId || !dateString) {
             res.status(400).json({ error: "All fields are required" });
             return;
         }
         
-        date = new Date(date);
+        const date: Date = new Date(dateString);
 
         const vev = await service.createVev(challengerId, challengedId, date, reason);
         res.status(201).json(vev);

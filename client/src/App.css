@@ -2,9 +2,6 @@
 
 
 #root {
-    background-color: var(--background-color);
-    color: var(--text-color);
-
     font-family: Inter;
     font-size: 18px;
 
@@ -25,7 +22,6 @@
 
 .error-message {
     color: red;
-    font-size: 0.8rem;
 }
 
 .input-container {
@@ -39,14 +35,16 @@
 }
 
 .close-button {
-    background-color: var(--secondary-background-color);
+    background-color: inherit;
 
     position: absolute;
-    top: 0;
-    right: 0;
+    top: .5rem;
+    right: .5rem;
 
-    border: none;
-    border-radius: 0;
+    box-sizing: border-box;
+    width: fit-content;
+    padding: .2rem;
+    border-radius: 5rem;
 }
 
 .name {

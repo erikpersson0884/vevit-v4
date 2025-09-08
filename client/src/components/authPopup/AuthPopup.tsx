@@ -1,9 +1,10 @@
 import { useAuthContext } from "../../contexts/authContext";
 import { useState, useEffect } from "react";
-import ActionPopupWindow from "../actionPopupWindow/actionPopupWindow";
+import ActionPopupWindow from "../actionPopupWindow/ActionPopupWindow";
 import { useUsersContext } from "../../contexts/usersContext";
 import './AuthPopup.css';
 
+const errortextDisplayTime = 5000; // milliseconds
 
 enum PopupType {
     LOGIN = 'login',
@@ -16,7 +17,7 @@ const AuthPopup: React.FC = () => {
     const { login, logout, currentUser, showAuthPopup, setShowAuthPopup } = useAuthContext();
     const { createUser, updateUser } = useUsersContext();
 
-    const [ username, setUsername ] = useState('');
+    const [ username, setUsername ] = useState(currentUser ? currentUser.username : '');
     const [ password, setPassword ] = useState('');
     const [ errorText, setErrorText ] = useState<string | null>(null);
 
@@ -28,7 +29,19 @@ const AuthPopup: React.FC = () => {
         } else setPopupType(PopupType.LOGIN);
     }, [currentUser]);
 
+    useEffect(() => {
+        if (errorText) {
+            const timer = setTimeout(() => {
+                setErrorText(null);
+            }, errortextDisplayTime);
+
+            return () => clearTimeout(timer);
+        }
+    }, [errorText]);
+
+
     const handleLogin = async () => {
+        setErrorText(null)
         const successfullLogin: boolean = await login(username, password);
         if (!successfullLogin) {
             setErrorText("Felaktigt användarnamn eller lösenord");
@@ -63,7 +76,7 @@ const AuthPopup: React.FC = () => {
     };
 
     const handleClose = () => {
-        setUsername('');
+        setUsername(currentUser ? currentUser.username : '');
         setPassword('');
         setErrorText(null);
         setShowAuthPopup(false);
@@ -95,14 +108,11 @@ const AuthPopup: React.FC = () => {
                 isOpen={showAuthPopup}
                 onClose={handleClose}
                 onAccept={handleAccept}
-                title="Konto"
+                title={currentUser.username}
                 acceptButtonText="Logga ut"
                 className="auth-popup"
             >
-                <p>{`Inloggad som: ${currentUser.username}`}</p>
-                <p>{`Skapad: ${new Date(currentUser.createdAt).toLocaleDateString('sv-SE', { year: 'numeric', month: 'long', day: 'numeric' })}`}</p>
-
-                <p className="link" onClick={() => setPopupType(PopupType.UPDATE)}>Uppdatera uppgifter</p>
+                <button className="" onClick={() => setPopupType(PopupType.UPDATE)}>Uppdatera uppgifter</button>
             </ActionPopupWindow>
         );
     }

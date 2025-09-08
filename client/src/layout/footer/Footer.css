@@ -7,8 +7,8 @@
 }
 
 .page-footer a {
-    color: var(--primary-color);
-
+    color: var(--secondary-color);
+    
     text-decoration: none;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .page-footer a::after {
-    background-color: var(--primary-color); 
+    background-color: var(--secondary-color); 
 
     content: '';
     

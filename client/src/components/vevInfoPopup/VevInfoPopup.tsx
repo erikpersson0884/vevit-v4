@@ -1,4 +1,6 @@
 import React from 'react';
+import './VevPopup.css';
+
 import PopupWindow from '../popupWindow/PopupWindow';
 import { useUsersContext } from '../../contexts/usersContext';
 import { useVevContext } from '../../contexts/vevContext';
@@ -21,49 +23,41 @@ const VevInfoPopup: React.FC<VevInfoPopupProps> = ({openUpdatePopup}) => {
     
     return (
         <PopupWindow
-            title="Vev"
-            className="selectedVev-popup"
+            className="selectedVev-popup vev-info-popup"
             onClose={() => setSelectedVev(null)}
             isOpen={selectedVev !== null}
         >
-                <p>
-                    <span>Utmanare: </span>
-                    <span className='name'>{challenger.username}</span>
-                </p>
-                <p>
-                    <span>Utmanar: </span>
-                    <span className='name'>{challenged.username}</span>
-                </p>
-                <p>
-                    <span>Datum: </span>
-                    <span>{new Date(selectedVev.date).toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' })}</span>
-                </p>
-                <p>
-                    <span>Klockan: </span>
-                    <span>{new Date(selectedVev.date).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })}</span>
-                </p>
-                <p>
-                    <span>Anledning: </span>
-                    <span>{selectedVev.reason}</span>
-                </p>
-                {selectedVev.date < now && (
-                    <>
-                        <p>
-                            <span>Vinnare: </span>
-                            <span className={` ${selectedVev.winnerId ? "name" : ""}`}>
-                                {selectedVev.winnerId ? getUserById(selectedVev.winnerId).username : "Ingen satt"}
-                            </span>
-                        </p>
-                        {currentUser && currentUser.id === selectedVev.challengerId && (
-                            <button 
-                                className='selectedVev-item-button' 
-                                onClick={openUpdatePopup}
-                            >
-                                Uppdatera vinnare
-                            </button>
-                        )}
-                    </>
-                )}
+
+            <h2>{new Date(selectedVev.date).toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' })}</h2>
+            <h3>{new Date(selectedVev.date).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' })}</h3>
+            <p className='selectedVev-item-names'>
+                <span className='name'>{challenger.username}</span>
+                <span> vs </span>
+                <span className='name'>{challenged.username}</span>
+            </p>
+
+            {selectedVev.date < now && (
+                <>
+                    <p>
+                        <span>Vinnare: </span>
+                        <span className={` ${selectedVev.winnerId ? "name" : ""}`}>
+                            {selectedVev.winnerId ? getUserById(selectedVev.winnerId).username : "Ingen satt"}
+                        </span>
+                    </p>
+                    {currentUser && currentUser.id === selectedVev.challengerId && (
+                        <button 
+                            className='selectedVev-item-button' 
+                            onClick={openUpdatePopup}
+                        >
+                            Uppdatera vinnare
+                        </button>
+                    )}
+                </>
+            )}
+            <p>
+                <span>Anledning: </span>
+                <span>{selectedVev.reason}</span>
+            </p>
         </PopupWindow>
     );
 }

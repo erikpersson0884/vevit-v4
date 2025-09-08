@@ -1,5 +1,5 @@
 import React from 'react';
-import VevInfoPopup from '../vevInfoPopup/vevInfoPopup';
+import VevInfoPopup from '../vevInfoPopup/VevInfoPopup';
 import UpdateVevPopup from '../updateVevPopup/UpdateVevPopup';
 import { useVevContext } from '../../contexts/vevContext';
 

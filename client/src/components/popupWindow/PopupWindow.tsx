@@ -38,15 +38,18 @@ const PopupWindow: React.FC<PopupWindowProps> = ({
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <div className={`popup-window `} onClick={onClose}>
-                <div className={`popup-content${className ? ` ${className}` : ''}`} onClick={(e) => e.stopPropagation()}>
+                <div 
+                    className={`popup-content ${className ? `${className}` : ''}`} 
+                    onClick={(e) => e.stopPropagation()}
+                >
                     {title && <h2 className="popup-title">{title}</h2>}
-
-                    <button className="close-button" onClick={onClose}>
-                        <img src={closeIcon} alt="Close" className="close-icon" />
-                    </button>
                     
                     {children}
                 </div>
+
+                <button className="close-button" onClick={onClose}>
+                    <img src={closeIcon} alt="Close" className="close-icon" />
+                </button>
             </div>
         </Modal>
     );

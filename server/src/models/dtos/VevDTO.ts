@@ -6,7 +6,7 @@ const MAX_LENGTH_FOR_VEV_REASON = 1000
 // Request Schemas
 export const CreateVevSchema = z.object({
     challengedId: z.string().uuid(),
-    date: z.date(), 
+    date: z.string(), 
     reason: z.string().max(MAX_LENGTH_FOR_VEV_REASON),
 });
 

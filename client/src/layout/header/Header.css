@@ -5,10 +5,36 @@
     justify-content: center;
     align-items: center;
 
+    box-sizing: border-box;
     width: 100%;
-    padding: 1rem 0;
+    padding: 3rem 0;
 }
 
 .page-header .header-logo {
     width: 10rem;
+}
+
+.page-header .auth-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+@media screen and (max-width: 600px) {
+    .page-header {
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .page-header .header-logo {
+        height: 4rem;
+        width: auto;
+    }
+
+    .page-header .auth-button {
+        position: static;
+    }
+    
 }

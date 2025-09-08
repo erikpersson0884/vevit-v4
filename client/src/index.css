@@ -1,13 +1,16 @@
 
 
 :root {
-    --primary-color: #09cdda;
-    --text-color: #fff;
-    --background-color: #2c2c2c;
-    --secondary-background-color: #818181;
+    --primary-color: #17421c;
+    --secondary-color: #26ed40;
+    --text-color: #ffffff;
+    --background-color: #232323;
+    --secondary-background-color: #414141;
 }
 
 html {
+    background-color: var(--background-color);
+
     font-size: 18px;
 }
 
@@ -20,21 +23,31 @@ body {
     min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1, h2, h3, h4, h5, h6, p, label {
+    color: var(--text-color);
+
     margin: 0;
 }
 
 button {
     background-color: var(--secondary-background-color);
-    color: #000;
+    background-color: #97979723;
+    color: var(--text-color);
 
     font-size: 1rem;
 
     cursor: pointer;
 
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+
+    width: fit-content;
     padding: .3rem .5rem;
-    border: 2px solid #09cdda;
-    border-radius: 5px;
+    border: .1rem solid var(--secondary-color);
+    border: .1rem solid #b6b6b6;
+
+    border-radius: .3rem;
 }
 
 button img {
@@ -52,6 +65,8 @@ input, select {
 
     padding: .4rem 1rem;
     border-radius: .3rem;
+    border: var(--primary-color) 2px solid;
+    outline: none;
 }
 
 option {

@@ -51,7 +51,7 @@ const UpdateVevPopup = () => {
             acceptButtonText="Uppdatera"
         >
             <div>
-                <label htmlFor="winner-select">Vinnare</label>
+                <label htmlFor="winner-select">Välj ny vinnare:</label>
                 <select
                     value={winnerId}
                     onChange={(e) => setWinnerId(e.target.value)}
