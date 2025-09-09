@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { createUserService } from "../services/userService";
 import { IUserController } from "../models/controllers/IUserController";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
@@ -40,7 +40,9 @@ export const createUserController = (service = userService): IUserController => 
         const authUser: IUser = req.user;
         let { username, password }: { username?: string, password?: string} = req.body;
         let userId: string = req.params.id;
+
         if (!userId) throw new MissingUserIDError();
+        
         if (authUser.id !== userId && authUser.role !== 'admin') {
             throw new UnauthorizedActionError('Forbidden: Only admins can update other users');
         }
