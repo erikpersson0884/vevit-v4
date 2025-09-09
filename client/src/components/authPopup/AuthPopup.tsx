@@ -4,6 +4,8 @@ import ActionPopupWindow from "../actionPopupWindow/ActionPopupWindow";
 import { useUsersContext } from "../../contexts/usersContext";
 import './AuthPopup.css';
 
+import { Link } from "react-router-dom";
+
 const errortextDisplayTime = 5000; // milliseconds
 
 enum PopupType {
@@ -113,6 +115,9 @@ const AuthPopup: React.FC = () => {
                 className="auth-popup"
             >
                 <button className="" onClick={() => setPopupType(PopupType.UPDATE)}>Uppdatera uppgifter</button>
+                <Link to="/user-management">
+                    <button onClick={handleClose}>Hantera Användare</button>
+                </Link>
             </ActionPopupWindow>
         );
     }

@@ -56,7 +56,14 @@ export const UsersProvider = ({ children }: { children: ReactNode }) => {
 
     const updateUser = async (userId: string, username: string, password: string): Promise<boolean> => {
         try {
-            await userApi.updateUser(userId, username, password);
+            const user = getUserById(userId);
+            if (!user) throw new Error(`User with id ${userId} not found`);
+
+            await userApi.updateUser(
+                userId,
+                username === user.username ? undefined : username,
+                password === "" ? undefined : password
+            );
             fetchUsers(); // Refresh the users list after updating
             return true;
         } catch (error) {

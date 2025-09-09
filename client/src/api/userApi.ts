@@ -49,11 +49,14 @@ export const userApi = {
         }
     },
 
-    updateUser: async (userId: string, username: string, password: string) => {
+    updateUser: async (userId: string, username?: string, password?: string) => {
         try {
-            const body = {
-                username,
-                password,
+            const body: { username?: string; password?: string } = {};
+            if (username !== undefined) {
+                body.username = username;
+            }
+            if (password !== undefined) {
+                body.password = password;
             }
             const response = await api.patch(`/user/${userId}`, body);
             return response.data;

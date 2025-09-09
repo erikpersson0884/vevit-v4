@@ -73,7 +73,7 @@ const ActionPopupWindow: React.FC<ActionPopupWindowProps> = ({
                 <button className="popup-button" onClick={onCancel}>{cancelButtonText}</button>
             </div>
 
-            {errorText && <p className='error-text'>{errorText}</p>}
+            {errorText && <p className='error-message'>{errorText}</p>}
         </PopupWindow>    
     );
 };

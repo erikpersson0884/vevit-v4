@@ -24,6 +24,11 @@ const UpdateUserPopup: React.FC<UpdateUserPopupProps> = ({onClose, user}) => {
             return;
         }
 
+        if (password.length < 4) {
+            setErrorText('Lösenordet måste vara minst 4 tecken långt');
+            return;
+        }
+
         const successfullUpdate = await updateUser(currentUser.id, username, password);
         if (!successfullUpdate) {
             setErrorText('Något gick fel, försök igen senare');
