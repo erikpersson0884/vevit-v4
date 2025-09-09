@@ -105,7 +105,7 @@ describe('UserController', () => {
     });
 
     describe('updateUser', () => {
-        it('should update the user if found', async () => {
+        it('should update the user itself, if found', async () => {
             req.body = { username: 'NewName', password: 'newPassword' };
             mockService.updateUser.mockResolvedValue(fakeUser);
 
@@ -124,6 +124,24 @@ describe('UserController', () => {
             expect(mockService.updateUser).toHaveBeenCalledWith(fakeUser.id, 'NewName', 'newPassword');
             expect(res.status).toHaveBeenCalledWith(404);
             expect(res.json).toHaveBeenCalledWith({ error: `User with id ${fakeUser.id} not found` });
+        });
+
+        it('should return 403 if trying to update another user without admin role', async () => {
+            req.body = { username: 'NewName', password: 'newPassword', userId: 'otherUserId' };
+            // fakeUser has role 'user', not 'admin'
+            await userController.updateUser(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(403);
+            expect(res.json).toHaveBeenCalledWith({ error: 'Forbidden: Only admins can update other users' });
+        });
+        it('should allow admin to update another user', async () => {
+            req.body = { username: 'NewName', password: 'newPassword', userId: 'otherUserId' };
+            req.user.role = 'admin';
+            mockService.updateUser.mockResolvedValue(fakeUser);
+
+            await userController.updateUser(req, res);
+            expect(mockService.updateUser).toHaveBeenCalledWith('otherUserId', 'NewName', 'newPassword');
+            expect(sendValidatedResponse).toHaveBeenCalledWith(res, UserResponseSchema, fakeUser);
         });
     });
 

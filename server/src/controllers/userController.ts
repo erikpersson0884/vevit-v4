@@ -35,11 +35,17 @@ export const createUserController = (service = userService): IUserController => 
     },
 
     updateUser: async (req: AuthenticatedRequest, res: Response) => {
-        const user: IUser = req.user;
-        const { username, password }: {username: string, password: string} = req.body;
-        const updatedUser: IUser | null = await service.updateUser(user.id, username, password);
+        const authUser: IUser = req.user;
+        let { username, password, userId }: { username?: string, password?: string, userId?: string } = req.body;
+        if (!userId) userId = authUser.id;
+        if (authUser.id !== userId && authUser.role !== 'admin') {
+                return res.status(403).json({ error: 'Forbidden: Only admins can update other users' });
+        }
+
+        const updatedUser: IUser | null = await service.updateUser(userId, username, password);
+
         if (updatedUser) sendValidatedResponse(res, UserResponseSchema, updatedUser);
-        else res.status(404).json({ error: `User with id ${user.id} not found` });
+        else res.status(404).json({ error: `User with id ${userId} not found` });
     },
 
     deleteUser: async (req: AuthenticatedRequest, res: Response) => {

@@ -20,6 +20,7 @@ export const CreateUserSchema = z.object({
 export const UpdateUserSchema = z.object({
     username: z.string().min(usernameMinLength).optional(),
     password: z.string().min(passwordMinLength).optional(),
+    userId: z.string().optional(),
 });
 
 export type CreateUserDTO = z.infer<typeof CreateUserSchema>;
@@ -29,6 +30,7 @@ export type CreateUserDTO = z.infer<typeof CreateUserSchema>;
 export const UserResponseSchema = z.object({
     id: z.string(),
     username: z.string(),
+    role: z.string(),
     createdAt: z.date(),
     updatedAt: z.date(),
 });
