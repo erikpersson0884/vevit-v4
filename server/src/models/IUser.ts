@@ -4,6 +4,7 @@ export interface IUser {
     password: string;
     createdAt: Date;
     updatedAt: Date;
+    role: "admin" | "user";
 }
 
 export default IUser;

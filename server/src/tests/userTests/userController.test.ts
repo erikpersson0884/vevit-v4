@@ -20,6 +20,7 @@ describe('UserController', () => {
         id: 'user123',
         username: 'JohnDoe',
         password: 'password123',
+        role: 'user',
         createdAt: new Date(),
         updatedAt: new Date(),
     };

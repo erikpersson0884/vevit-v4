@@ -32,7 +32,7 @@ export class UserService implements IUserService {
     }
 
     async getUserByUsername(username: string): Promise<IUser | null> {
-        const user = await this.prisma.user.findUnique({
+        const user: IUser | null = await this.prisma.user.findUnique({
             where: { username: username },
         });
         return user;
