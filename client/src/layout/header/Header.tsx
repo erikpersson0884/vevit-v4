@@ -10,8 +10,8 @@ const Header: React.FC = () => {
         <header className="page-header">
             <Link to="/">
                 <img src={vevITLogo} alt="VevIT Logo" className="header-logo" width={200}/>
-                <AuthButton />
             </Link>
+            <AuthButton />
         </header>
     );
 };

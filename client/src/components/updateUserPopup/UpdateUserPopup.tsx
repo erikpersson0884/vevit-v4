@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuthContext } from '../../contexts/authContext';
 import { useUsersContext } from '../../contexts/usersContext';
 import ActionPopupWindow from '../actionPopupWindow/ActionPopupWindow';
@@ -13,7 +13,7 @@ const UpdateUserPopup: React.FC<UpdateUserPopupProps> = ({onClose, user}) => {
     const { currentUser } = useAuthContext();
     const { updateUser } = useUsersContext();
 
-    const [ username, setUsername ] = useState(currentUser ? currentUser.username : '');
+    const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ errorText, setErrorText ] = useState<string | undefined>(undefined);
 
@@ -24,31 +24,28 @@ const UpdateUserPopup: React.FC<UpdateUserPopupProps> = ({onClose, user}) => {
             return;
         }
 
-        if (password.length < 4) {
+        if (password.length > 0 && password.length < 4) {
+            console.log(password.length);
             setErrorText('Lösenordet måste vara minst 4 tecken långt');
             return;
         }
 
-        const successfullUpdate = await updateUser(currentUser.id, username, password);
+        if (!user) return;
+
+        const successfullUpdate = await updateUser(user.id, username, password);
         if (!successfullUpdate) {
             setErrorText('Något gick fel, försök igen senare');
             return;
         }
-        onClose();
+        handleClose();
     };
 
     const handleClose = () => {
+        setUsername('');
+        setPassword('');
         setErrorText(undefined);
         onClose();
     }
-
-    useEffect(() => {
-        if (user) {
-            setUsername(user.username);
-            setPassword('');
-            setErrorText(undefined);
-        }
-    }, [user]);
 
     return (
         <ActionPopupWindow 
