@@ -1,11 +1,8 @@
 import React from 'react';
 import './VevItem.css';
 
-import { useUsersContext } from '../../../contexts/usersContext';
-import { useVevContext } from '../../../contexts/vevContext';
-
-// import editIcon from '../../../assets/edit.svg';
-
+import { useUsersContext } from '../../contexts/usersContext';
+import { useVevContext } from '../../contexts/vevContext';
 
 interface vevItemProps {
     vev: IVev;

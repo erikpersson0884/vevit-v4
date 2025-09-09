@@ -4,7 +4,7 @@ import './mainPage.css';
 import { useVevContext } from '../../contexts/vevContext';
 import { useAuthContext } from '../../contexts/authContext';
 
-import VevItem from './vevItem/VevItem';
+import VevItem from '../../components/vevItem/VevItem';
 import UserFilter from '../../components/Filter/userFilter/UserFilter';
 import TimeFilter from '../../components/Filter/timeFilter/TimeFilter';
 

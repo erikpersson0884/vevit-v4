@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './actionPopupWindow.css';
 import PopupWindow from '../popupWindow/PopupWindow';
 
@@ -12,6 +12,8 @@ interface ActionPopupWindowProps {
     title?: string;
     acceptButtonText?: string;
     cancelButtonText?: string;
+    errorText?: string;
+    errortextDisplayTime?: number;
 
     className?: string;
 }
@@ -40,9 +42,25 @@ const ActionPopupWindow: React.FC<ActionPopupWindowProps> = ({
     title, 
     acceptButtonText = 'Skapa',
     cancelButtonText = 'Avbryt', 
+    errorText = null,
+    errortextDisplayTime = 3000, // Time in milliseconds the error text is displayed
     children, 
-    className }) => {
+    className 
+}) => {
     if (!isOpen) return null;
+
+    const [localErrorText, setLocalErrorText] = React.useState<string | null>(errorText);
+
+    useEffect(() => {
+        setLocalErrorText(errorText ?? null);
+        if (errorText) {
+            const timer = setTimeout(() => {
+                setLocalErrorText(null);
+            }, errortextDisplayTime);
+
+            return () => clearTimeout(timer);
+        }
+    }, [errorText, errortextDisplayTime]);
 
     return (
         <PopupWindow title={title} isOpen={isOpen} onClose={onClose}>
@@ -54,6 +72,8 @@ const ActionPopupWindow: React.FC<ActionPopupWindowProps> = ({
                 <button className="popup-button" onClick={onAccept}>{acceptButtonText}</button>
                 <button className="popup-button" onClick={onCancel}>{cancelButtonText}</button>
             </div>
+
+            {errorText && <p className='error-text'>{errorText}</p>}
         </PopupWindow>    
     );
 };

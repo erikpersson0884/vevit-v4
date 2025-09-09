@@ -1,0 +1,29 @@
+
+.user-management-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    margin: 2rem;
+}
+
+.user-management-page h1 {
+    width: fit-content;
+}
+
+.user-management-page .user-list {
+    width: 100%;
+}
+
+.user-management-page .user-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.user-management-page li:hover {
+    background-color: #3b3b3b;
+}
