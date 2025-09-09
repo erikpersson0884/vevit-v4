@@ -20,7 +20,6 @@ export const CreateUserSchema = z.object({
 export const UpdateUserSchema = z.object({
     username: z.string().min(usernameMinLength).optional(),
     password: z.string().min(passwordMinLength).optional(),
-    userId: z.string().optional(),
 });
 
 export type CreateUserDTO = z.infer<typeof CreateUserSchema>;

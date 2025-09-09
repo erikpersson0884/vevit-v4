@@ -5,6 +5,8 @@ import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
 import { IUser } from "../models/IUser";
 import { UserResponseSchema, UserResponseArraySchema } from '../models/dtos/UserDTOs';
 import { sendValidatedResponse } from "../middleware/validateResponseMiddleware";
+import { MissingUserIDError } from "../errors/MissingUserIDError";
+import { UnauthorizedActionError } from "../errors/UnauthorizedActionError";
 
 const userService = createUserService();
 
@@ -36,10 +38,11 @@ export const createUserController = (service = userService): IUserController => 
 
     updateUser: async (req: AuthenticatedRequest, res: Response) => {
         const authUser: IUser = req.user;
-        let { username, password, userId }: { username?: string, password?: string, userId?: string } = req.body;
-        if (!userId) userId = authUser.id;
+        let { username, password }: { username?: string, password?: string} = req.body;
+        let userId: string = req.params.id;
+        if (!userId) throw new MissingUserIDError();
         if (authUser.id !== userId && authUser.role !== 'admin') {
-                return res.status(403).json({ error: 'Forbidden: Only admins can update other users' });
+            throw new UnauthorizedActionError('Forbidden: Only admins can update other users');
         }
 
         const updatedUser: IUser | null = await service.updateUser(userId, username, password);
@@ -49,12 +52,15 @@ export const createUserController = (service = userService): IUserController => 
     },
 
     deleteUser: async (req: AuthenticatedRequest, res: Response) => {
-        const user: IUser = req.user;
-        try {
-            await service.deleteUser(user.id);
-            res.json({ message: `User with id ${user.id} deleted` });
-        } catch (err) {
-            res.status(404).json({ error: `User with id ${user.id} not found` });
+        const authUser: IUser = req.user;
+        let userId: string = req.params.id;
+        if (!userId) throw new MissingUserIDError();
+        
+        if (authUser.id !== userId && authUser.role !== 'admin') {
+            throw new UnauthorizedActionError('Forbidden: Only admins can delete other users');
         }
-    },
+
+        await service.deleteUser(userId);
+        res.json({ message: `User with id ${userId} deleted` });
+    }
 });
