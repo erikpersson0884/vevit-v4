@@ -1,11 +1,13 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import vevApi from '../api/vevApi';
+
+import { useAuthContext } from './authContext';
+
 
 interface VevContextProps {
     vevs: IVev[];
     setVevs: React.Dispatch<React.SetStateAction<IVev[]>>;
     filteredVevs: IVev[];
-    setFilteredVevs: React.Dispatch<React.SetStateAction<IVev[]>>;
     createVev: (challangedId: string, date: string, reason: string) => Promise<boolean>;
     updateVev: (vevId: string, date: Date, winnerId: string | null, reason: string | null) => Promise<boolean>;
     updateVevWinner: (vevId: string, winnerId: string | null) => Promise<boolean>;
@@ -13,14 +15,46 @@ interface VevContextProps {
 
     selectedVev: IVev | null;
     setSelectedVev: React.Dispatch<React.SetStateAction<IVev | null>>;
+
+    setFilters: React.Dispatch<React.SetStateAction<{
+        timeFilter: "all" | "future" | "past" | null;
+        userFilter: "all" | "mine" | null;
+    }>>;
 }
 
 const VevContext = createContext<VevContextProps | undefined>(undefined);
 
 export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const { currentUser } = useAuthContext();
+    
     const [ vevs, setVevs ] = useState<IVev[]>([]);
     const [ filteredVevs, setFilteredVevs ] = useState<IVev[]>([]);
     const [ selectedVev, setSelectedVev ] = useState<IVev | null>(null);
+    const [filters, setFilters] = useState<
+    {
+        timeFilter: "all" | "future" | "past" | null;
+        userFilter: "all" | "mine" | null;
+    }>({
+        timeFilter: null,
+        userFilter: null,
+    });
+    
+    useEffect(() => {
+        let filtered = [...vevs];
+        const now = new Date();
+
+        if (filters.timeFilter === "past") {
+            filtered = filtered.filter(vev => vev.date < now);
+        } else if (filters.timeFilter === "future") {
+            filtered = filtered.filter(vev => vev.date >= now);
+        }
+
+        if (filters.userFilter === "mine") {
+            filtered = filtered.filter(vev => vev.challengerId === currentUser?.id);
+        }
+        setFilteredVevs(filtered);
+    }, [filters, vevs, currentUser]);
+
 
     const fetchVevs = async () => {
         try {
@@ -38,10 +72,6 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     React.useEffect(() => {
         fetchVevs();
     }, []);
-
-    React.useEffect(() => {
-        setFilteredVevs(vevs);
-    }, [vevs]);
 
     const getVevById = (id: string): IVev | undefined => {
         return vevs.find(vev => vev.id == id)
@@ -109,13 +139,13 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             vevs, 
             setVevs, 
             filteredVevs, 
-            setFilteredVevs,
             createVev,
             updateVev,
             updateVevWinner,
             deleteVev,
             selectedVev,
-            setSelectedVev
+            setSelectedVev,
+            setFilters,
         }}>
             {children}
         </VevContext.Provider>

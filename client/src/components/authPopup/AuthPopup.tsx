@@ -18,7 +18,7 @@ enum PopupType {
 
 const AuthPopup: React.FC = () => {
     const { login, logout, currentUser, showAuthPopup, setShowAuthPopup } = useAuthContext();
-    const { createUser, updateUser } = useUsersContext();
+    const { createUser } = useUsersContext();
 
     const [ username, setUsername ] = useState(currentUser ? currentUser.username : '');
     const [ password, setPassword ] = useState('');
@@ -26,8 +26,19 @@ const AuthPopup: React.FC = () => {
 
     const [popupType, setPopupType] = useState<PopupType>(PopupType.LOGIN);
 
+    useEffect(() => {
+        if (currentUser) setPopupType(PopupType.PROFILE);
+        else setPopupType(PopupType.LOGIN);
+    }, [currentUser]);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (popupType === PopupType.LOGIN) handleLogin();
+        else if (popupType === PopupType.REGISTER) handleCreation();
+    }
+
     const inputs = () => (
-        <>
+        <form onSubmit={handleSubmit}>
             <div>
                 <label htmlFor="username">Användarnamn</label>
                 <input
@@ -51,7 +62,7 @@ const AuthPopup: React.FC = () => {
                 />
             </div>
             {errorText && <p className="error-message">{errorText}</p>}
-        </>
+        </form>
     );
 
     const handleClose = () => {
@@ -80,7 +91,7 @@ const AuthPopup: React.FC = () => {
         else handleClose();
     }
 
-    if (!currentUser) {
+    if (!currentUser && popupType === PopupType.LOGIN) {
         return (
             <ActionPopupWindow
                 isOpen={showAuthPopup}
@@ -91,7 +102,7 @@ const AuthPopup: React.FC = () => {
                 className="auth-popup"
             >
                 {inputs()}
-                <p>Har du inget konto? <button className="link-button" onClick={() => setPopupType(PopupType.REGISTER)}>Registrera</button></p>
+                <p>Har du inget konto? <span className="link" onClick={() => setPopupType(PopupType.REGISTER)}>Registrera</span></p>
             </ActionPopupWindow>
         );
     }
@@ -101,7 +112,7 @@ const AuthPopup: React.FC = () => {
         handleClose();
     }
     
-    if (popupType === PopupType.PROFILE) {
+    if ( currentUser && popupType === PopupType.PROFILE) {
         return (
             <ActionPopupWindow 
                 isOpen={showAuthPopup}
@@ -120,9 +131,13 @@ const AuthPopup: React.FC = () => {
     }
 
     const handleCreation = async () => {
-        const successfullCreation: boolean = await createUser(username, password);
-        if (!successfullCreation) setErrorText("Det gick inte att skapa användaren, försök igen senare");
-        else handleClose();
+        if (username.length <1 ) setErrorText("Användarnamn måste vara minst 1 tecken långt");
+        else if (password.length < 4) setErrorText("Lösenord måste vara minst 4 tecken långt");
+        else {
+            const successfullCreation: boolean = await createUser(username, password);
+            if (!successfullCreation) setErrorText("Det gick inte att skapa användaren, försök igen senare");
+            else handleClose();
+        }
     }
 
     if (popupType === PopupType.REGISTER) return (
@@ -135,7 +150,7 @@ const AuthPopup: React.FC = () => {
             className="auth-popup"
         >
             {inputs()}
-            <p>Har du redan ett konto? <button className="link-button" onClick={() => setPopupType(PopupType.LOGIN)}>Logga in</button></p>
+            <p>Har du redan ett konto? <span className="link" onClick={() => setPopupType(PopupType.LOGIN)}>Logga in</span></p>
         </ActionPopupWindow>
     );
 

@@ -60,15 +60,11 @@ button img {
 }
 
 input, select {
-    background-color: transparent;
+    background-color: var(--background-color);
     color: var(--text-color);
 
     padding: .4rem 1rem;
     border-radius: .3rem;
     border: var(--primary-color) 2px solid;
     outline: none;
-}
-
-option {
-    background-color: #363636;
 }

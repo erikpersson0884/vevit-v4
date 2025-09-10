@@ -1,24 +1,20 @@
 import React from 'react';
 import Filter from '../Filter';
 import { useVevContext } from '../../../contexts/vevContext';
-import { useAuthContext } from '../../../contexts/authContext';
-
 
 const UserFilter: React.FC = () => {
-    const { currentUser } = useAuthContext();
-    const { setFilteredVevs, vevs } = useVevContext();
+    const { setFilters } = useVevContext();
 
     const options: IFilterOption<string>[] = [
-        { label: 'Alla vev', value: 'all'},
-        { label: 'Mina vev', value: currentUser?.id || '' },
+        { label: 'Alla vev', value: 'all' },
+        { label: 'Mina vev', value: 'mine' },
     ];
 
-    const handleFilterChange = (selectedValue: string) => {
-        if (selectedValue === 'all') {
-            setFilteredVevs(vevs);
-        } else {
-            setFilteredVevs(vevs.filter(vev => vev.challengerId === currentUser?.id));
-        }
+    const handleFilterChange = (selectedValue: "all" | "mine") => {
+        setFilters(prev => ({
+            ...prev,
+            userFilter: selectedValue,
+        }));
     };
 
     return (

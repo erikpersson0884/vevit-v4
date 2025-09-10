@@ -1,6 +1,10 @@
 
 .auth-popup .link {
-    color: var(--primary-color) !important;
+    color: var(--secondary-color) !important;
 
     cursor: pointer;
+}
+
+.auth-popup a {
+    text-decoration: none;
 }

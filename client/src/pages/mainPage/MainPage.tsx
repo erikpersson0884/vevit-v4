@@ -9,6 +9,7 @@ import UserFilter from '../../components/Filter/userFilter/UserFilter';
 import TimeFilter from '../../components/Filter/timeFilter/TimeFilter';
 
 import CreateVevPopup from '../../components/createVevPopup/CreateVevPopup';
+import { useUsersContext } from '../../contexts/usersContext';
 
 
 const MainPage: React.FC = () => {
@@ -67,6 +68,11 @@ const BookVevButton: React.FC<BookVevButtonProps> = ({ openPopup }) => {
 
 const VevList = () => {
     const { filteredVevs } = useVevContext();
+    const { loadingUsers } = useUsersContext();
+
+    if (loadingUsers) {
+        return <p>Laddar användare...</p>
+    }
 
     if (filteredVevs.length === 0) {
         return <p>Inga vev bokade</p>
