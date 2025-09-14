@@ -51,8 +51,6 @@ const VevInfoPopup: React.FC<VevInfoPopupProps> = ({openUpdatePopup}) => {
                 <span className='name'>{challenged.username}</span>
             </p>
 
-            <button onClick={() => console.log(selectedVev)}>Logga selectedVev</button>
-
             {selectedVev.date < now && (
                 <>
                     <p>

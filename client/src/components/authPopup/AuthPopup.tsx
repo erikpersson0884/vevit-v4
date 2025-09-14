@@ -127,8 +127,8 @@ const AuthPopup: React.FC = () => {
                 <button className="" onClick={() => setPopupType(PopupType.UPDATE)}>
                     Uppdatera uppgifter
                     <img src={userAttributesIcon} alt="User Attributes" />
-                    
                 </button>
+
                 <Link to="/user-management">
                     <button onClick={handleClose}>
                         Hantera Användare
@@ -158,6 +158,7 @@ const AuthPopup: React.FC = () => {
             title="Registrera"
             acceptButtonText="Registrera"
             className="auth-popup"
+            acceptButtonDisabled={username === '' || password === ''}
         >
             {inputs()}
             <p>Har du redan ett konto? <span className="link" onClick={() => setPopupType(PopupType.LOGIN)}>Logga in</span></p>

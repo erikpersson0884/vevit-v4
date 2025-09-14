@@ -55,6 +55,7 @@ const UpdateUserPopup: React.FC<UpdateUserPopupProps> = ({onClose, user}) => {
             acceptButtonText="Uppdatera" 
             title="Uppdatera användare" 
             errorText={errorText }
+            acceptButtonDisabled={username === '' && password === ''}
         >
             <div>
                 <label htmlFor="username">Nytt användarnamn</label>

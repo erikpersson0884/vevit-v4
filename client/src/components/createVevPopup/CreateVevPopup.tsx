@@ -67,6 +67,7 @@ const CreateVevPopup: React.FC<CreateVevPopupProps> = ({isOpen, onClose}) => {
             onClose={handleClose}
             onAccept={handleSubmit}
             className="create-vev-popup"
+            acceptButtonDisabled={!selectedUser || !selectedDate || !selectedTime}
         >
             <div className="input-container">
                 <label htmlFor="pickChallanged">Utmana</label>

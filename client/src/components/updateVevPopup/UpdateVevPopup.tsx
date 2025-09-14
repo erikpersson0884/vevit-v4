@@ -56,6 +56,7 @@ const UpdateVevPopup: React.FC<UpdateVevPopupProps> = ({onClose}) => {
             isOpen={!!selectedVev}
             acceptButtonText="Uppdatera"
             errorText={errorText}
+            acceptButtonDisabled={selectedVev.winnerId === winnerId && selectedVev.reason === reson}
         >
             <div>
                 <label htmlFor="winner-select">Välj ny vinnare:</label>
