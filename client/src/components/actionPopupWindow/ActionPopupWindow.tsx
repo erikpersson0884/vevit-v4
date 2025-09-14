@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import './actionPopupWindow.css';
+import './ActionPopupWindow.css';
 import PopupWindow from '../popupWindow/PopupWindow';
 
 interface ActionPopupWindowProps {
@@ -51,7 +51,7 @@ const ActionPopupWindow: React.FC<ActionPopupWindowProps> = ({
 }) => {
     if (!isOpen) return null;
 
-    const [localErrorText, setLocalErrorText] = React.useState<string | null>(errorText);
+    const [ _, setLocalErrorText] = React.useState<string | null>(errorText);
 
     useEffect(() => {
         setLocalErrorText(errorText ?? null);

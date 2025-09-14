@@ -1,5 +1,5 @@
 import React from 'react';
-import './mainPage.css';
+import './MainPage.css';
 
 import { useVevContext } from '../../contexts/vevContext';
 import { useAuthContext } from '../../contexts/authContext';

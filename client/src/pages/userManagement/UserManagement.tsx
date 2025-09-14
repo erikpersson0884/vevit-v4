@@ -1,5 +1,5 @@
 import React from 'react';
-import './userManagement.css';
+import './UserManagement.css';
 
 import { useUsersContext } from '../../contexts/usersContext';
 

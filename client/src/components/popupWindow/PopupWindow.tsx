@@ -1,5 +1,5 @@
 import React from 'react';
-import './popupWindow.css';
+import './PopupWindow.css';
 import Modal from '../modal/Modal';
 import closeIcon from '../../assets/close.svg';
 

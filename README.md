@@ -18,6 +18,9 @@ npm install
 
 ```sh
 docker run --name vevit-v4 -e POSTGRES_PASSWORD=secretpassword -e POSTGRES_USER=myuser -e POSTGRES_DB=mydb -p 5432:5432 -d postgres
+npx prisma migrate dev
+npx prisma db push
+
 
 
 ```
