@@ -14,6 +14,7 @@ interface ActionPopupWindowProps {
     cancelButtonText?: string;
     errorText?: string;
     errortextDisplayTime?: number;
+    acceptButtonDisabled?: boolean;
 
     className?: string;
 }
@@ -44,6 +45,7 @@ const ActionPopupWindow: React.FC<ActionPopupWindowProps> = ({
     cancelButtonText = 'Avbryt', 
     errorText = null,
     errortextDisplayTime = 3000, // Time in milliseconds the error text is displayed
+    acceptButtonDisabled = false,
     children, 
     className 
 }) => {
@@ -69,12 +71,12 @@ const ActionPopupWindow: React.FC<ActionPopupWindowProps> = ({
             </div>
 
             <div className='popup-footer'>
-                <button className="popup-button" onClick={onAccept}>{acceptButtonText}</button>
-                <button className="popup-button" onClick={onCancel}>{cancelButtonText}</button>
+                <button className="popup-button" onClick={onAccept} disabled={acceptButtonDisabled} >{acceptButtonText}</button>
+                <button className="popup-button" onClick={onCancel} >{cancelButtonText}</button>
             </div>
 
             {errorText && <p className='error-message'>{errorText}</p>}
-        </PopupWindow>    
+        </PopupWindow>
     );
 };
 
