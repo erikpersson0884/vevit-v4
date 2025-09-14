@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: vevit-backend
+    ports:
+      - "3001:3001"   # or whatever your backend runs on
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://myuser:secretpassword@db:5432/vevit-v4?schema=public
+      - JWT_SECRET=your_jwt_secret
+    volumes:
+      - ./server:/app
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: vevit-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  # optional: database
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: vevit-v4
+    ports:
+      - "5432:5432"

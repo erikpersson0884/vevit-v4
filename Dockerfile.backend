@@ -1,0 +1,54 @@
+# # Use Node LTS
+# FROM node:18-alpine
+
+# # Set working directory
+# WORKDIR /app
+
+# # Copy package files first (better caching)
+# COPY server/package*.json ./
+# COPY server/prisma ./prisma
+# COPY server/tsconfig*.json ./
+
+# # Install deps
+# RUN npm install
+
+# # Generate Prisma client
+# RUN npx prisma generate
+
+
+# # Copy source
+# COPY server/src ./src
+
+# # Build TypeScript -> JS
+# RUN npx tsc
+
+# # Generate client (no DB connection needed)
+# RUN npx prisma generate
+
+# # Wait for DB, then push schema
+
+# # CMD ["sh", "-c", "npx prisma db push && node dist/server.js"]
+
+# # Start app
+# CMD ["node", "dist/server.js"]
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package and Prisma
+COPY server/package*.json ./
+COPY server/prisma ./prisma
+
+# Install deps
+RUN npm install
+
+# Copy source and tsconfig
+COPY server/src ./src
+COPY server/tsconfig*.json ./
+
+# Build TypeScript
+RUN npm run build
+
+# Push Prisma schema to DB then start app
+CMD ["sh", "-c", "npx prisma db push && node dist/server.js"]
