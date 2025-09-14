@@ -1,10 +1,11 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useEffect, useContext, useState, ReactNode } from 'react';
 import authApi from '../api/authApi';
 import userApi from '../api/userApi';
 import { setAuthToken } from '../api/axiosInstance';
 
 interface AuthContextType {
     currentUser: IUser | null;
+    isLoggedIn: boolean;
     login: (username: string, password: string) => Promise<boolean>;
     logout: () => void;
 
@@ -16,9 +17,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [ currentUser, setCurrentUser ] = useState<IUser | null>(null);
+    const [ isLoggedIn, setIsLoggedIn ] = useState<boolean>(!!currentUser);
     const [ showAuthPopup, setShowAuthPopup ] = React.useState(false);
 
-    React.useEffect(() => {
+    useEffect(() => {
+        setIsLoggedIn(!!currentUser);
+    }, [currentUser]);
+
+    useEffect(() => {
         const fetchUser = async () => {
             try {
                 const user = await userApi.getCurrentUser();
@@ -54,7 +60,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     return (
-        <AuthContext.Provider value={{ currentUser, login, logout, showAuthPopup, setShowAuthPopup }}>
+        <AuthContext.Provider value={{ currentUser, isLoggedIn, login, logout, showAuthPopup, setShowAuthPopup }}>
             {children}
         </AuthContext.Provider>
     );

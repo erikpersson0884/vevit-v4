@@ -39,9 +39,7 @@ export const vevApi = {
 
     updateVev: async (
         vevId: string, 
-        date?: Date, 
-        winnerId?: string | null, 
-        reason?: string | null
+        {date, winnerId, reason}: UpdateVevOptions,
     ): Promise<boolean> => {
         try {
             const body: Record<string, string | null> = {};
@@ -50,7 +48,7 @@ export const vevApi = {
             if (reason) body.reason = reason;
 
             const response = await api.patch(`/vev/${vevId}`, body);
-            return response.data.success;
+            return response.status === 200;
         } catch (error) {
             console.error(`Error updating vev with id ${vevId}:`, error);
             throw error;

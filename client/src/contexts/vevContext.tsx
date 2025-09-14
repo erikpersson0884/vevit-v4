@@ -6,10 +6,9 @@ import { useAuthContext } from './authContext';
 
 interface VevContextProps {
     vevs: IVev[];
-    setVevs: React.Dispatch<React.SetStateAction<IVev[]>>;
     filteredVevs: IVev[];
     createVev: (challangedId: string, date: string, reason: string) => Promise<boolean>;
-    updateVev: (vevId: string, date: Date, winnerId: string | null, reason: string | null) => Promise<boolean>;
+    updateVev: (vevId: string, options: UpdateVevOptions) => Promise<boolean>;
     updateVevWinner: (vevId: string, winnerId: string | null) => Promise<boolean>;
     deleteVev: (vevId: string) => Promise<boolean>;
 
@@ -55,6 +54,13 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setFilteredVevs(filtered);
     }, [filters, vevs, currentUser]);
 
+    useEffect(() => {
+        if (selectedVev) {
+            const updatedSelectedVev = vevs.find(vev => vev.id === selectedVev.id) || null;
+            setSelectedVev(updatedSelectedVev);
+        }
+    }, [vevs]);
+
 
     const fetchVevs = async () => {
         try {
@@ -88,22 +94,16 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         }
     };
 
-    const updateVev = async (
-        vevId: string, 
-        date: Date, 
-        winnerId: string | null, 
-        reason: string | null
-    ) => {
+    const updateVev = async (vevId: string, options: UpdateVevOptions): Promise<boolean> => {
         try {
             const vevToUpdate = getVevById(vevId);
-            if (!vevToUpdate) throw new Error("Tried to update a vev that did not exist")
-            
-            const success = await vevApi.updateVev(vevId, date, winnerId, reason);
+            if (!vevToUpdate) throw new Error("Tried to update a vev that did not exist");
+
+            const success = await vevApi.updateVev(vevId, options);
             fetchVevs();
             return success;
-        }
-        catch (error) {
-            console.error('Error updating VEV:', error);
+        } catch (error) {
+            console.error("Error updating VEV:", error);
             return false;
         }
     };
@@ -111,7 +111,7 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const updateVevWinner = async (
         vevId: string,
         winnerId: string | null
-    ) => {
+    ): Promise<boolean> => {
         try {
             await vevApi.updateWinner(vevId, winnerId)
             return true;
@@ -137,7 +137,6 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     return (
         <VevContext.Provider value={{ 
             vevs, 
-            setVevs, 
             filteredVevs, 
             createVev,
             updateVev,

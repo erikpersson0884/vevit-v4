@@ -20,6 +20,12 @@ declare global {
         value: T;
         label: string;
     }
+
+    type UpdateVevOptions = {
+        date?: Date;
+        winnerId?: string | null;
+        reason?: string | null;
+    };
 }
 
 export {};

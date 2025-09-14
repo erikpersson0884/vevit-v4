@@ -11,9 +11,9 @@ export const CreateVevSchema = z.object({
 });
 
 export const UpdateVevSchema = z.object({
-    date: z.date(), 
-    winnerId: z.string().uuid().nullable(),
-    reason: z.string().max(MAX_LENGTH_FOR_VEV_REASON),
+    date: z.date().optional(), 
+    winnerId: z.string().uuid().nullable().optional(),
+    reason: z.string().max(MAX_LENGTH_FOR_VEV_REASON).optional(),
 });
 
 export const UpdateVevWinnerSchema = z.object({

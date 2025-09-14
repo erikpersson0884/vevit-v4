@@ -59,7 +59,7 @@ button img {
     min-width: 1.5rem;
 }
 
-input, select {
+input, select, textarea {
     background-color: var(--background-color);
     color: var(--text-color);
 
@@ -67,4 +67,8 @@ input, select {
     border-radius: .3rem;
     border: var(--primary-color) 2px solid;
     outline: none;
+}
+
+textarea {
+    padding: .5rem;
 }

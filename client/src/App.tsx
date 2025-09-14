@@ -1,6 +1,7 @@
 import './App.css'
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useAuthContext } from './contexts/authContext'
 
 import MainPage from './pages/mainPage/MainPage'
 import UserManagement from './pages/userManagement/UserManagement'
@@ -9,10 +10,10 @@ import Header from './layout/header/Header'
 import Footer from './layout/footer/Footer'
 
 import AuthPopup from './components/authPopup/AuthPopup';
-import UpdateVevPopup from './components/updateVevPopup/UpdateVevPopup';
 import VevPopup from './components/vevPopup/VevPopup';
 
 function App() {
+    const { isLoggedIn } = useAuthContext()
     return (
         <BrowserRouter>
             <Header />
@@ -21,18 +22,13 @@ function App() {
                 <Route path='/' element={
                     <>
                         <MainPage />
-                        <UpdateVevPopup />
                         <VevPopup />
                     </>
                 } />
 
-                <Route path='/user-management' element={
-                    <>  
-                        <UserManagement />
-                        
-                    </>
-                } />
+                { isLoggedIn && <Route path='/user-management' element={ <UserManagement /> } />}
 
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
 
             <AuthPopup />

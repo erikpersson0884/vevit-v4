@@ -14,7 +14,7 @@ const VevPopup = () => {
     if (!selectedVev) return null;
 
     if (editIsOpen) {
-        return <UpdateVevPopup />;
+        return <UpdateVevPopup onClose={() => setEditIsOpen(false)} />;
     } 
     return (
         <VevInfoPopup openUpdatePopup={() => setEditIsOpen(true)} />

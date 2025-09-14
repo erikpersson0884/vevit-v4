@@ -4,6 +4,8 @@ import ActionPopupWindow from "../actionPopupWindow/ActionPopupWindow";
 import UpdateUserPopup from "../updateUserPopup/UpdateUserPopup";
 import { useUsersContext } from "../../contexts/usersContext";
 import './AuthPopup.css';
+import userAttributesIcon from '../../assets/user-attributes.svg';
+import usersIcon from '../../assets/users.svg';
 
 import { Link } from "react-router-dom";
 
@@ -122,9 +124,17 @@ const AuthPopup: React.FC = () => {
                 acceptButtonText="Logga ut"
                 className="auth-popup"
             >
-                <button className="" onClick={() => setPopupType(PopupType.UPDATE)}>Uppdatera uppgifter</button>
+                <button className="" onClick={() => setPopupType(PopupType.UPDATE)}>
+                    Uppdatera uppgifter
+                    <img src={userAttributesIcon} alt="User Attributes" />
+                    
+                </button>
                 <Link to="/user-management">
-                    <button onClick={handleClose}>Hantera Användare</button>
+                    <button onClick={handleClose}>
+                        Hantera Användare
+                        <img src={usersIcon} alt="Users" />
+
+                    </button>
                 </Link>
             </ActionPopupWindow>
         );
