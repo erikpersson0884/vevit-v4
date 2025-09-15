@@ -26,12 +26,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push backend image
+      - name: Build and push backend image (multi-arch)
         run: |
-          docker build -f Dockerfile.backend -t ghcr.io/${{ github.repository }}/backend:latest .
-          docker push ghcr.io/${{ github.repository }}/backend:latest
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            -f Dockerfile.backend \
+            -t ghcr.io/${{ github.repository }}/backend:latest \
+            --push .
 
-      - name: Build and push frontend image
+      - name: Build and push frontend image (multi-arch)
         run: |
-          docker build -f Dockerfile.frontend -t ghcr.io/${{ github.repository }}/frontend:latest .
-          docker push ghcr.io/${{ github.repository }}/frontend:latest
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            -f Dockerfile.frontend \
+            -t ghcr.io/${{ github.repository }}/frontend:latest \
+            --push .
