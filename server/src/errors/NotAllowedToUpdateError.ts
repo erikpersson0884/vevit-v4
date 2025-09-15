@@ -1,4 +1,4 @@
-import { CustomError } from './CustomError';
+import { CustomError } from './CustomError.js';
 
 export class NotAllowedToUpdateError extends CustomError {
     constructor(message: string = 'User is not allowed to update this') {

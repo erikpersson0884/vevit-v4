@@ -1,4 +1,4 @@
-import { CustomError } from './CustomError';
+import { CustomError } from './CustomError.js';
 
 export class UpdateFailedError extends CustomError {
     constructor(message: string = 'Update was unsuccessful') {

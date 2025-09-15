@@ -1,14 +1,14 @@
-import { IVev } from '../models/IVev';
+import { IVev } from '../models/IVev.js';
 import { v4 as uuidv4 } from 'uuid';
-import prismaClient from "../lib/prisma";
-import { createUserService } from './userService';
-import { IUserService } from '../models/services/IUserService';
+import prismaClient from "../lib/prisma.js";
+import { createUserService } from './userService.js';
+import { IUserService } from '../models/services/IUserService.js';
 import { PrismaClient, Vev } from '@prisma/client';
-import { UserNotFoundError } from '../errors/UserNotFoundError';
-import { NotAllowedToUpdateError } from '../errors/NotAllowedToUpdateError';
-import { IVevService } from '../models/services/IVevService';
-import { VevNotFoundError } from '../errors/VevNotFoundError';
-import { UpdateFailedError } from '../errors/UpdateFailedError';
+import { UserNotFoundError } from '../errors/UserNotFoundError.js';
+import { NotAllowedToUpdateError } from '../errors/NotAllowedToUpdateError.js';
+import { IVevService } from '../models/services/IVevService.js';
+import { VevNotFoundError } from '../errors/VevNotFoundError.js';
+import { UpdateFailedError } from '../errors/UpdateFailedError.js';
 
 
 export class VevService implements IVevService {

@@ -1,4 +1,4 @@
-import { IVev } from '../IVev';
+import { IVev } from '../IVev.js';
 
 export interface IVevService {
     checkIfUserInVev(userId: string, vevId: string): Promise<boolean>;

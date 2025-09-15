@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
-import userRoutes from "./routes/userRoutes";
-import vevRoutes from "./routes/vevRoutes";
-import authRoutes from "./routes/authRoutes";
-import { errorHandler } from "./middleware/errorHandler";
+import userRoutes from "./routes/userRoutes.js";
+import vevRoutes from "./routes/vevRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 

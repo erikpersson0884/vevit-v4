@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest.js';
 
 export interface IVevController {
     getAllVevs: (req: Request, res: Response) => void;

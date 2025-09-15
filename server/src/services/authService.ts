@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { IAuthService } from "../models/services/IAuthService";
-import { createUserService } from "./userService";
-import { UserNotFoundError } from "../errors/UserNotFoundError";
+import { IAuthService } from "../models/services/IAuthService.js";
+import { createUserService } from "./userService.js";
+import { UserNotFoundError } from "../errors/UserNotFoundError.js";
 
 class authService implements IAuthService {
     private readonly JWT_SECRET = process.env.JWT_SECRET || "fallbacksecret";

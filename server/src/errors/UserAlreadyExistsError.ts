@@ -1,6 +1,6 @@
 // src/errors/NotFoundError.ts
 
-import { CustomError } from './CustomError';
+import { CustomError } from './CustomError.js';
 
 export class UserAlreadyExistsError extends CustomError {
     constructor(message: string = 'UserAlreadyExistsError') {

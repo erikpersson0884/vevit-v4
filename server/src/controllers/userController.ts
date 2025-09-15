@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { createUserService } from "../services/userService";
-import { IUserController } from "../models/controllers/IUserController";
-import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
-import { IUser } from "../models/IUser";
-import { UserResponseSchema, UserResponseArraySchema } from '../models/dtos/UserDTOs';
-import { sendValidatedResponse } from "../middleware/validateResponseMiddleware";
-import { MissingUserIDError } from "../errors/MissingUserIDError";
-import { UnauthorizedActionError } from "../errors/UnauthorizedActionError";
+import { createUserService } from "../services/userService.js";
+import { IUserController } from "../models/controllers/IUserController.js";
+import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
+import { IUser } from "../models/IUser.js";
+import { UserResponseSchema, UserResponseArraySchema } from '../models/dtos/UserDTOs.js';
+import { sendValidatedResponse } from "../middleware/validateResponseMiddleware.js";
+import { MissingUserIDError } from "../errors/MissingUserIDError.js";
+import { UnauthorizedActionError } from "../errors/UnauthorizedActionError.js";
 
 const userService = createUserService();
 

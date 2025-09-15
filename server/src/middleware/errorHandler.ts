@@ -1,6 +1,6 @@
 
 import { Request, Response, NextFunction, ErrorRequestHandler  } from 'express';
-import { CustomError } from '../errors/CustomError';
+import { CustomError } from '../errors/CustomError.js';
 
 export const errorHandler: ErrorRequestHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof CustomError) {

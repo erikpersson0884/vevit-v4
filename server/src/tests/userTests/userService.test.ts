@@ -1,13 +1,14 @@
-import { UserService } from '../../services/userService';
+import { UserService } from '../../services/userService.js';
+import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 const mockPrisma: any = {
     user: {
-        findFirst: jest.fn(),
-        findMany: jest.fn(),
-        findUnique: jest.fn(),
-        create: jest.fn(),
-        update: jest.fn(),
-        delete: jest.fn(),
+        findFirst: vi.fn(),
+        findMany: vi.fn(),
+        findUnique: vi.fn(),
+        create: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
     }
 };
 
@@ -15,7 +16,7 @@ describe('UserService', () => {
     let userService: UserService;
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         userService = new UserService(mockPrisma); // Now you're passing the mock
     });
 

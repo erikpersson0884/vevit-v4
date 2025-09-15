@@ -1,13 +1,13 @@
 import express from "express";
 import { Request, Response } from "express";
-import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
+import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
 
-import { createUserController } from "../controllers/userController";
+import { createUserController } from "../controllers/userController.js";
 
-import authMiddleware from "../middleware/authMiddleware";
-import { validateRequest } from "../middleware/validateRequestMiddleware";
-import { CreateUserSchema, UpdateUserSchema } from "../models/dtos/UserDTOs";
-import asyncHandler from "../middleware/asyncHandler";
+import authMiddleware from "../middleware/authMiddleware.js";
+import { validateRequest } from "../middleware/validateRequestMiddleware.js";
+import { CreateUserSchema, UpdateUserSchema } from "../models/dtos/UserDTOs.js";
+import asyncHandler from "../middleware/asyncHandler.js";
 
 const router = express.Router();
 

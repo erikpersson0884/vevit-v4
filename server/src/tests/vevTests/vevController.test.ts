@@ -1,15 +1,17 @@
-import { createVevController } from "../../controllers/vevController";
-import { NotAllowedToUpdateError } from "../../errors/NotAllowedToUpdateError";
+import { createVevController } from "../../controllers/vevController.js";
+import { NotAllowedToUpdateError } from "../../errors/NotAllowedToUpdateError.js";
+import { describe, it, beforeEach, expect, vi } from 'vitest';
+
 
 // Mock the dependencies
 const mockService = {
-    getAllVevs: jest.fn(),
-    createVev: jest.fn(),
-    getVevById: jest.fn(),
-    updateVev: jest.fn(),
-    setVevWinner: jest.fn(),
-    deleteVev: jest.fn(),
-    checkIfUserInVev: jest.fn(),
+    getAllVevs: vi.fn(),
+    createVev: vi.fn(),
+    getVevById: vi.fn(),
+    updateVev: vi.fn(),
+    setVevWinner: vi.fn(),
+    deleteVev: vi.fn(),
+    checkIfUserInVev: vi.fn(),
 };
 
 const controller = createVevController(mockService as any);
@@ -17,14 +19,14 @@ const controller = createVevController(mockService as any);
 // Mock req and res
 const mockResponse = () => {
     const res: any = {};
-    res.status = jest.fn().mockReturnValue(res);
-    res.json = jest.fn().mockReturnValue(res);
+    res.status = vi.fn().mockReturnValue(res);
+    res.json = vi.fn().mockReturnValue(res);
     return res;
 };
 
 describe("VevController", () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     describe("getAllVevs", () => {

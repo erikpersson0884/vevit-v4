@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client"; 
-import prismaClient from "../lib/prisma";
-import { IUser } from '../models/IUser';
-import { IUserService } from '../models/services/IUserService';
-import { UserNotFoundError } from '../errors/UserNotFoundError';
-import { UserAlreadyExistsError } from '../errors/UserAlreadyExistsError';
+import prismaClient from "../lib/prisma.js";
+import { IUser } from '../models/IUser.js';
+import { IUserService } from '../models/services/IUserService.js';
+import { UserNotFoundError } from '../errors/UserNotFoundError.js';
+import { UserAlreadyExistsError } from '../errors/UserAlreadyExistsError.js';
 
 export class UserService implements IUserService {
     private prisma: PrismaClient;

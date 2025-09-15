@@ -1,9 +1,9 @@
 import express from "express";
-import { createVevController } from "../controllers/vevController";
-import authMiddleware from "../middleware/authMiddleware";
-import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
-import { validateRequest } from "../middleware/validateRequestMiddleware";
-import { CreateVevSchema, UpdateVevSchema, UpdateVevWinnerSchema } from "../models/dtos/VevDTO";
+import { createVevController } from "../controllers/vevController.js";
+import authMiddleware from "../middleware/authMiddleware.js";
+import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
+import { validateRequest } from "../middleware/validateRequestMiddleware.js";
+import { CreateVevSchema, UpdateVevSchema, UpdateVevWinnerSchema } from "../models/dtos/VevDTO.js";
 
 const router = express.Router();
 const vevController = createVevController();

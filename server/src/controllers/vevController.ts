@@ -1,8 +1,8 @@
-import { createVevService} from "../services/vevService";
+import { createVevService} from "../services/vevService.js";
 import { Request, Response } from "express";
-import { IVevController } from "../models/controllers/IVevController";
-import { AuthenticatedRequest } from "../types/AuthenticatedRequest";
-import { NotAllowedToUpdateError } from "../errors/NotAllowedToUpdateError";
+import { IVevController } from "../models/controllers/IVevController.js";
+import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
+import { NotAllowedToUpdateError } from "../errors/NotAllowedToUpdateError.js";
 
 const vevService = createVevService();
 
