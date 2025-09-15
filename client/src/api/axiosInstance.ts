@@ -12,9 +12,11 @@ const isTokenValid = (token: string): boolean => {
     }
 }
 
+const API_URL = import.meta.env.VITE_BASE_URL || "/api";
+if (!API_URL) throw new Error('VITE_BASE_URL is not defined in environment variables');
+
 const api = axios.create({
-    // baseURL: "http://localhost:3001/api",
-    baseURL: "http://192.168.50.127:3001/api",
+    baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json',
     },

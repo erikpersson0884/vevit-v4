@@ -5,8 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     container_name: vevit-backend
-    ports:
-      - "3001:3001"   # or whatever your backend runs on
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://myuser:secretpassword@db:5432/vevit-v4?schema=public
@@ -20,6 +18,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+      args:
+        VITE_BASE_URL: http://backend:3001
     container_name: vevit-frontend
     ports:
       - "3000:80"
@@ -34,5 +34,3 @@ services:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: secretpassword
       POSTGRES_DB: vevit-v4
-    ports:
-      - "5432:5432"
