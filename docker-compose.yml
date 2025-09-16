@@ -9,10 +9,9 @@ services:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://myuser:secretpassword@db:5432/vevit-v4?schema=public
       - JWT_SECRET=your_jwt_secret
-    volumes:
-      - ./server:/app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
     build:
@@ -34,3 +33,10 @@ services:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: secretpassword
       POSTGRES_DB: vevit-v4
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d vevit-v4"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
