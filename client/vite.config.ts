@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
-import icons from './icons.json'
+import icons from './pwa/icons.json'
 
 // https://vite.dev/config/
 export default defineConfig({
