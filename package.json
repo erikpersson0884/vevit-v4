@@ -1,7 +1,7 @@
 {
     "name": "vevit-v4",
     "version": "1.0.0",
-    "description": "",
+    "description": " The third (and hopfully final) version of the booking applicaiton to book vev in the Sandlådan ",
     "main": "index.js",
     "scripts": {
         "server": "cd server && npm run dev",
