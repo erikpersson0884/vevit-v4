@@ -14,7 +14,6 @@
         "test-server": "cd server && npm run test",
         "test": "npm run test-server",
 
-
         "build-server": "cd server && npm run build",
         "build-client": "cd client && npm run build",
         "build": "npm run build-server && npm run build-client"
