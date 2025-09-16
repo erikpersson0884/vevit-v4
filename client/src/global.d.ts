@@ -24,7 +24,11 @@ declare global {
         username: string;
         createdAt: Date;
         updatedAt: Date;
+        role: Role;
+        isAdmin: boolean;
     }
+
+    type Role = 'user' | 'admin';
 
     interface IFilterOption<T> {
         value: T;

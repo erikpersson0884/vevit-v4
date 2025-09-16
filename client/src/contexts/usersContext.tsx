@@ -21,7 +21,12 @@ export const UsersProvider = ({ children }: { children: ReactNode }) => {
     const fetchUsers = async () => {
         try {
             const fetchedUsers = await userApi.fetchUsers();
-            setUsers(fetchedUsers);
+            const myUsers: IUser[] = fetchedUsers.map((user: any) => {
+                user.isAdmin = user.role === 'admin';
+                return user;
+            });
+
+            setUsers(myUsers);
             setLoadingUsers(false);
         } catch (error) {
             console.error('Failed to fetch users:', error);
@@ -32,8 +37,8 @@ export const UsersProvider = ({ children }: { children: ReactNode }) => {
         fetchUsers();
     }, []);
 
-    const getUserById = (id: string) => {
-        const user = users.find(user => user.id === id);
+    const getUserById = (id: string): IUser => {
+        const user: IUser | undefined = users.find(user => user.id === id);
         if (user) return user;
         else throw new Error(`User with id ${id} not found`);
     }
@@ -72,6 +77,9 @@ export const UsersProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
+    if (loadingUsers) {
+        return <div>Loading users...</div>;
+    }
 
     return (
         <UsersContext.Provider value={{ loadingUsers, users, getUserById, createUser, updateUser }}>

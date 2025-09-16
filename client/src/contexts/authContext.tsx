@@ -20,6 +20,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [ isLoggedIn, setIsLoggedIn ] = useState<boolean>(!!currentUser);
     const [ showAuthPopup, setShowAuthPopup ] = React.useState(false);
 
+    const getCurrentUser = async (): Promise<void> => {
+        const user = await userApi.getCurrentUser();
+        user.isAdmin = user.role === 'admin';
+        setCurrentUser(user);
+    }
+
+    
     useEffect(() => {
         setIsLoggedIn(!!currentUser);
     }, [currentUser]);
@@ -27,10 +34,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const user = await userApi.getCurrentUser();
-                setCurrentUser(user);
+                await getCurrentUser();
             } catch (error) {
-                
                 console.error('Failed to fetch current user', error);
             }
         };
@@ -43,9 +48,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         try {
             const token: string = await authApi.login(username, password);
             if (token) {
-                setAuthToken(token); // Set the token in axios instance
-                const user = await userApi.getCurrentUser(); // Fetch the current user after login
-                setCurrentUser(user);
+                setAuthToken(token);
+                getCurrentUser();
                 return true;
             }
         } catch (error: unknown) {

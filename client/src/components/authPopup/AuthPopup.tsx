@@ -114,6 +114,7 @@ const AuthPopup: React.FC = () => {
         handleClose();
     }
     
+    
     if ( currentUser && popupType === PopupType.PROFILE) {
         return (
             <ActionPopupWindow 
@@ -124,18 +125,20 @@ const AuthPopup: React.FC = () => {
                 acceptButtonText="Logga ut"
                 className="auth-popup"
             >
-                <button className="" onClick={() => setPopupType(PopupType.UPDATE)}>
+                <button onClick={() => setPopupType(PopupType.UPDATE)}>
                     Uppdatera uppgifter
                     <img src={userAttributesIcon} alt="User Attributes" />
                 </button>
+                
+                { currentUser.isAdmin &&
+                    <Link to="/user-management">
+                        <button onClick={handleClose}>
+                            Hantera Användare
+                            <img src={usersIcon} alt="Users" />
 
-                <Link to="/user-management">
-                    <button onClick={handleClose}>
-                        Hantera Användare
-                        <img src={usersIcon} alt="Users" />
-
-                    </button>
-                </Link>
+                        </button>
+                    </Link>
+                }
             </ActionPopupWindow>
         );
     }
