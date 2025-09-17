@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import icons from './pwa/icons.json'
@@ -14,6 +14,11 @@ export default defineConfig({
                 secure: true,
             },
         }
+    },
+    test: {
+        globals: true,
+        environment: "jsdom",
+        setupFiles: "./tests/setupTests.ts",
     },
     plugins: [
         react(),
