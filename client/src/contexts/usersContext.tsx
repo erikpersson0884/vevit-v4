@@ -77,10 +77,6 @@ export const UsersProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-    if (loadingUsers) {
-        return <div>Loading users...</div>;
-    }
-
     return (
         <UsersContext.Provider value={{ loadingUsers, users, getUserById, createUser, updateUser }}>
             {children}
