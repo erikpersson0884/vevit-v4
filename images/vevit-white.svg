@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="100mm"
+   height="56.24823mm"
+   viewBox="0 0 100 56.24823"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="vevit-white.svg"
+   inkscape:export-filename="vev IT.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#232323"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#c848a3"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="2.025849"
+     inkscape:cx="22.706529"
+     inkscape:cy="80.213283"
+     inkscape:window-width="2560"
+     inkscape:window-height="1351"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Lager 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-378.50745,-281.80498)">
+    <g
+       id="g5143-1-8"
+       transform="matrix(1.1608365,0,0,1.1608365,116.04025,122.84296)"
+       inkscape:export-filename="vevit-white.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
+      <path
+         id="path4485-42-2-9"
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.116072"
+         d="m 288.01885,136.93748 a 24.227634,24.227634 0 0 0 -22.65293,15.66176 h 1.72851 a 22.613795,22.613795 0 0 1 20.92441,-14.0482 22.613795,22.613795 0 0 1 22.61414,22.61365 22.613795,22.613795 0 0 1 -22.61414,22.61412 22.613795,22.613795 0 0 1 -20.92489,-14.04818 l -1.72754,1e-5 a 24.227634,24.227634 0 0 0 22.65244,15.66175 24.227634,24.227634 0 0 0 24.22771,-24.22769 24.227634,24.227634 0 0 0 -24.22771,-24.22722 z" />
+      <g
+         id="g4239-6-5-7-0"
+         transform="translate(171.2124,-2.58354)"
+         style="stroke:none">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.6944px;font-family:'Copperplate Gothic Bold';-inkscape-font-specification:'Copperplate Gothic Bold, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           x="54.949673"
+           y="170.99159"
+           id="text343-9-5-3-79-1"
+           inkscape:export-filename=".\vevIT-logo.png"
+           inkscape:export-xdpi="300"
+           inkscape:export-ydpi="300"><tspan
+             sodipodi:role="line"
+             id="tspan341-3-1-2-9-3"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24.6944px;font-family:'Copperplate Gothic Bold';-inkscape-font-specification:'Copperplate Gothic Bold, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583"
+             x="54.949673"
+             y="170.99159">vev</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.8973px;font-family:'Copperplate Gothic Bold';-inkscape-font-specification:'Copperplate Gothic Bold, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#00ffff;stroke:none;stroke-width:0.264583"
+           x="103.65921"
+           y="171.76331"
+           id="text347-0-6-5-2-7"><tspan
+             sodipodi:role="line"
+             id="tspan345-1-9-6-6-4"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.8973px;font-family:'Copperplate Gothic Bold';-inkscape-font-specification:'Copperplate Gothic Bold, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#00ffff;stroke:none;stroke-width:0.264583"
+             x="103.65921"
+             y="171.76331">IT</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>
