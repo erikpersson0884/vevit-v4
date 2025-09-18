@@ -9,6 +9,7 @@ import gooseicon from '../../assets/header-images/goose.png';
 import ideicon from '../../assets/header-images/ide.png';
 import fredagicon from '../../assets/header-images/fredag.png';
 import neineiicon from '../../assets/header-images/neinei.png';
+import SpaceBackground from '../../components/spaceBackground/SpaceBackground';
 
 const Header: React.FC = () => {
     const { currentUser } = useAuthContext();
@@ -28,6 +29,8 @@ const Header: React.FC = () => {
     
     return (
         <header className="page-header">
+            {(currentUser?.username.toLowerCase() === 'space') && <SpaceBackground />}
+
             <Link to="/">
                 <img src={headerLogo} alt="VevIT Logo" className="header-logo" width={200}/>
             </Link>
