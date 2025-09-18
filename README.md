@@ -128,10 +128,10 @@ Don't forget to give the project a star! Thanks again!
 
 
 # Acknowledgements
-![Gustav 'Goose' Asplund][goose-shield]
+<!-- ![Gustav 'Goose' Asplund][goose-shield]
 ![Oscar 'Space' Eriksson][space-shield]
 ![Oscar 'Saxen' Palm][saxen-shield]
-![Hanna 'Neinei' Adenholm][neinei-shield]
+![Hanna 'Neinei' Adenholm][neinei-shield] -->
 
 Without the help of a lot of wonderful people, this project would not have been possible! Therefore, there are a few people I would like to acknowledge for their help and support along the way.
 
@@ -143,28 +143,15 @@ A big thanks also goes out to my wonderful girlfriend <a href="https://github.co
 
 Finally, a big thanks to all the people who encouraged and helped me along the way, always keeping me motivated to finish this project!🩵
 
+<img src="./images/goose.svg" style="height:50px"/>
 
-<!-- SADLY README.md dont suport this, it however would look so much better
-<ul class="acknowledgements-list">
-  <li class="acknowledgement-item">
-    <img src="https://github.com/GAsplund.png" alt="Gustav 'Goose' Asplund">
-    <a href="https://github.com/GAsplund">Gustav "Goose" Asplund</a>
-  </li>
-  <li class="acknowledgement-item">
-    <img src="https://github.com/Oscariremma.png" alt="Oscar 'Space' Eriksson">
-    <a href="https://github.com/Oscariremma">Oscar "Space" Eriksson</a>
-  </li>
-  <li class="acknowledgement-item">
-    <img src="https://github.com/x183.png" alt="Oscar 'Saxen' Palm">
-    <a href="https://github.com/x183">Oscar "Saxen" Palm</a>
-  </li>
-  <li class="acknowledgement-item">
-    <img src="https://github.com/Adenholm.png" alt="Hanna 'Neinei' Adenholm">
-    <a href="https://github.com/Adenholm">Hanna "Neinei" Adenholm</a>
-  </li>
-</ul>
+<img src="./images/space.svg" style="height:50px"/>
 
--->
+<img src="./images/saxen.svg" style="height:50px"/>
+
+<img src="./images/neinei.svg" style="height:50px"/>
+
+
 
 
 <!--  CONFIG FOR README.md   -->
@@ -202,8 +189,28 @@ Finally, a big thanks to all the people who encouraged and helped me along the w
 
 
 
+<!-- SADLY README.md dont suport this, so i use images instead
 
-<!-- Acknowlegements -->
+<ul class="acknowledgements-list">
+  <li class="acknowledgement-item">
+    <img src="https://github.com/GAsplund.png" alt="Gustav 'Goose' Asplund">
+    <a href="https://github.com/GAsplund">Gustav "Goose" Asplund</a>
+  </li>
+  <li class="acknowledgement-item">
+    <img src="https://github.com/Oscariremma.png" alt="Oscar 'Space' Eriksson">
+    <a href="https://github.com/Oscariremma">Oscar "Space" Eriksson</a>
+  </li>
+  <li class="acknowledgement-item">
+    <img src="https://github.com/x183.png" alt="Oscar 'Saxen' Palm">
+    <a href="https://github.com/x183">Oscar "Saxen" Palm</a>
+  </li>
+  <li class="acknowledgement-item">
+    <img src="https://github.com/Adenholm.png" alt="Hanna 'Neinei' Adenholm">
+    <a href="https://github.com/Adenholm">Hanna "Neinei" Adenholm</a>
+  </li>
+</ul>
+
+
 <style>
   .acknowledgements-list {
     list-style: none;
@@ -231,3 +238,4 @@ Finally, a big thanks to all the people who encouraged and helped me along the w
     color: #c4c4c4ff;
   }
 </style>
+-->
