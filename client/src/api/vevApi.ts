@@ -1,11 +1,27 @@
 import api from './axiosInstance';
 
+const DEFAULT_PAGE = 0;
+const DEFAULT_LIMIT = 25;
 
 export const vevApi = {
-    fetchVevs: async () => {
+    fetchVevs: async (
+        page: number = DEFAULT_PAGE, 
+        limit: number = DEFAULT_LIMIT
+    ): Promise<FetchVevsResponse> => {
+        const params = {
+            page: page.toString(),
+            limit: limit.toString(),
+        }
+
         try {
-            const response = await api.get('/vev');
-            return response.data;
+            const response = await api.get('/vev', { params });
+            const apiResponse = {
+                vevs: response.data.vevs,
+                total: response.data.total,
+                page: response.data.page,
+                limit: response.data.limit,
+            }
+            return apiResponse;
         } catch (error) {
             console.error('Error fetching vevs:', error);
             throw error;

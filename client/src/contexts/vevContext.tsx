@@ -18,6 +18,7 @@ interface sortOptions {
 interface VevContextProps {
     vevs: IVev[];
     filteredVevs: IVev[];
+    fetchVevs: () => void;
     createVev: (challangedId: string, date: string, reason: string) => Promise<boolean>;
     updateVev: (vevId: string, options: UpdateVevOptions) => Promise<boolean>;
     updateVevWinner: (vevId: string, winnerId: string | null) => Promise<boolean>;
@@ -39,6 +40,8 @@ const VevContext = createContext<VevContextProps | undefined>(undefined);
 export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { currentUser } = useAuthContext();
     const { getUserById } = useUsersContext();
+
+    const [loadingVevs, setLoadingVevs] = useState(false);
     
     const [ vevs, setVevs ] = useState<IVev[]>([]);
     const [ filteredVevs, setFilteredVevs ] = useState<IVev[]>([]);
@@ -49,6 +52,9 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         userFilter: null,
     });
     const [sortConfig, setSortConfig] = useState<sortOptions>({key: "time", order: "asc"});
+
+    const [ totalNumberOfVevs, setTotalNumberOfVevs ] = useState<number>(0);
+    const [ currentPage, setCurrentPage ] = useState<number>(0);
     
 
     const sortVevs = (
@@ -122,21 +128,33 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }, [vevs]);
 
 
-    const fetchVevs = async () => {
+    const fetchVevs = async (page: number = currentPage, limit?: number) => {
+        if (totalNumberOfVevs <= vevs.length && vevs.length !== 0) return; // all vevs already fetched
+        if (loadingVevs) return; // prevent multiple simultaneous fetches
+        console.log("fetching some vevs...");
+
+        setLoadingVevs(true);
+
         try {
-            const data: IVev[] = await vevApi.fetchVevs();
-            data.forEach(vev => {
+            const { vevs: newVevs, total: newTotal}: FetchVevsResponse = await vevApi.fetchVevs(page, limit);
+            newVevs.forEach(vev => {
                 vev.date = new Date(vev.date);
             });
-            setVevs(data);
-            
+            setVevs([
+                ...vevs,
+                ...newVevs.filter(newVev => !vevs.some(existingVev => existingVev.id === newVev.id))
+            ]);
+            setCurrentPage(currentPage+1);
+            setTotalNumberOfVevs(newTotal);
         } catch (error) {
             console.error('Error fetching vevs:', error);
+        } finally {
+            setLoadingVevs(false);
         }
     };
 
     React.useEffect(() => {
-        fetchVevs();
+        fetchVevs(0);
     }, []);
 
     const getVevById = (id: string): IVev | undefined => {
@@ -198,6 +216,7 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         <VevContext.Provider value={{ 
             vevs, 
             filteredVevs, 
+            fetchVevs,
             createVev,
             updateVev,
             updateVevWinner,

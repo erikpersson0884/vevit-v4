@@ -19,7 +19,7 @@ export class VevService implements IVevService {
         this.prisma = prismaClient;
     }
 
-        public async checkIfUserInVev(userId: string, vevId: string): Promise<boolean> {
+    public async checkIfUserInVev(userId: string, vevId: string): Promise<boolean> {
         const vev = await this.prisma.vev.findUnique({
             where: { id: vevId },
             include: { challenger: true, challenged: true }

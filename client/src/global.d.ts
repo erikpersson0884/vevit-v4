@@ -8,6 +8,15 @@ declare global {
         reason: string;
     }
 
+    // API types
+
+    interface FetchVevsResponse {
+        vevs: IVev[]; 
+        total: number;
+        page: number;
+        limit: number;
+    }
+
     // types for frontend
 
     interface IVev {

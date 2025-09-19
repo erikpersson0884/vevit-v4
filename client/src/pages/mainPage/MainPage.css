@@ -1,10 +1,13 @@
 
 .main-page {
+    flex: 1;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
 
+    min-height: 0;
     padding-inline: 3rem;
 }
 
@@ -27,10 +30,12 @@
  /* --- Vev List --- */  
 
 .vev-list {
+    flex: 1;
     display: flex;
     flex-direction: column;
 
     width: 100%;
+    min-height: 0;
 }
 
 .vev-list header {
@@ -52,6 +57,12 @@
 
 .vev-list header p:last-child {
     justify-content: flex-end;
+}
+
+.vev-list-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: scroll;
 }
 
 @media screen and (max-width: 600px) {
