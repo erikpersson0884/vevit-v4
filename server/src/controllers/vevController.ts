@@ -6,6 +6,7 @@ import { NotAllowedToUpdateError } from "../errors/NotAllowedToUpdateError.js";
 
 import sendValidatedResponse from "../middleware/validateResponseMiddleware.js";
 import { VevResponseSchema, PaginatedVevsResponseSchema } from "../models/dtos/VevDTO.js";
+import { IVev } from "../models/IVev.js";
 
 
 const defaultService = createVevService();
@@ -32,7 +33,6 @@ export const createVevController = (vevService = defaultService): IVevController
             limit,
             total
         }
-
         sendValidatedResponse(res, PaginatedVevsResponseSchema, response);
     },
 
@@ -40,14 +40,11 @@ export const createVevController = (vevService = defaultService): IVevController
         let { challengedId, date: dateString, reason } = req.body;
         const challengerId = req.user.id; // Assuming the user ID is stored in req.userId after authentication
         
-        if (!challengerId || !challengedId || !dateString) {
-            res.status(400).json({ error: "All fields are required" });
-            return;
-        }
-        
+        if (!challengerId || !challengedId || !dateString) throw new Error("Missing required fields to create a Vev");
+    
         const date: Date = new Date(dateString);
 
-        const vev = await vevService.createVev(challengerId, challengedId, date, reason);
+        const vev: IVev = await vevService.createVev(challengerId, challengedId, date, reason);
         sendValidatedResponse(res, VevResponseSchema, vev);
     },
 
@@ -64,11 +61,10 @@ export const createVevController = (vevService = defaultService): IVevController
     updateVev: async (req: AuthenticatedRequest, res: Response): Promise<void> => {
         const { id } = req.params;
         const { date, winnerId, reason }: {date?: Date, winnerId?: string, reason?: string} = req.body;
+        const isUserInVev = await vevService.checkIfUserInVev(req.user.id, id);
+        if (!isUserInVev) throw new NotAllowedToUpdateError(`User with id ${req.user.id} is not part of the Vev with id ${id} and therefore cannot update it`);
+
         const vev = await vevService.updateVev(id, date, winnerId, reason);
-        if (!vev) {
-            res.status(404).json({ error: "Vev not found" });
-            return;
-        }
         sendValidatedResponse(res, VevResponseSchema, vev);
     },
 

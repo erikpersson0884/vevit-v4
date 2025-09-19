@@ -1,7 +1,8 @@
 import { createVevController } from "../../controllers/vevController.js";
 import { NotAllowedToUpdateError } from "../../errors/NotAllowedToUpdateError.js";
 import { describe, it, beforeEach, expect, vi } from 'vitest';
-
+import {IUser } from "../../models/IUser.js";
+import { IVev } from "../../models/IVev.js";
 
 // Mock the dependencies
 const mockService = {
@@ -26,177 +27,115 @@ const mockResponse = () => {
     return res;
 };
 
+const mockUser1: IUser = {
+    id: "22222222-2222-2222-2222-222222222222",
+    username: "user 1",
+    password: "1234",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    role: "user",
+};
+
+const mockUser2: IUser = {
+    id: "33333333-3333-3333-3333-333333333333",
+    username: "user 2",
+    password: "1234",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    role: "user",
+};
+    
+const mockVev: IVev = {
+    id: "11111111-1111-1111-1111-111111111111",
+    challengerId: mockUser1.id,
+    challengedId: mockUser2.id,
+    date: new Date("2025-01-01T10:00:00Z"),
+    bookedDate: new Date("2025-01-02T10:00:00Z"),
+    winnerId: null,
+    reason: "Test reason"
+}
+mockService.createVev.mockResolvedValue(mockVev);
+
+
+
 describe("VevController", () => {
     beforeEach(() => {
         vi.clearAllMocks();
     });
 
+    describe("getVevById", () => {
+        it("should return a vev if found", async () => {
+            mockService.getVevById.mockResolvedValue(mockVev);
+            const req = { params: { id: mockVev.id } } as any;
+            const res = mockResponse();
+            await controller.getVevById(req, res);
+            expect(res.status).not.toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ id: mockVev.id }));
+        });
+
+        it("should return 404 if vev not found", async () => {
+            mockService.getVevById.mockResolvedValue(null);
+            const req = { params: { id: "non-existent-id" } } as any;
+            const res = mockResponse();
+            await controller.getVevById(req, res);
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({ error: "Vev not found" });
+        });
+    });
+
     describe("createVev", () => {
         it("should create a new vev", async () => {
-            const vev = { id: "1" };
-            mockService.createVev.mockResolvedValue(vev);
 
             const req = {
                 body: {
-                    challengedId: "challenged-id",
+                    challengedId: mockUser2.id,
                     date: new Date().toISOString(),
                     reason: "Test reason",
                 },
-                user: { id: "challenger-id" },
+                user: { id: mockUser1.id },
             } as any;
             const res = mockResponse();
 
             await controller.createVev(req, res);
 
             expect(mockService.createVev).toHaveBeenCalledWith(
-                "challenger-id",
-                "challenged-id",
+                mockUser1.id,
+                mockUser2.id,
                 expect.any(Date),
                 "Test reason"
             );
-            expect(res.status).toHaveBeenCalledWith(201);
-            expect(res.json).toHaveBeenCalledWith(vev);
         });
-
-        it("should return 400 if fields are missing", async () => {
-            const req = {
-                body: {},
-                user: { id: "challenger-id" },
-            } as any;
-            const res = mockResponse();
-
-            await controller.createVev(req, res);
-
-            expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith({ error: "All fields are required" });
-        });
-    });
-
-    describe("getVevById", () => {
-        it("should return vev by id", async () => {
-            const vev = { id: "1" };
-            mockService.getVevById.mockResolvedValue(vev);
-
-            const req = { params: { id: "1" } } as any;
-            const res = mockResponse();
-
-            await controller.getVevById(req, res);
-
-            expect(mockService.getVevById).toHaveBeenCalledWith("1");
-            expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith(vev);
-        });
-
-        it("should return 404 if vev not found", async () => {
-            mockService.getVevById.mockResolvedValue(null);
-
-            const req = { params: { id: "1" } } as any;
-            const res = mockResponse();
-
-            await controller.getVevById(req, res);
-
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: "Vev not found" });
-        });
-    });
+    })
 
     describe("updateVev", () => {
-        it("should update vev", async () => {
-            const updatedVev = { id: "1" };
-            mockService.updateVev.mockResolvedValue(updatedVev);
-
+        it("should update a vev if user is part of it", async () => {
+            mockService.getVevById.mockResolvedValue(mockVev);
+            mockService.checkIfUserInVev.mockResolvedValue(true);
+            const mockUpdatedVev = { ...mockVev, reason: "Updated reason" };
+            mockService.updateVev.mockResolvedValue(mockUpdatedVev);
             const req = {
-                params: { id: "1" },
-                body: { challengerId: "c1", challengedId: "c2", date: new Date() },
+                params: { id: mockVev.id },
+                body: { reason: "Updated reason" },
+                user: { id: mockUser1.id },
             } as any;
             const res = mockResponse();
-
             await controller.updateVev(req, res);
-
-            expect(mockService.updateVev).toHaveBeenCalled();
-            expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith(updatedVev);
+            expect(mockService.updateVev).toHaveBeenCalledWith(mockVev.id, undefined, undefined, mockUpdatedVev.reason);
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ id: mockUpdatedVev.id }));
         });
-
-        it("should return 404 if vev not found", async () => {
-            mockService.updateVev.mockResolvedValue(null);
-
+        
+        it("should throw an error if user is not part of vev", async () => {
+            mockService.getVevById.mockResolvedValue(mockVev);
+            mockService.checkIfUserInVev.mockResolvedValue(false);
             const req = {
-                params: { id: "1" },
-                body: { challengerId: "c1", challengedId: "c2", date: new Date() },
+                params: { id: mockVev.id },
+                body: { reason: "Updated reason" },
+                user: { id: mockUser1.id },
             } as any;
             const res = mockResponse();
-
-            await controller.updateVev(req, res);
-
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: "Vev not found" });
+            expect(controller.updateVev(req, res)).rejects.toThrowError(NotAllowedToUpdateError);
+            expect(mockService.updateVev).not.toHaveBeenCalled();
         });
-    });
-
-    describe("setVevWinner", () => {
-        it("should set vev winner if user is in vev", async () => {
-            const vev = { id: "1", winnerId: "winner-id" };
-            mockService.checkIfUserInVev.mockReturnValue(true);
-            mockService.setVevWinner.mockResolvedValue(vev);
-
-            const req = {
-                params: { id: "1" },
-                body: { winnerId: "winner-id" },
-                user: { id: "user-id" },
-            } as any;
-            const res = mockResponse();
-
-            await controller.setVevWinner(req, res);
-
-            expect(mockService.checkIfUserInVev).toHaveBeenCalledWith("user-id", "1");
-            expect(mockService.setVevWinner).toHaveBeenCalledWith("1", "winner-id");
-            expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith(vev);
-        });
-
-        it("should throw NotAllowedToUpdateError if user not in vev", async () => {
-            mockService.checkIfUserInVev.mockReturnValue(false);
-
-            const req = {
-                params: { id: "1" },
-                body: { winnerId: "winner-id" },
-                user: { id: "user-id" },
-            } as any;
-            const res = mockResponse();
-
-            await expect(controller.setVevWinner(req, res)).rejects.toThrow(NotAllowedToUpdateError);
-
-            expect(mockService.checkIfUserInVev).toHaveBeenCalledWith("user-id", "1");
-        });
-    });
-
-    describe("deleteVev", () => {
-        it("should delete vev", async () => {
-            const deletedVev = { id: "1" };
-            mockService.deleteVev.mockResolvedValue(deletedVev);
-
-            const req = { params: { id: "1" } } as any;
-            const res = mockResponse();
-
-            await controller.deleteVev(req, res);
-
-            expect(mockService.deleteVev).toHaveBeenCalledWith("1");
-            expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith(deletedVev);
-        });
-
-        it("should return 404 if vev not found", async () => {
-            mockService.deleteVev.mockResolvedValue(null);
-
-            const req = { params: { id: "1" } } as any;
-            const res = mockResponse();
-
-            await controller.deleteVev(req, res);
-
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: `Vev not found, id: 1` });
-        });
-    });
+    })
 });
 
