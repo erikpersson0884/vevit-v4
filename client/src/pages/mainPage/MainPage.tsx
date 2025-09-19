@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './MainPage.css';
 
 import { useVevContext } from '../../contexts/vevContext';
@@ -10,10 +10,11 @@ import TimeFilter from '../../components/Filter/timeFilter/TimeFilter';
 
 import CreateVevPopup from '../../components/createVevPopup/CreateVevPopup';
 import { useUsersContext } from '../../contexts/usersContext';
-
+import sortIcon from '../../assets/down.svg';
 
 const MainPage: React.FC = () => {
-    const [ showCreateVevPopup, setShowCreateVevPopup ] = React.useState(false);
+    const [ showCreateVevPopup, setShowCreateVevPopup ] = useState(false);
+    const { toggleSort } = useVevContext();
 
     return (
         <div className='main-page'>
@@ -23,14 +24,33 @@ const MainPage: React.FC = () => {
 
             <BookVevButton openPopup={() => setShowCreateVevPopup(true)} />
 
-            <VevList />
+            <div className='vev-list'>
+                <header>
+                    <p onClick={() => {toggleSort("challenged")}}>
+                        <span>Utmanare</span>
+                        <img src={sortIcon} alt="Sort icon" />
+                    </p>
+                    <p onClick={() => toggleSort("challenged")}>
+                        <span>Utmanad</span>
+                        <img src={sortIcon} alt="Sort icon" />
+                    </p>
+                    <p onClick={() => toggleSort("time")}>
+                        <span>Datum</span>
+                        <img src={sortIcon} alt="Sort icon" />
+                    </p>
+                </header>
+                
+                <hr />
+                <VevList />
+            </div>
+
         </div>
     );
 };
 
 const Filters = () => {
     const { currentUser } = useAuthContext();
-    const [ showFilters, setShowFilters ] = React.useState(false);
+    const [ showFilters, setShowFilters ] = useState(false);
 
     if (!showFilters) {
         return (
@@ -70,30 +90,34 @@ const VevList = () => {
     const { filteredVevs } = useVevContext();
     const { loadingUsers } = useUsersContext();
 
-    if (loadingUsers) {
-        return <p>Laddar användare...</p>
-    }
+    if (loadingUsers) return <p>Laddar användare...</p>
+    if (filteredVevs.length === 0) return <p>Inga vev bokade</p>
 
-    if (filteredVevs.length === 0) {
-        return <p>Inga vev bokade</p>
-    }
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const { fetchVevs } = useVevContext();
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const container = containerRef.current;
+            if (!container) return;
+
+            if (container.scrollHeight - container.scrollTop - container.clientHeight < 200) {
+                console.log('Near bottom, fetching more vevs...');
+                fetchVevs(); // load next page when 100px from bottom
+            }
+        };
+
+        const container = containerRef.current;
+        container?.addEventListener('scroll', handleScroll);
+        return () => container?.removeEventListener('scroll', handleScroll);
+    }, [fetchVevs]);
 
     return (
-        <ul className='vev-list no-ul-formatting'>
-            <header>
-                <p>Utmanare</p>
-                <p>Utmanad</p>
-                <p>Datum</p>
-            </header>
-            
-            <hr />
-
-            {[...filteredVevs]
-                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                .map((vev) => (
-                    <VevItem key={vev.id} vev={vev} />
-                ))} 
-        </ul>
+        <div ref={containerRef} className='vev-list-container'>
+            {[...filteredVevs].map((vev) => (
+                <VevItem key={vev.id} vev={vev} />
+            ))} 
+        </div>
     )
 };
 

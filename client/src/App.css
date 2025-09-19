@@ -9,7 +9,7 @@
     flex-direction: column;
 
     box-sizing: border-box;
-    min-height: 100vh;
+    height: 100vh;
     padding: .3rem;
 }
 

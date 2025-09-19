@@ -1,36 +1,41 @@
 
 .main-page {
+    flex: 1;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
 
+    min-height: 0;
     padding-inline: 3rem;
 }
 
 
 .filters {
     display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 1rem;
-    align-items: center;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    margin-bottom: 1rem;
 }
 
 .create-vev-button {
-    width: max-content;
     background-color: var(--primary-color);
 }
 
 
- /* --- --- --- */  
+ /* --- Vev List --- */  
 
 .vev-list {
+    flex: 1;
     display: flex;
     flex-direction: column;
 
     width: 100%;
+    min-height: 0;
 }
 
 .vev-list header {
@@ -38,29 +43,31 @@
     flex-direction: row;
     justify-content: space-between;
 
-    padding: .5rem 1rem;
+    padding: .5rem 0;
 }
 
 .vev-list header p {
-    flex: 1;
+    cursor: pointer;
     font-weight: bold;
+
+    flex: 1;
+
+    display: flex;
 }
 
 .vev-list header p:last-child {
-    text-align: right;
+    justify-content: flex-end;
 }
 
-.vev-list hr {
-    width: 100%;
+.vev-list-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: scroll;
 }
 
 @media screen and (max-width: 600px) {
     .main-page {
         padding-inline: 0rem;
-    }
-
-    .vev-list header {
-        padding-inline: 1rem;
     }
 
     .filters {

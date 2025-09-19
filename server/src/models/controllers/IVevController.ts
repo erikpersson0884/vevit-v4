@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest.js';
 
 export interface IVevController {
-    getAllVevs: (req: Request, res: Response) => void;
+    getVevsPaginated: (req: Request, res: Response) => void;
     createVev: (req: AuthenticatedRequest, res: Response) => void;
     getVevById: (req: Request, res: Response) => void;
     updateVev: (req: AuthenticatedRequest, res: Response) => void;
