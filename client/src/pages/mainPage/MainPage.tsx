@@ -10,7 +10,7 @@ import TimeFilter from '../../components/Filter/timeFilter/TimeFilter';
 
 import CreateVevPopup from '../../components/createVevPopup/CreateVevPopup';
 import { useUsersContext } from '../../contexts/usersContext';
-
+import sortIcon from '../../assets/down.svg';
 
 const MainPage: React.FC = () => {
     const [ showCreateVevPopup, setShowCreateVevPopup ] = React.useState(false);
@@ -67,7 +67,7 @@ const BookVevButton: React.FC<BookVevButtonProps> = ({ openPopup }) => {
 };
 
 const VevList = () => {
-    const { filteredVevs } = useVevContext();
+    const { filteredVevs, toggleSort } = useVevContext();
     const { loadingUsers } = useUsersContext();
 
     if (loadingUsers) {
@@ -81,18 +81,25 @@ const VevList = () => {
     return (
         <ul className='vev-list no-ul-formatting'>
             <header>
-                <p>Utmanare</p>
-                <p>Utmanad</p>
-                <p>Datum</p>
+                <p onClick={() => {toggleSort("challenged")}}>
+                    <span>Utmanare</span>
+                    <img src={sortIcon} alt="Sort icon" />
+                </p>
+                <p onClick={() => toggleSort("challenged")}>
+                    <span>Utmanad</span>
+                    <img src={sortIcon} alt="Sort icon" />
+                </p>
+                <p onClick={() => toggleSort("time")}>
+                    <span>Datum</span>
+                    <img src={sortIcon} alt="Sort icon" />
+                </p>
             </header>
             
             <hr />
 
-            {[...filteredVevs]
-                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                .map((vev) => (
-                    <VevItem key={vev.id} vev={vev} />
-                ))} 
+            {[...filteredVevs].map((vev) => (
+                <VevItem key={vev.id} vev={vev} />
+            ))} 
         </ul>
     )
 };

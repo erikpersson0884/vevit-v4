@@ -39,8 +39,8 @@ export const UsersProvider = ({ children }: { children: ReactNode }) => {
 
     const getUserById = (id: string): IUser => {
         const user: IUser | undefined = users.find(user => user.id === id);
-        if (user) return user;
-        else throw new Error(`User with id ${id} not found`);
+        if (!user) throw new Error(`User with id ${id} not found`);
+        else return user;
     }
 
     const createUser = async (username: string, password: string): Promise<boolean> => {

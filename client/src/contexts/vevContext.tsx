@@ -2,7 +2,18 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import vevApi from '../api/vevApi';
 
 import { useAuthContext } from './authContext';
+import { useUsersContext } from './usersContext';
 
+interface filterOptions {
+    timeFilter: "all" | "future" | "past" | null;
+    userFilter: "all" | "mine" | null;
+}
+
+type sortingKeys = "challenger" | "challenged" | "time";
+interface sortOptions {
+    key: sortingKeys;
+    order: "asc" | "desc";
+}
 
 interface VevContextProps {
     vevs: IVev[];
@@ -19,26 +30,69 @@ interface VevContextProps {
         timeFilter: "all" | "future" | "past" | null;
         userFilter: "all" | "mine" | null;
     }>>;
+    setSortConfig: React.Dispatch<React.SetStateAction<sortOptions>>;
+    toggleSort: (key: sortingKeys) => void;
 }
 
 const VevContext = createContext<VevContextProps | undefined>(undefined);
 
 export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { currentUser } = useAuthContext();
+    const { getUserById } = useUsersContext();
     
     const [ vevs, setVevs ] = useState<IVev[]>([]);
     const [ filteredVevs, setFilteredVevs ] = useState<IVev[]>([]);
     const [ selectedVev, setSelectedVev ] = useState<IVev | null>(null);
-    const [filters, setFilters] = useState<
-    {
-        timeFilter: "all" | "future" | "past" | null;
-        userFilter: "all" | "mine" | null;
-    }>({
+
+    const [filters, setFilters] = useState<filterOptions>({
         timeFilter: null,
         userFilter: null,
     });
+    const [sortConfig, setSortConfig] = useState<sortOptions>({key: "time", order: "asc"});
     
-    useEffect(() => {
+
+    const sortVevs = (
+        vevsToBeSorted: IVev[],
+        config: sortOptions
+    ): IVev[] => {
+        return [...vevsToBeSorted].sort((a, b) => {
+            if (config.key === "time") {
+                const diff = a.date.getTime() - b.date.getTime();
+                return config.order === "asc" ? diff : -diff;
+            }
+
+            let nameA = "";
+            let nameB = "";
+
+            if (config.key === "challenger") {
+                const userA = getUserById(a.challengerId);
+                const userB = getUserById(b.challengerId);
+                nameA = userA.username;
+                nameB = userB.username;
+            } else if (config.key === "challenged") {
+                const userA = getUserById(a.challengedId);
+                const userB = getUserById(b.challengedId);
+                nameA = userA.username;
+                nameB = userB.username;
+            }
+
+            const cmp = nameA.localeCompare(nameB, undefined, { sensitivity: "base" });
+            return config.order === "asc" ? cmp : -cmp;
+        });
+    };
+
+    const toggleSort = (key: sortingKeys) => {
+        setSortConfig(prev => {
+            if (prev.key === key) {
+                // Same key → flip order
+                return { key, order: prev.order === "asc" ? "desc" : "asc" };
+            }
+            // New key → start ascending
+            return { key, order: "asc" };
+        });
+    };
+
+    const filterVevs = (): void => {
         let filtered = [...vevs];
         const now = new Date();
 
@@ -49,12 +103,18 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         }
 
         if (filters.userFilter === "mine") {
-            filtered = filtered.filter(vev => vev.challengerId === currentUser?.id);
+            filtered = filtered.filter(vev => vev.challengerId === currentUser?.id || vev.challengedId === currentUser?.id);
         }
-        setFilteredVevs(filtered);
-    }, [filters, vevs, currentUser]);
 
+        filtered = sortVevs(filtered, sortConfig);
+        setFilteredVevs(filtered);
+    };
+    
     useEffect(() => {
+        filterVevs();
+    }, [filters, sortConfig, vevs, currentUser]);
+
+    useEffect(() => { // also update selectedVev when all vevs change
         if (selectedVev) {
             const updatedSelectedVev = vevs.find(vev => vev.id === selectedVev.id) || null;
             setSelectedVev(updatedSelectedVev);
@@ -145,6 +205,8 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             selectedVev,
             setSelectedVev,
             setFilters,
+            setSortConfig,
+            toggleSort,
         }}>
             {children}
         </VevContext.Provider>

@@ -80,3 +80,7 @@ input, select, textarea {
 textarea {
     padding: .5rem;
 }
+
+hr {
+    width: 100%;
+}
