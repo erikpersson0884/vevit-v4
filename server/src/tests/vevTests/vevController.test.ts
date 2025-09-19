@@ -5,7 +5,8 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 // Mock the dependencies
 const mockService = {
-    getAllVevs: vi.fn(),
+    getVevsPaginated: vi.fn(),
+    getVevsCount: vi.fn(),
     createVev: vi.fn(),
     getVevById: vi.fn(),
     updateVev: vi.fn(),
@@ -15,6 +16,7 @@ const mockService = {
 };
 
 const controller = createVevController(mockService as any);
+
 
 // Mock req and res
 const mockResponse = () => {
@@ -27,22 +29,6 @@ const mockResponse = () => {
 describe("VevController", () => {
     beforeEach(() => {
         vi.clearAllMocks();
-    });
-
-    describe("getAllVevs", () => {
-        it("should return all vevs", async () => {
-            const vevs = [{ id: "1" }, { id: "2" }];
-            mockService.getAllVevs.mockResolvedValue(vevs);
-
-            const req = {} as any;
-            const res = mockResponse();
-
-            await controller.getAllVevs(req, res);
-
-            expect(mockService.getAllVevs).toHaveBeenCalled();
-            expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith(vevs);
-        });
     });
 
     describe("createVev", () => {
@@ -213,3 +199,4 @@ describe("VevController", () => {
         });
     });
 });
+

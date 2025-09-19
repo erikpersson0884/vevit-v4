@@ -19,11 +19,7 @@ export class VevService implements IVevService {
         this.prisma = prismaClient;
     }
 
-    public async getAllVevs(): Promise<IVev[]> {
-        return await this.prisma.vev.findMany();
-    }
-
-    public async checkIfUserInVev(userId: string, vevId: string): Promise<boolean> {
+        public async checkIfUserInVev(userId: string, vevId: string): Promise<boolean> {
         const vev = await this.prisma.vev.findUnique({
             where: { id: vevId },
             include: { challenger: true, challenged: true }
@@ -34,6 +30,24 @@ export class VevService implements IVevService {
         return vev.challengerId === userId || vev.challengedId === userId;
     }
 
+
+    public async getVevsPaginated(
+        skip: number = 0, 
+        take: number = 20, // default page size
+        orderBy: { field: "date" | "challengerId" | "challengedId", direction: "asc" | "desc" } = { field: "date", direction: "desc" }
+    ): Promise<IVev[]> {
+        return await this.prisma.vev.findMany({
+            skip,
+            take,
+            orderBy: {
+                [orderBy.field]: orderBy.direction
+            }
+        });
+    }
+
+    public async getTotalNumberOfVevs(): Promise<number> {
+        return await this.prisma.vev.count();
+    }
 
     public async createVev(
         challengerId: string, 

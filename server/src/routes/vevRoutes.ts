@@ -3,13 +3,15 @@ import { createVevController } from "../controllers/vevController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
 import { validateRequest } from "../middleware/validateRequestMiddleware.js";
-import { CreateVevSchema, UpdateVevSchema, UpdateVevWinnerSchema } from "../models/dtos/VevDTO.js";
+import { GetVevsPaginatedSchema, CreateVevSchema, UpdateVevSchema, UpdateVevWinnerSchema } from "../models/dtos/VevDTO.js";
 
 const router = express.Router();
 const vevController = createVevController();
 
 
-router.get("/", vevController.getAllVevs);
+router.get("/", validateRequest(GetVevsPaginatedSchema), (req, res) => {
+    vevController.getVevsPaginated(req, res);
+});
 router.get("/:id", vevController.getVevById);
 
 router.post("/", validateRequest(CreateVevSchema), authMiddleware, (req, res) => {
