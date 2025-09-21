@@ -4,16 +4,6 @@ import vevApi from '../api/vevApi';
 import { useAuthContext } from './authContext';
 import { useUsersContext } from './usersContext';
 
-interface filterOptions {
-    timeFilter: "all" | "future" | "past" | null;
-    userFilter: "all" | "mine" | null;
-}
-
-type sortingKeys = "challenger" | "challenged" | "time";
-interface sortOptions {
-    key: sortingKeys;
-    order: "asc" | "desc";
-}
 
 interface VevContextProps {
     vevs: IVev[];
@@ -28,11 +18,14 @@ interface VevContextProps {
     setSelectedVev: React.Dispatch<React.SetStateAction<IVev | null>>;
 
     setFilters: React.Dispatch<React.SetStateAction<{
-        timeFilter: "all" | "future" | "past" | null;
-        userFilter: "all" | "mine" | null;
+        timeFilter: "all" | "future" | "past";
+        userFilter: "all" | "mine";
     }>>;
     setSortConfig: React.Dispatch<React.SetStateAction<sortOptions>>;
     toggleSort: (key: sortingKeys) => void;
+
+    filters: IFilterOptions;
+    sortOptions: sortOptions;
 }
 
 const VevContext = createContext<VevContextProps | undefined>(undefined);
@@ -47,9 +40,9 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     const [ filteredVevs, setFilteredVevs ] = useState<IVev[]>([]);
     const [ selectedVev, setSelectedVev ] = useState<IVev | null>(null);
 
-    const [filters, setFilters] = useState<filterOptions>({
-        timeFilter: null,
-        userFilter: null,
+    const [filters, setFilters] = useState<IFilterOptions>({
+        timeFilter: 'all',
+        userFilter: 'all',
     });
     const [sortConfig, setSortConfig] = useState<sortOptions>({key: "time", order: "asc"});
 
@@ -226,6 +219,8 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             setFilters,
             setSortConfig,
             toggleSort,
+            filters,
+            sortOptions: sortConfig,
         }}>
             {children}
         </VevContext.Provider>

@@ -76,12 +76,31 @@ const BookVevButton: React.FC<BookVevButtonProps> = ({ openPopup }) => {
     );
 };
 
+const VevListHeader = () => {
+    const { toggleSort } = useVevContext();
+    return (
+        <header className='vev-list-header'>
+            <p onClick={() => {toggleSort("challenged")}}>
+                <span>Utmanare</span>
+                <img src={sortIcon} alt="Sort icon" />
+            </p>
+            <p onClick={() => toggleSort("challenged")}>
+                <span>Utmanad</span>
+                <img src={sortIcon} alt="Sort icon" />
+            </p>
+            <p onClick={() => toggleSort("time")}>
+                <span>Datum</span>
+                <img src={sortIcon} alt="Sort icon" />
+            </p>
+        </header>
+    )
+}
+
 const VevList = () => {
-    const { filteredVevs, toggleSort } = useVevContext();
+    const { filteredVevs } = useVevContext();
     const { loadingUsers } = useUsersContext();
 
     if (loadingUsers) return <p>Laddar användare...</p>
-    if (filteredVevs.length === 0) return <p>Inga vev bokade</p>
 
     const containerRef = useRef<HTMLDivElement | null>(null);
     const { fetchVevs } = useVevContext();
@@ -102,31 +121,21 @@ const VevList = () => {
         return () => container?.removeEventListener('scroll', handleScroll);
     }, [fetchVevs]);
 
+
     return (  
         <div className='vev-list'>
-            <header>
-                <p onClick={() => {toggleSort("challenged")}}>
-                    <span>Utmanare</span>
-                    <img src={sortIcon} alt="Sort icon" />
-                </p>
-                <p onClick={() => toggleSort("challenged")}>
-                    <span>Utmanad</span>
-                    <img src={sortIcon} alt="Sort icon" />
-                </p>
-                <p onClick={() => toggleSort("time")}>
-                    <span>Datum</span>
-                    <img src={sortIcon} alt="Sort icon" />
-                </p>
-            </header>
-            
+            <VevListHeader />
+
             <hr />
+            
+            { filteredVevs.length === 0 && <p className='no-vevs-available'>Inga vev att visa</p> }
+
             <div ref={containerRef} className='vev-list-container'>
                 {[...filteredVevs].map((vev) => (
                     <VevItem key={vev.id} vev={vev} />
                 ))} 
             </div>
         </div>
-
     )
 };
 

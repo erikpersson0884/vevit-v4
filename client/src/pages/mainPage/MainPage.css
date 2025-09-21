@@ -64,15 +64,16 @@
     min-height: 0;
 }
 
-.vev-list header {
+.vev-list-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 
+    width: 100%;
     padding: .5rem 0;
 }
 
-.vev-list header p {
+.vev-list-header p {
     cursor: pointer;
     font-weight: bold;
 
@@ -81,8 +82,15 @@
     display: flex;
 }
 
-.vev-list header p:last-child {
+.vev-list-header p:last-child {
     justify-content: flex-end;
+}
+
+.no-vevs-available {
+    text-align: center;
+    font-style: italic;
+    
+    margin-top: 1rem;
 }
 
 .vev-list-container {

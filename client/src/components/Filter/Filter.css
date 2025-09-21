@@ -12,11 +12,11 @@
     overflow: hidden;
 }
 
-.filter>div {
+.filter .filter-option {
     padding: .5rem;
 }
 
-.filter > div:not(:last-child) {
+.filter > .filter-option:not(:last-child) {
     border-right: 1px solid var(--primary-color);
 }
 
@@ -30,12 +30,12 @@
         flex-direction: column;
     }
 
-    .filter > div:not(:last-child) {
+    .filter > .filter-option:not(:last-child) {
         border-right: none;
         border-bottom: 1px solid var(--primary-color);
     }
 
-    .filter>div {
+    .filter>.filter-option {
         width: 100%;
         text-align: center;
     }
