@@ -34,13 +34,28 @@ export class VevService implements IVevService {
     public async getVevsPaginated(
         skip: number = 0, 
         take: number = 20, // default page size
-        orderBy: { field: "date" | "challengerId" | "challengedId", direction: "asc" | "desc" } = { field: "date", direction: "desc" }
+        orderBy: { field: "date" | "challengerId" | "challengedId", direction: "asc" | "desc" } = { field: "date", direction: "desc" },
+        filterBy: { timeFilter: "all" | "future" | "past", userFilter: "all" | "mine", userId: string | undefined } = { timeFilter: "all", userFilter: "all", userId: undefined }
     ): Promise<IVev[]> {
+        if (filterBy.userFilter === "mine" && !filterBy.userId) throw new Error("userId must be provided when filterUser is 'mine'");
+
         return await this.prisma.vev.findMany({
             skip,
             take,
             orderBy: {
                 [orderBy.field]: orderBy.direction
+            },
+            where: {
+                AND: [
+                    filterBy.timeFilter === "future" ? { date: { gte: new Date() } } : {},
+                    filterBy.timeFilter === "past" ? { date: { lt: new Date() } } : {},
+                    filterBy.userFilter === "mine" && filterBy.userId ? {
+                        OR: [
+                            { challengerId: filterBy.userId },
+                            { challengedId: filterBy.userId }
+                        ]
+                    } : {}
+                ]
             }
         });
     }

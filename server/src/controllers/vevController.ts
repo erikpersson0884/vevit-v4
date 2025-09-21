@@ -5,36 +5,50 @@ import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
 import { NotAllowedToUpdateError } from "../errors/NotAllowedToUpdateError.js";
 
 import sendValidatedResponse from "../middleware/validateResponseMiddleware.js";
-import { VevResponseSchema, PaginatedVevsResponseSchema } from "../models/dtos/VevDTO.js";
+import { GetVevsPaginatedSchema, VevResponseSchema, PaginatedVevsResponseSchema } from "../models/dtos/VevDTO.js";
 import { IVev } from "../models/IVev.js";
+import {  } from "../models/dtos/VevDTO.js";
 
 
 const defaultService = createVevService();
 
 export const createVevController = (vevService = defaultService): IVevController => ({
     getVevsPaginated: async (req: Request, res: Response): Promise<void> => {
-        const page = parseInt(req.query.page as string);
-        const limit = parseInt(req.query.limit as string);
-        const sortField = (req.query.sortField as string) || "date";
-        const sortOrder = (req.query.sortOrder as string) === "asc" ? "asc" : "desc";
+        const { page, limit, sortField, sortOrder, filterTime, filterUser } =
+            GetVevsPaginatedSchema.parse(req.query);
 
-        // Map frontend keys to DB fields if necessary
+        let {userId} = GetVevsPaginatedSchema.parse(req.query);
+        if (userId === undefined) {
+            const authReq = req as AuthenticatedRequest;
+            userId = authReq.user?.id;
+        }
+
+        // Build orderBy directly from validated values
         const orderBy: { field: "date" | "challengerId" | "challengedId"; direction: "asc" | "desc" } = {
-            field: sortField as "date" | "challengerId" | "challengedId",
-            direction: sortOrder
+            field: sortField,
+            direction: sortOrder,
         };
 
-        const vevs = await vevService.getVevsPaginated(page * limit, limit, orderBy);
+        // Build filter object
+        const filterBy: { timeFilter: "all" | "future" | "past"; userFilter: "all" | "mine"; userId: string | undefined } = {
+            timeFilter: filterTime,
+            userFilter: filterUser,
+            userId,
+        };
+
+        const vevs = await vevService.getVevsPaginated(page * limit, limit, orderBy, filterBy);
         const total = await vevService.getTotalNumberOfVevs();
 
         const response = {
             vevs,
             page,
             limit,
-            total
-        }
+            total,
+        };
+
         sendValidatedResponse(res, PaginatedVevsResponseSchema, response);
     },
+
 
     createVev: async (req: AuthenticatedRequest, res: Response): Promise<void> => {
         let { challengedId, date: dateString, reason } = req.body;

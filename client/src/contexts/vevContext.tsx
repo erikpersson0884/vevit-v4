@@ -109,9 +109,18 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setFilteredVevs(filtered);
     };
     
-    useEffect(() => {
+    useEffect(() => { // update filteredVevs when filters, sortConfig or vevs change
         filterVevs();
     }, [filters, sortConfig, vevs, currentUser]);
+
+    useEffect(() => {
+        // Reset before fetching fresh data
+        setVevs([]);
+        setCurrentPage(0);
+        setTotalNumberOfVevs(0);
+        fetchVevs(0);
+    }, [filters, sortConfig]);
+
 
     useEffect(() => { // also update selectedVev when all vevs change
         if (selectedVev) {
@@ -129,9 +138,16 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setLoadingVevs(true);
 
         try {
-            const { vevs: newVevs, total: newTotal}: FetchVevsResponse = await vevApi.fetchVevs(page, limit);
+            const { vevs: newVevs, total: newTotal}: FetchVevsResponse = await vevApi.fetchVevs(
+                page, 
+                limit, 
+                sortConfig.key, 
+                sortConfig.order, 
+                filters.timeFilter, 
+                filters.userFilter
+            );
             newVevs.forEach(vev => {
-                vev.date = new Date(vev.date);
+                vev.date = new Date(vev.date); 
             });
             setVevs([
                 ...vevs,
@@ -203,7 +219,6 @@ export const VevProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             return false;
         }
     };
-
 
     return (
         <VevContext.Provider value={{ 

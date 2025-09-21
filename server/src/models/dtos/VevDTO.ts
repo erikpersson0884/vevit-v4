@@ -7,6 +7,11 @@ const MAX_LENGTH_FOR_VEV_REASON = 1000
 export const GetVevsPaginatedSchema = z.object({
     page: z.string().regex(/^\d+$/).transform((val) => parseInt(val, 10)).default("0"),
     limit: z.string().regex(/^\d+$/).transform((val) => parseInt(val, 10)).default("25"),
+    sortField: z.enum(["date", "challengerId", "challengedId"]).default("date"),
+    sortOrder: z.enum(["asc", "desc"]).default("desc"),
+    filterTime: z.enum(["all", "future", "past"]).default("all"),
+    filterUser: z.enum(["all", "mine"]).default("all"),
+    userId: z.string().uuid().optional(),
 });
 
 export const CreateVevSchema = z.object({
