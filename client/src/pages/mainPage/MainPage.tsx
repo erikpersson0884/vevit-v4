@@ -80,7 +80,7 @@ const VevListHeader = () => {
     const { toggleSort } = useVevContext();
     return (
         <header className='vev-list-header'>
-            <p onClick={() => {toggleSort("challenged")}}>
+            <p onClick={() => {toggleSort("challenger")}}>
                 <span>Utmanare</span>
                 <img src={sortIcon} alt="Sort icon" />
             </p>
@@ -97,13 +97,9 @@ const VevListHeader = () => {
 }
 
 const VevList = () => {
-    const { filteredVevs } = useVevContext();
+    const { filteredVevs, fetchVevs } = useVevContext();
     const { loadingUsers } = useUsersContext();
-
-    if (loadingUsers) return <p>Laddar användare...</p>
-
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const { fetchVevs } = useVevContext();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -121,6 +117,8 @@ const VevList = () => {
         return () => container?.removeEventListener('scroll', handleScroll);
     }, [fetchVevs]);
 
+    if (loadingUsers) return <p>Laddar användare...</p>
+
 
     return (  
         <div className='vev-list'>
@@ -131,7 +129,7 @@ const VevList = () => {
             { filteredVevs.length === 0 && <p className='no-vevs-available'>Inga vev att visa</p> }
 
             <div ref={containerRef} className='vev-list-container'>
-                {[...filteredVevs].map((vev) => (
+                {filteredVevs.map((vev) => (
                     <VevItem key={vev.id} vev={vev} />
                 ))} 
             </div>
