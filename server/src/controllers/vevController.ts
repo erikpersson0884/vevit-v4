@@ -24,13 +24,24 @@ export const createVevController = (vevService = defaultService): IVevController
         }
 
         // Build orderBy directly from validated values
-        const orderBy: { field: "date" | "challengerId" | "challengedId"; direction: "asc" | "desc" } = {
+        interface OrderBy {
+            field: "date" | "challengerId" | "challengedId";
+            direction: "asc" | "desc";
+        }
+
+        const orderBy: OrderBy = {
             field: sortField,
             direction: sortOrder,
         };
 
         // Build filter object
-        const filterBy: { timeFilter: "all" | "future" | "past"; userFilter: "all" | "mine"; userId: string | undefined } = {
+        interface FilterBy {
+            timeFilter: "all" | "future" | "past";
+            userFilter: "all" | "mine";
+            userId: string | undefined;
+        }
+        
+        const filterBy: FilterBy = {
             timeFilter: filterTime,
             userFilter: filterUser,
             userId,

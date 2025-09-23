@@ -5,8 +5,8 @@ export interface IVevService {
     getVevsPaginated(
         skip: number, 
         take: number, 
-        orderBy: { field: "date" | "challengerId" | "challengedId", direction: "asc" | "desc" },  
-        filterBy: { timeFilter: "all" | "future" | "past", userFilter: "all" | "mine", userId: string | undefined }
+        orderBy?: { field: "date" | "challengerId" | "challengedId", direction: "asc" | "desc" },  
+        filterBy?: { timeFilter: "all" | "future" | "past", userFilter: "all" | "mine", userId: string | undefined }
     ): Promise<IVev[]>;
     getVevById(id: string): Promise<IVev | null>;
     createVev(challengerId: string, challengedId: string, date: Date, reason: string): Promise<IVev>;
