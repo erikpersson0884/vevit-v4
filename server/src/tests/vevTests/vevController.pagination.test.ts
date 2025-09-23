@@ -46,7 +46,7 @@ describe("VevController - getVevsPaginated", () => {
         const req: any = { query: { page: "0", limit: "10" } };
         const res: any = { json: vi.fn() };
 
-        controller.getVevsPaginated(req, res);
+        await controller.getVevsPaginated(req, res);
 
         const response = res.json.mock.calls[0][0];
         PaginatedVevsResponseSchema.parse(response);
