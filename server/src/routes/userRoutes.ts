@@ -4,7 +4,7 @@ import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
 
 import { createUserController } from "../controllers/userController.js";
 
-import authMiddleware from "../middleware/authMiddleware.js";
+import { strictAuth} from "../middleware/authMiddleware.js";
 import { validateRequest } from "../middleware/validateRequestMiddleware.js";
 import { CreateUserSchema, UpdateUserSchema } from "../models/dtos/UserDTOs.js";
 import asyncHandler from "../middleware/asyncHandler.js";
@@ -16,7 +16,7 @@ const userController = createUserController();
 // Get information about the currently authenticated user
 router.get(
     "/me",
-    authMiddleware,
+    strictAuth,
     asyncHandler((req: Request, res: Response) => {
         const authenticatedReq = req as AuthenticatedRequest;
         return userController.getCurrentUser(authenticatedReq, res);
@@ -37,7 +37,7 @@ router.post(
 // Update a user by ID (requires authentication)
 router.patch(
     "/:id",
-    authMiddleware,
+    strictAuth,
     validateRequest(UpdateUserSchema),
     asyncHandler((req: Request, res: Response) => {
         const authenticatedReq = req as AuthenticatedRequest;
@@ -48,7 +48,7 @@ router.patch(
 // Delete a user by ID (requires authentication)
 router.delete(
     "/:id",
-    authMiddleware,
+    strictAuth,
     asyncHandler((req: Request, res: Response) => {
         const authenticatedReq = req as AuthenticatedRequest;
         return userController.deleteUser(authenticatedReq, res);

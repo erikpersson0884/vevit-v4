@@ -39,9 +39,20 @@ declare global {
 
     type Role = 'user' | 'admin';
 
-    interface IFilterOption<T> {
+    interface IFilterLabelOption<T> {
         value: T;
         label: string;
+    }
+
+    interface IFilterOptions {
+        timeFilter: "all" | "future" | "past";
+        userFilter: "all" | "mine";
+    }
+
+    type sortingKeys = "challenger" | "challenged" | "time";
+    interface sortOptions {
+        key: sortingKeys;
+        order: "asc" | "desc";
     }
 
     type UpdateVevOptions = {

@@ -3,9 +3,9 @@ import Filter from '../Filter';
 import { useVevContext } from '../../../contexts/vevContext';
 
 const UserFilter: React.FC = () => {
-    const { setFilters } = useVevContext();
+    const { setFilters, filters } = useVevContext();
 
-    const options: IFilterOption<string>[] = [
+    const options: IFilterLabelOption<string>[] = [
         { label: 'Alla vev', value: 'all' },
         { label: 'Mina vev', value: 'mine' },
     ];
@@ -18,7 +18,7 @@ const UserFilter: React.FC = () => {
     };
 
     return (
-        <Filter options={options} onFilterChange={handleFilterChange} />
+        <Filter options={options} onFilterChange={handleFilterChange} activeOption={filters.userFilter} />
     );
 };
 

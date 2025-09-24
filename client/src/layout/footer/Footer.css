@@ -2,6 +2,12 @@
 .page-footer {
     text-align: center;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .4rem;
+
+    width: 100%;
     padding: 1rem 0;
     margin-top: auto;
 }
@@ -12,25 +18,6 @@
     text-decoration: none;
 }
 
-.page-footer a {
-    text-decoration: none;
-    position: relative;
-}
-
-.page-footer a::after {
-    background-color: var(--secondary-color); 
-
-    content: '';
-    
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -2px;
-    left: 0;
-
-    transition: width 0.3s ease;
-}
-
-.page-footer a:hover::after {
-    width: 100%;
+.page-footer img {
+    height: 1.2rem;
 }

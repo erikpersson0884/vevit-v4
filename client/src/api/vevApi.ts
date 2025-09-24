@@ -6,11 +6,23 @@ const DEFAULT_LIMIT = 25;
 export const vevApi = {
     fetchVevs: async (
         page: number = DEFAULT_PAGE, 
-        limit: number = DEFAULT_LIMIT
+        limit: number = DEFAULT_LIMIT,
+        sortField: "time" | "challenger" | "challenged" = "time",
+        sortOrder: "asc" | "desc" = "desc",
+        filterTime: "all" | "future" | "past" = "all",
+        filterUser: "all" | "mine" = "all",
     ): Promise<FetchVevsResponse> => {
+        const apiSortField: string = 
+            sortField === "time" ? "date" 
+            : sortField === "challenger" ? "challengerId"
+            :  "challengedId";
         const params = {
             page: page.toString(),
             limit: limit.toString(),
+            sortField: apiSortField,
+            sortOrder,
+            filterTime,
+            filterUser
         }
 
         try {

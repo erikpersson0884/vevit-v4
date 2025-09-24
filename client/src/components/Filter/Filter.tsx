@@ -1,41 +1,35 @@
-import React, { useState } from 'react';
+import { FC } from 'react';
 import './Filter.css';
 
-
 interface FilterProps<T> {
-    options: IFilterOption<T>[];
+    options: IFilterLabelOption<T>[];
     onFilterChange: (selectedValue: T) => void;
+    activeOption: T;
 }
 
-const Filter: React.FC<FilterProps<any>> = ({ options, onFilterChange }) => {
-    const [chosenOption, setChosenOption] = useState<IFilterOption<any>>(options[0]);
-
-    const handleOptionClick = (clickedOption: IFilterOption<any>) => {
-        // If the clicked option is the current one, cycle to the next
-        if (clickedOption.value === chosenOption.value) {
-            const currentIndex = options.findIndex(option => option.value === chosenOption.value);
+const Filter: FC<FilterProps<any>> = ({ options, onFilterChange, activeOption }) => {
+    const handleOptionClick = (clickedOption: IFilterLabelOption<any>) => {
+        if (clickedOption.value === activeOption) {
+            const currentIndex = options.findIndex(option => option.value === activeOption);
             const nextIndex = (currentIndex + 1) % options.length;
-            setChosenOption(options[nextIndex]);
             onFilterChange(options[nextIndex].value);
         } else {
-            setChosenOption(clickedOption);
             onFilterChange(clickedOption.value);
         }
     };
 
-
     return (
-        <div className="filter">
+        <ul className="filter no-ul-formatting">
             {options.map((option) => (
-                <div
+                <li
                     key={option.value as string}
-                    className={`filter-option ${option.value === chosenOption.value ? "active" : ""}`}
+                    className={`filter-option ${option.value === activeOption ? "active" : ""}`}
                     onClick={() => handleOptionClick(option)}
                 >
                     <p>{option.label}</p>
-                </div>
+                </li>
             ))}
-        </div>
+        </ul>
     );
 };
 
