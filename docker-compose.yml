@@ -12,6 +12,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    restart: always
+
 
   frontend:
     build:
@@ -24,6 +26,8 @@ services:
       - "3000:80"
     depends_on:
       - backend
+    restart: always
+
 
   # optional: database
   db:
