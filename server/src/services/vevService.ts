@@ -11,9 +11,10 @@ import { VevNotFoundError } from "../errors/VevNotFoundError.js";
 import { NotAllowedToUpdateError } from "../errors/NotAllowedToUpdateError.js";
 import { UpdateFailedError } from "../errors/UpdateFailedError.js";
 import { IVevService } from "../models/services/IVevService.js";
+import IVevRepository from "../models/repositories/IVevRepository.js";
 
 export class VevService implements IVevService {
-    private vevRepo: VevRepository;
+    private vevRepo: IVevRepository;
     private userService: IUserService = createUserService();
 
     constructor(prisma: PrismaClient = prismaClient) {
@@ -21,8 +22,9 @@ export class VevService implements IVevService {
     }
 
     public async checkIfUserInVev(userId: string, vevId: string): Promise<boolean> {
-        const vev = await this.vevRepo.findByIdWithUsers(vevId);
-        if (!vev) throw new VevNotFoundError(`Vev with id ${vevId} not found`);
+        const vev = await this.vevRepo.findById(vevId);
+        const userIsInVev = vev?.challengerId === userId || vev?.challengedId === userId;
+        if (!userIsInVev) throw new VevNotFoundError(`Vev with id ${vevId} not found`);
         return vev.challengerId === userId || vev.challengedId === userId;
     }
 

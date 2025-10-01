@@ -1,8 +1,9 @@
 // src/repositories/vevRepository.ts
 import { PrismaClient, Vev } from "@prisma/client";
 import prisma from "../lib/prisma.js";
+import IVevRepository from "../models/repositories/IVevRepository.js";
 
-export class VevRepository {
+export class VevRepository implements IVevRepository {
     private prisma: PrismaClient;
 
     constructor(prismaClient: PrismaClient = prisma) {
@@ -11,13 +12,6 @@ export class VevRepository {
 
     async findById(id: string): Promise<Vev | null> {
         return this.prisma.vev.findUnique({ where: { id } });
-    }
-
-    async findByIdWithUsers(id: string): Promise<Vev | null> {
-        return this.prisma.vev.findUnique({
-        where: { id },
-        include: { challenger: true, challenged: true },
-        });
     }
 
     async findManyPaginated(
@@ -55,11 +49,11 @@ export class VevRepository {
         return this.prisma.vev.count();
     }
 
-    async countByUser(userId: string): Promise<number> {
+    async countVevsByUserId(userId: string): Promise<number> {
         return this.prisma.vev.count({
-        where: {
-            OR: [{ challengerId: userId }, { challengedId: userId }],
-        },
+            where: {
+                OR: [{ challengerId: userId }, { challengedId: userId }],
+            },
         });
     }
 
@@ -83,5 +77,12 @@ export class VevRepository {
 
     async delete(id: string): Promise<Vev> {
         return this.prisma.vev.delete({ where: { id } });
+    }
+
+    async countVevsWonByUserId(userId: string): Promise<number> {
+        // Assuming "winnerId" is a field in Vev
+        return this.prisma.vev.count({
+            where: { winnerId: userId }
+        });
     }
 }
