@@ -3,35 +3,75 @@ import { createVevController } from "../controllers/vevController.js";
 import { strictAuth, optionalAuth } from "../middleware/authMiddleware.js";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
 import { validateRequest } from "../middleware/validateRequestMiddleware.js";
-import { GetVevsPaginatedSchema, CreateVevSchema, UpdateVevSchema, UpdateVevWinnerSchema } from "../models/dtos/VevDTO.js";
+import { 
+    GetVevsPaginatedSchema, 
+    CreateVevSchema, 
+    UpdateVevSchema, 
+    UpdateVevWinnerSchema 
+} from "../models/dtos/VevDTO.js";
+import asyncHandler from "../middleware/asyncHandler.js";
+
+import type { Request, Response } from "express";
 
 const router = express.Router();
 const vevController = createVevController();
 
 
-router.get("/", validateRequest(GetVevsPaginatedSchema), optionalAuth, (req, res) => {
-    vevController.getVevsPaginated(req, res);
-});
-router.get("/:id", vevController.getVevById);
 
-router.post("/", validateRequest(CreateVevSchema), strictAuth, (req, res) => {
-    const authenticatedReq = req as AuthenticatedRequest; // Explicitly cast req
-    vevController.createVev(authenticatedReq, res);
-});
+router.get(
+    "/", 
+    validateRequest(GetVevsPaginatedSchema), 
+    optionalAuth, 
+    asyncHandler((req: Request, res: Response) => vevController.getVevsPaginated(req, res))
+);
 
-router.patch("/:id", validateRequest(UpdateVevSchema), strictAuth, (req, res) => {
-    const authenticatedReq = req as AuthenticatedRequest; // Explicitly cast req
-    vevController.updateVev(authenticatedReq, res);
-});
+// GET /vevs/:id
+router.get(
+    "/:id",
+    asyncHandler((req: Request, res: Response) => vevController.getVevById(req, res))
+);
 
-router.patch("/winner/:id", validateRequest(UpdateVevWinnerSchema), strictAuth, (req, res) => {
-    const authenticatedReq = req as AuthenticatedRequest; // Explicitly cast req
-    vevController.setVevWinner(authenticatedReq, res);
-});
+// POST /vevs - create a new vev
+router.post(
+    "/", 
+    validateRequest(CreateVevSchema), 
+    strictAuth, 
+    asyncHandler((req: Request, res: Response) => {
+        const authenticatedReq = req as AuthenticatedRequest;
+        return vevController.createVev(authenticatedReq, res);
+    })
+);
 
-router.delete("/:id", strictAuth, (req, res) => {
-    const authenticatedReq = req as AuthenticatedRequest; // Explicitly cast req
-    vevController.deleteVev(authenticatedReq, res);
-});
+// PATCH /vevs/:id - update vev
+router.patch(
+    "/:id", 
+    validateRequest(UpdateVevSchema), 
+    strictAuth, 
+    asyncHandler((req: Request, res: Response) => {
+        const authenticatedReq = req as AuthenticatedRequest;
+        return vevController.updateVev(authenticatedReq, res);
+    })
+);
+
+// PATCH /vevs/winner/:id - set winner
+router.patch(
+    "/winner/:id", 
+    validateRequest(UpdateVevWinnerSchema), 
+    strictAuth, 
+    asyncHandler((req: Request, res: Response) => {
+        const authenticatedReq = req as AuthenticatedRequest;
+        return vevController.setVevWinner(authenticatedReq, res);
+    })
+);
+
+// DELETE /vevs/:id
+router.delete(
+    "/:id", 
+    strictAuth, 
+    asyncHandler((req: Request, res: Response) => {
+        const authenticatedReq = req as AuthenticatedRequest;
+        return vevController.deleteVev(authenticatedReq, res);
+    })
+);
 
 export default router;
