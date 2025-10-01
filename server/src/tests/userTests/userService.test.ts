@@ -21,7 +21,7 @@ describe('UserService', () => {
     });
 
     it('createUser should create a new user', async () => {
-        // Mock checkIfUserExists to return false
+        // Mock doesUserExistWithUsername to return false
         mockPrisma.user.findFirst.mockResolvedValue(null); // User does not exist
 
         // Mock create to return a new user object
@@ -41,7 +41,7 @@ describe('UserService', () => {
     });
 
     it('should throw error if user already exists', async () => {
-        // Mock checkIfUserExists to return true
+        // Mock doesUserExistWithUsername to return false
         mockPrisma.user.findFirst.mockResolvedValue({ id: 'id123', username: 'JohnDoe' }); // User exists
 
         await expect(userService.createUser('JohnDoe', 'password123')).rejects.toThrow(

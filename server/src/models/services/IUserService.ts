@@ -1,8 +1,9 @@
 import IUser from '../IUser.js';
 
 export interface IUserService {
-    checkIfUserExists(id: string): Promise<boolean>;
-    
+    doesUserExistWithId(id: string): Promise<boolean>;
+    doesUserExistWithUsername(username: string): Promise<boolean>;
+
     getAllUsers(): Promise<IUser[]>;
     getUserByUsername(username: string): Promise<IUser | null>;
     createUser(name: string, password: string): Promise<IUser>;

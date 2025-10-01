@@ -54,8 +54,8 @@ export class VevService implements IVevService {
         date: Date,
         reason: string
     ): Promise<IVev> {
-        const challangerExists = await this.userService.checkIfUserExists(challengerId);
-        const challengedExists = await this.userService.checkIfUserExists(challengedId);
+        const challangerExists = await this.userService.doesUserExistWithId(challengerId);
+        const challengedExists = await this.userService.doesUserExistWithId(challengedId);
 
         if (!challangerExists) throw new UserNotFoundError(`Challenger with id ${challengerId} not found`);
         if (!challengedExists) throw new UserNotFoundError(`Challenged with id ${challengedId} not found`);
@@ -93,7 +93,7 @@ export class VevService implements IVevService {
         }
 
         if (winnerId !== null) {
-        if (!(await this.userService.checkIfUserExists(winnerId))) {
+        if (!(await this.userService.doesUserExistWithId(winnerId))) {
             throw new UserNotFoundError(`User with id ${winnerId} not found`);
         }
         if (!(await this.checkIfUserInVev(winnerId, id))) {

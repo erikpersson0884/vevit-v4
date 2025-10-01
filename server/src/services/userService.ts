@@ -12,12 +12,20 @@ export class UserService implements IUserService {
         this.prisma = prismaClient;
     }
 
-    public async checkIfUserExists(username: string): Promise<boolean> {
+    public async doesUserExistWithId(id: string): Promise<boolean> {
+        let userExists = await this.prisma.user.findFirst({
+            where: { id: id },
+        })
+        return userExists !== null;
+    }
+
+    public async doesUserExistWithUsername(username: string): Promise<boolean> {
         let userExists = await this.prisma.user.findFirst({
             where: { username: username },
         })
         return userExists !== null;
     }
+
 
     async getAllUsers(): Promise<IUser[]> {
         const users: IUser[] = await this.prisma.user.findMany();
@@ -39,7 +47,7 @@ export class UserService implements IUserService {
     }
 
     async createUser(username: string, password: string): Promise<IUser> {
-        if (await this.checkIfUserExists(username)) {
+        if (await this.doesUserExistWithUsername(username)) {
             throw new UserAlreadyExistsError(`User with username ${username} already exists`);
         }
         const user: IUser = await this.prisma.user.create({
@@ -71,7 +79,7 @@ export class UserService implements IUserService {
     }
 
     async deleteUser(userId: string): Promise<IUser> {
-        if (await this.checkIfUserExists(userId)) {
+        if (await this.doesUserExistWithId(userId)) {
             const user: IUser | null = await this.getUserById(userId);
             if (user) {
                 return this.prisma.user.delete({
