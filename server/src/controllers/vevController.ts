@@ -1,4 +1,4 @@
-import { createVevService} from "../services/vevService.js";
+import { VevService} from "../services/vevService.js";
 import { Request, Response } from "express";
 import { IVevController } from "../models/controllers/IVevController.js";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
@@ -8,11 +8,12 @@ import sendValidatedResponse from "../middleware/validateResponseMiddleware.js";
 import { GetVevsPaginatedSchema, VevResponseSchema, PaginatedVevsResponseSchema } from "../models/dtos/VevDTO.js";
 import { IVev } from "../models/IVev.js";
 import {  } from "../models/dtos/VevDTO.js";
+import { IVevService } from "../models/services/IVevService.js";
 
 
-const defaultService = createVevService();
+const defaultService = new VevService();
 
-export const createVevController = (vevService = defaultService): IVevController => ({
+export const createVevController = (vevService: IVevService = defaultService): IVevController => ({
     getVevsPaginated: async (req: Request, res: Response): Promise<void> => {
         const { page, limit, sortField, sortOrder, filterTime, filterUser } =
             GetVevsPaginatedSchema.parse(req.query);
