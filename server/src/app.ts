@@ -3,6 +3,7 @@ import cors from "cors";
 import userRoutes from "./routes/userRoutes.js";
 import vevRoutes from "./routes/vevRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import achievementRoutes from "./routes/achievementRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/vev", vevRoutes);
+app.use("/api/achievements", achievementRoutes);
 
 app.use(errorHandler);
 

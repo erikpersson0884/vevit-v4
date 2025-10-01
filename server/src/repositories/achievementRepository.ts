@@ -1,6 +1,6 @@
 import IAchievementsRepository from "../models/repositories/IAchievementsRepository.js";
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, UserAchievement, Achievement } from "@prisma/client";
 
 export class AchievementRepository implements IAchievementsRepository {
     private prisma: PrismaClient;
@@ -28,11 +28,16 @@ export class AchievementRepository implements IAchievementsRepository {
         return record !== null;
     }
 
-    async getUserAchievements(userId: string): Promise<string[]> {
+    async getAllAchievements(): Promise<Achievement[]> {
+        const records = await this.prisma.achievement.findMany();
+        return records;
+    }
+
+    async getUserAchievements(userId: string): Promise<UserAchievement[]> {
         const records = await this.prisma.userAchievement.findMany({
             where: { userId },
         });
-        return records.map(record => record.achievementId);
+        return records;
     }
 }
 

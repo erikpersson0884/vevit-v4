@@ -1,7 +1,7 @@
 import { vi } from "vitest";
-import type { IVev } from "../models/IVev.js";
+import { Vev } from "@prisma/client";
 
-export const mockVevs: IVev[] = [
+export const mockVevs: Vev[] = [
     { id: "1", date: new Date("2025-01-01"), challengerId: "A", challengedId: "B", bookedDate: new Date("2025-01-01"), reason: "", winnerId: null },
     { id: "2", date: new Date("2025-02-01"), challengerId: "B", challengedId: "B", bookedDate: new Date("2025-02-01"), reason: "", winnerId: null },
     { id: "3", date: new Date("2024-12-01"), challengerId: "C", challengedId: "A", bookedDate: new Date("2024-12-01"), reason: "", winnerId: null },
@@ -37,7 +37,7 @@ const mockPrisma = {
 
       // --- sorting ---
       if (orderBy) {
-        const [field, direction] = Object.entries(orderBy)[0] as [keyof IVev, "asc" | "desc"];
+        const [field, direction] = Object.entries(orderBy)[0] as [keyof Vev, "asc" | "desc"];
         result.sort((a, b) => {
           if (a[field]! < b[field]!) return direction === "asc" ? -1 : 1;
           if (a[field]! > b[field]!) return direction === "asc" ? 1 : -1;

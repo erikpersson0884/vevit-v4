@@ -1,21 +1,19 @@
 // src/services/vevService.ts
-import { IVev } from "../models/IVev.js";
+import { Vev } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { createUserService } from "./userService.js";
 import { IUserService } from "../models/services/IUserService.js";
-import { VevRepository } from "../repositories/vevRepository.js";
 import { PrismaClient } from "@prisma/client";
 import prismaClient from "../lib/prisma.js";
 import { UserNotFoundError } from "../errors/UserNotFoundError.js";
 import { VevNotFoundError } from "../errors/VevNotFoundError.js";
 import { NotAllowedToUpdateError } from "../errors/NotAllowedToUpdateError.js";
 import { UpdateFailedError } from "../errors/UpdateFailedError.js";
-import { IVevService } from "../models/services/IVevService.js";
-import IVevRepository from "../models/repositories/IVevRepository.js";
+import VevRepository from "../repositories/vevRepository.js";
 import AchievementService from "./achievementService.js";
 
-export class VevService implements IVevService {
-    private vevRepo: IVevRepository;
+export default class VevService implements VevService {
+    private vevRepo: VevRepository;
     private userService: IUserService = createUserService();
     private achievementService: AchievementService = new AchievementService();
 
@@ -42,7 +40,7 @@ export class VevService implements IVevService {
             userFilter: "all" | "mine";
             userId?: string;
         } = { timeFilter: "all", userFilter: "all" }
-    ): Promise<IVev[]> {
+    ): Promise<Vev[]> {
         if (filterBy.userFilter === "mine" && !filterBy.userId) {
             throw new Error("userId must be provided when filterUser is 'mine'");
         }
@@ -60,7 +58,7 @@ export class VevService implements IVevService {
         challengedId: string,
         date: Date,
         reason: string
-    ): Promise<IVev> {
+    ): Promise<Vev> {
         const challangerExists = await this.userService.doesUserExistWithId(challengerId);
         const challengedExists = await this.userService.doesUserExistWithId(challengedId);
 
@@ -84,7 +82,7 @@ export class VevService implements IVevService {
         return newVev;
     }
 
-    public async getVevById(id: string): Promise<IVev | null> {
+    public async getVevById(id: string): Promise<Vev | null> {
         return this.vevRepo.findById(id);
     }
 
@@ -93,11 +91,11 @@ export class VevService implements IVevService {
         date?: Date,
         winnerId?: string,
         reason?: string
-    ): Promise<IVev | null> {
+    ): Promise<Vev | null> {
         return this.vevRepo.update(id, { date, winnerId, reason });
     }
 
-    public async setVevWinner(id: string, winnerId: string | null): Promise<IVev | null> {
+    public async setVevWinner(id: string, winnerId: string | null): Promise<Vev | null> {
         const vev = await this.vevRepo.findById(id);
         if (!vev) throw new VevNotFoundError(`Vev with id ${id} not found`);
         if (vev.date > new Date()) {
@@ -120,7 +118,7 @@ export class VevService implements IVevService {
         return updated;
     }
 
-    public async deleteVev(id: string): Promise<IVev | null> {
+    public async deleteVev(id: string): Promise<Vev | null> {
         return this.vevRepo.delete(id);
     }
 }

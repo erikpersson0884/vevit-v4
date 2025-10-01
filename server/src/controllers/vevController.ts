@@ -1,14 +1,14 @@
-import { VevService} from "../services/vevService.js";
 import { Request, Response } from "express";
-import { IVevController } from "../models/controllers/IVevController.js";
+import IVevController from "../models/controllers/IVevController.js";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
 import { NotAllowedToUpdateError } from "../errors/NotAllowedToUpdateError.js";
 
 import sendValidatedResponse from "../middleware/validateResponseMiddleware.js";
 import { GetVevsPaginatedSchema, VevResponseSchema, PaginatedVevsResponseSchema } from "../models/dtos/VevDTO.js";
-import { IVev } from "../models/IVev.js";
+import { Vev } from "@prisma/client";
 import {  } from "../models/dtos/VevDTO.js";
-import { IVevService } from "../models/services/IVevService.js";
+import IVevService from "../models/services/IVevService.js";
+import VevService from "../services/vevService.js";
 
 
 const defaultService = new VevService();
@@ -70,7 +70,7 @@ export const createVevController = (vevService: IVevService = defaultService): I
     
         const date: Date = new Date(dateString);
 
-        const vev: IVev = await vevService.createVev(challengerId, challengedId, date, reason);
+        const vev: Vev = await vevService.createVev(challengerId, challengedId, date, reason);
         sendValidatedResponse(res, VevResponseSchema, vev);
     },
 

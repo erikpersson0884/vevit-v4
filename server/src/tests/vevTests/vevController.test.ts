@@ -1,8 +1,8 @@
 import { createVevController } from "../../controllers/vevController.js";
 import { NotAllowedToUpdateError } from "../../errors/NotAllowedToUpdateError.js";
 import { describe, it, beforeEach, expect, vi } from 'vitest';
-import {IUser } from "../../models/IUser.js";
-import { IVev } from "../../models/IVev.js";
+import { Vev, User } from "@prisma/client";
+
 
 // Mock the dependencies
 const mockService = {
@@ -27,7 +27,7 @@ const mockResponse = () => {
     return res;
 };
 
-const mockUser1: IUser = {
+const mockUser1: User = {
     id: "22222222-2222-2222-2222-222222222222",
     username: "user 1",
     password: "1234",
@@ -36,7 +36,7 @@ const mockUser1: IUser = {
     role: "user",
 };
 
-const mockUser2: IUser = {
+const mockUser2: User = {
     id: "33333333-3333-3333-3333-333333333333",
     username: "user 2",
     password: "1234",
@@ -45,7 +45,7 @@ const mockUser2: IUser = {
     role: "user",
 };
     
-const mockVev: IVev = {
+const mockVev: Vev = {
     id: "11111111-1111-1111-1111-111111111111",
     challengerId: mockUser1.id,
     challengedId: mockUser2.id,

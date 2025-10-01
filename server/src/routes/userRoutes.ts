@@ -2,7 +2,7 @@ import express from "express";
 import { Request, Response } from "express";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
 
-import { createUserController } from "../controllers/userController.js";
+import UserController from "../controllers/userController.js";
 
 import { strictAuth} from "../middleware/authMiddleware.js";
 import { validateRequest } from "../middleware/validateRequestMiddleware.js";
@@ -11,7 +11,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 
 const router = express.Router();
 
-const userController = createUserController();
+const userController = UserController();
 
 // Get information about the currently authenticated user
 router.get(

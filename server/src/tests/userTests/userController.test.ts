@@ -1,12 +1,14 @@
 // tests/controllers/userController.test.ts
 
 import { describe, it, beforeEach, expect, vi } from 'vitest';
-import { createUserController } from '../../../src/controllers/userController.js';
+import { UserController } from '../../../src/controllers/userController.js';
 import { UserResponseSchema, UserResponseArraySchema } from '../../../src/models/dtos/UserDTOs.js';
-import { IUser } from '../../../src/models/IUser.js';
 import { sendValidatedResponse } from '../../../src/middleware/validateResponseMiddleware.js';
 import { UserNotFoundError } from '../../errors/UserNotFoundError.js';
 import { UnauthorizedActionError } from '../../errors/UnauthorizedActionError.js';
+import { User } from '@prisma/client';
+import IUserController from '../../models/controllers/IUserController.js';
+import Usercontroller from '../../../src/controllers/userController.js';
 
 // Mock sendValidatedResponse separately
 vi.mock('../../../src/middleware/validateResponseMiddleware', () => ({
@@ -15,11 +17,11 @@ vi.mock('../../../src/middleware/validateResponseMiddleware', () => ({
 
 describe('UserController', () => {
   let mockService: any;
-  let userController: ReturnType<typeof createUserController>;
+  let userController: IUserController;
   let req: any;
   let res: any;
 
-  const fakeUser: IUser = {
+  const fakeUser: User = {
     id: 'user123',
     username: 'JohnDoe',
     password: 'password123',
@@ -36,7 +38,7 @@ describe('UserController', () => {
       updateUser: vi.fn(),
       deleteUser: vi.fn(),
     };
-    userController = createUserController(mockService);
+    userController = Usercontroller(mockService);
 
     req = {
       params: {},

@@ -1,17 +1,17 @@
-import { IVev } from '../IVev.js';
+import { Vev } from '@prisma/client';
 
-export interface IVevService {
+export default interface VevService {
     checkIfUserInVev(userId: string, vevId: string): Promise<boolean>;
     getVevsPaginated(
         skip: number, 
         take: number, 
         orderBy?: { field: "date" | "challengerId" | "challengedId", direction: "asc" | "desc" },  
         filterBy?: { timeFilter: "all" | "future" | "past", userFilter: "all" | "mine", userId: string | undefined }
-    ): Promise<IVev[]>;
-    getVevById(id: string): Promise<IVev | null>;
-    createVev(challengerId: string, challengedId: string, date: Date, reason: string): Promise<IVev>;
-    updateVev(id: string, date?: Date, winnerId?: string, reason?: string): Promise<IVev | null>;
-    setVevWinner(vevId: string, winnerId: string): Promise<IVev | null>;
-    deleteVev(id: string): Promise<IVev | null>;
+    ): Promise<Vev[]>;
+    getVevById(id: string): Promise<Vev | null>;
+    createVev(challengerId: string, challengedId: string, date: Date, reason: string): Promise<Vev>;
+    updateVev(id: string, date?: Date, winnerId?: string, reason?: string): Promise<Vev | null>;
+    setVevWinner(vevId: string, winnerId: string): Promise<Vev | null>;
+    deleteVev(id: string): Promise<Vev | null>;
     getTotalNumberOfVevs(): Promise<number>;
 }

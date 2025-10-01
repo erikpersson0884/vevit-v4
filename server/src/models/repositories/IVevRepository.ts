@@ -1,7 +1,7 @@
-import IVev from "../IVev.js";
+import { Vev } from "@prisma/client";
 
-export default interface IVevRepository {
-    findById(id: string): Promise<IVev | null>;
+export default interface VevRepository {
+    findById(id: string): Promise<Vev | null>;
     countVevsByUserId(userId: string): Promise<number>;
     countAll(): Promise<number>;
     countVevsWonByUserId(userId: string): Promise<number>;
@@ -9,13 +9,13 @@ export default interface IVevRepository {
     countVevsCreatedByUserId(userId: string): Promise<number>;
     countVevsChallengedToUserId(userId: string): Promise<number>;
     
-    findAllByUserId(userId: string): Promise<IVev[]>;
-    findAllWhereUserIsChallenger(userId: string): Promise<IVev[]>;
-    findAllWhereUserIsChallenged(userId: string): Promise<IVev[]>;
-    findAllPastVevs(): Promise<IVev[]>;
-    findAllFutureVevs(): Promise<IVev[]>;
-    findAllPastVevsByUserId(userId: string): Promise<IVev[]>;
-    findAllFutureVevsByUserId(userId: string): Promise<IVev[]>;
+    findAllByUserId(userId: string): Promise<Vev[]>;
+    findAllWhereUserIsChallenger(userId: string): Promise<Vev[]>;
+    findAllWhereUserIsChallenged(userId: string): Promise<Vev[]>;
+    findAllPastVevs(): Promise<Vev[]>;
+    findAllFutureVevs(): Promise<Vev[]>;
+    findAllPastVevsByUserId(userId: string): Promise<Vev[]>;
+    findAllFutureVevsByUserId(userId: string): Promise<Vev[]>;
 
     create(data: {
         id: string;
@@ -24,14 +24,14 @@ export default interface IVevRepository {
         date: Date;
         bookedDate: Date;
         reason: string;
-    }): Promise<IVev>;
+    }): Promise<Vev>;
 
     update(id: string,
         data: { 
             date?: Date; 
             winnerId?: string | null; 
             reason?: string 
-    }): Promise<IVev>;
-    delete(id: string): Promise<IVev>;
-    findManyPaginated(skip: number, take: number, orderBy?: { field: "date" | "challengerId" | "challengedId"; direction: "asc" | "desc" }, filterBy?: { timeFilter: "all" | "future" | "past"; userFilter: "all" | "mine"; userId?: string }): Promise<IVev[]>;
+    }): Promise<Vev>;
+    delete(id: string): Promise<Vev>;
+    findManyPaginated(skip: number, take: number, orderBy?: { field: "date" | "challengerId" | "challengedId"; direction: "asc" | "desc" }, filterBy?: { timeFilter: "all" | "future" | "past"; userFilter: "all" | "mine"; userId?: string }): Promise<Vev[]>;
 }

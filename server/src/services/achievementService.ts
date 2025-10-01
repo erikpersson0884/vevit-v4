@@ -1,24 +1,28 @@
 import ACHIEVEMENTS from "../achievements/achievements.js";
 import IVevRepository from "../models/repositories/IVevRepository.js";
 import IAchievementService from "../models/services/IAchievementService.js";
-import { VevRepository } from "../repositories/vevRepository.js";
-import { AchievementRepository } from "../repositories/achievementRepository.js";
+import VevRepository from "../repositories/vevRepository.js";
+import AchievementRepository from "../repositories/achievementRepository.js";
+import IAchievementRepository from "../models/repositories/IAchievementsRepository.js";
+import { Achievement, UserAchievement } from "@prisma/client";
 
-const defaultVevRepository = new VevRepository();
-const defaultAchievementRepository = new AchievementRepository();
 
 export class AchievementService implements IAchievementService {
-    private vevRepository: IVevRepository;
-    private achievementRepository: AchievementRepository;
+    private vevRepository: VevRepository;
+    private achievementRepository: IAchievementRepository;
 
 
-    constructor(vevRepository: IVevRepository = defaultVevRepository, achievementRepository: AchievementRepository = defaultAchievementRepository) {
+    constructor(vevRepository: VevRepository = new VevRepository(), achievementRepository: IAchievementRepository = new AchievementRepository()) {
         this.vevRepository = vevRepository;
         this.achievementRepository = achievementRepository;
     }
 
-    async getAllAchievements(): Promise<string[]> {
-        return Object.keys(ACHIEVEMENTS);
+    async getAllAchievements(): Promise<Achievement[]> {
+        return this.achievementRepository.getAllAchievements();
+    }
+
+    async getAchievementsForUser(userId: string): Promise<UserAchievement[]> {
+        return this.achievementRepository.getUserAchievements(userId);
     }
 
     private async awardAchievement(userId: string, achievementId: string): Promise<void> {

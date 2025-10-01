@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { VevService } from "../../services/vevService.js";
+import VevService from "../../services/vevService.js";
 import mockPrisma, { mockVevs } from "../prismaMock.js";
 
 

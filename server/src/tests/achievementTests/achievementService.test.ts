@@ -1,18 +1,31 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, Mocked } from "vitest";
 import AchievementService from "../../services/achievementService.js";
 import ACHIEVEMENTS from "../../achievements/achievements.js";
+import IVevRepository from "../../models/repositories/IVevRepository.js";
+import IAchievementsRepository from "../../models/repositories/IAchievementsRepository.js";
 
 // Mock repositories
 const mockVevRepository = {
-findAllWhereUserIsChallenger: vi.fn(),
-findAllWhereUserIsChallenged: vi.fn(),
-findAllPastVevsByUserId: vi.fn(),
-};
+    findAllWhereUserIsChallenger: vi.fn(),
+    findAllWhereUserIsChallenged: vi.fn(),
+    findAllPastVevsByUserId: vi.fn(),
+    findById: vi.fn(),
+    countVevsByUserId: vi.fn(),
+    countAll: vi.fn(),
+    countVevsWonByUserId: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+    findAllByUserId: vi.fn(),
+    findAllPastVevs: vi.fn(),
+} as unknown as Mocked<IVevRepository>;
 
 const mockAchievementRepository = {
-hasUserAchievement: vi.fn(),
-awardAchievementToUser: vi.fn(),
-};
+    hasUserAchievement: vi.fn(),
+    awardAchievementToUser: vi.fn(),
+    getAllAchievements: vi.fn(),
+    getUserAchievements: vi.fn(),
+} as unknown as Mocked<IAchievementsRepository>;
 
 describe("AchievementService", () => {
     let service: AchievementService;
@@ -27,8 +40,16 @@ describe("AchievementService", () => {
     });
 
     it("should return all achievements", async () => {
+        const allAchievements = Object.values(ACHIEVEMENTS).map(a => ({
+            name: a.name,
+            id: a.id,
+            description: a.description,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        }));
+        mockAchievementRepository.getAllAchievements.mockResolvedValue(allAchievements);
         const achievements = await service.getAllAchievements();
-        expect(achievements).toEqual(Object.keys(ACHIEVEMENTS));
+        expect(achievements).toEqual(allAchievements);
     });
 
     describe("awardAchievement", () => {
@@ -61,7 +82,17 @@ describe("AchievementService", () => {
 
     describe("checkChallengerAchievements", () => {
         it("should award CHALLANGE_1_OPPONENT when user has created 1 vev", async () => {
-        mockVevRepository.findAllWhereUserIsChallenger.mockResolvedValue([{}]);
+        mockVevRepository.findAllWhereUserIsChallenger.mockResolvedValue([
+            {
+                id: "vev1",
+                challengerId: userId,
+                challengedId: "opponent1",
+                date: new Date(),
+                bookedDate: new Date(),
+                reason: "Test reason",
+                winnerId: null
+            }
+        ]);
         mockAchievementRepository.hasUserAchievement.mockResolvedValue(false);
 
         // @ts-ignore
@@ -74,7 +105,35 @@ describe("AchievementService", () => {
         });
 
         it("should not award anything when count is not 1, 10, or 50", async () => {
-        mockVevRepository.findAllWhereUserIsChallenger.mockResolvedValue([{}, {}, {}]);
+        mockVevRepository.findAllWhereUserIsChallenger.mockResolvedValue([
+            {
+                id: "vev1",
+                challengerId: userId,
+                challengedId: "opponent1",
+                date: new Date(),
+                bookedDate: new Date(),
+                reason: "Test reason 1",
+                winnerId: null
+            },
+            {
+                id: "vev2",
+                challengerId: userId,
+                challengedId: "opponent2",
+                date: new Date(),
+                bookedDate: new Date(),
+                reason: "Test reason 2",
+                winnerId: null
+            },
+            {
+                id: "vev3",
+                challengerId: userId,
+                challengedId: "opponent3",
+                date: new Date(),
+                bookedDate: new Date(),
+                reason: "Test reason 3",
+                winnerId: null
+            }
+        ]);
         // @ts-ignore
         await service["checkChallengerAchievements"](userId);
 
@@ -102,8 +161,24 @@ describe("AchievementService", () => {
     describe("checkWinnerAchievements", () => {
         it("should award WIN_1_VEV when user wins exactly 1 vev", async () => {
         mockVevRepository.findAllPastVevsByUserId.mockResolvedValue([
-            { winnerId: userId },
-            { winnerId: "other" },
+            {
+                id: "vev1",
+                challengerId: userId,
+                challengedId: "opponent1",
+                date: new Date(),
+                bookedDate: new Date(),
+                reason: "Test reason 1",
+                winnerId: userId
+            },
+            {
+                id: "vev2",
+                challengerId: "other",
+                challengedId: userId,
+                date: new Date(),
+                bookedDate: new Date(),
+                reason: "Test reason 2",
+                winnerId: "other"
+            }
         ]);
         mockAchievementRepository.hasUserAchievement.mockResolvedValue(false);
 
@@ -118,7 +193,15 @@ describe("AchievementService", () => {
 
         it("should not award when user has no wins", async () => {
         mockVevRepository.findAllPastVevsByUserId.mockResolvedValue([
-            { winnerId: "other" },
+            {
+                id: "vev1",
+                challengerId: "other",
+                challengedId: userId,
+                date: new Date(),
+                bookedDate: new Date(),
+                reason: "Test reason",
+                winnerId: "other"
+            },
         ]);
 
         // @ts-ignore
@@ -130,9 +213,39 @@ describe("AchievementService", () => {
 
     describe("checkAndAwardAchievements", () => {
         it("should trigger achievement checks through repositories", async () => {
-            mockVevRepository.findAllWhereUserIsChallenger.mockResolvedValue([{}]);
-            mockVevRepository.findAllWhereUserIsChallenged.mockResolvedValue([{}]);
-            mockVevRepository.findAllPastVevsByUserId.mockResolvedValue([{ winnerId: userId }]);
+            mockVevRepository.findAllWhereUserIsChallenger.mockResolvedValue([
+                {
+                    id: "vev1",
+                    challengerId: userId,
+                    challengedId: "opponent1",
+                    date: new Date(),
+                    bookedDate: new Date(),
+                    reason: "Test reason",
+                    winnerId: null
+                }
+            ]);
+            mockVevRepository.findAllWhereUserIsChallenged.mockResolvedValue([
+                {
+                    id: "vev1",
+                    challengerId: "someChallenger",
+                    challengedId: userId,
+                    date: new Date(),
+                    bookedDate: new Date(),
+                    reason: "Test reason",
+                    winnerId: null
+                }
+            ]);
+            mockVevRepository.findAllPastVevsByUserId.mockResolvedValue([
+                {
+                    id: "vev1",
+                    challengerId: userId,
+                    challengedId: "opponent1",
+                    date: new Date(),
+                    bookedDate: new Date(),
+                    reason: "Test reason",
+                    winnerId: userId
+                }
+            ]);
             mockAchievementRepository.hasUserAchievement.mockResolvedValue(false);
 
             await service.checkAndAwardAchievements(userId);

@@ -2,9 +2,8 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 import { createVevController } from "../../controllers/vevController.js";
 import { PaginatedVevsResponseSchema } from "../../models/dtos/VevDTO.js";
-
-import { IVevService } from "../../models/services/IVevService.js";
-import { IVevController } from "../../models/controllers/IVevController.js";
+import IVevService from "../../models/services/IVevService.js";
+import IVevController from "../../models/controllers/IVevController.js";
 
 // Mock the dependencies
 const mockService: IVevService = {
@@ -19,7 +18,7 @@ const mockService: IVevService = {
 };
 
 // Create controller with the mocked service
-const controller: IVevController = createVevController(mockService);
+const controller: IVevController = createVevController(mockService as any);
 
 const exampleVevs = [
     {
