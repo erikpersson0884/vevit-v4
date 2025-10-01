@@ -4,9 +4,19 @@ export default interface IVevRepository {
     findById(id: string): Promise<IVev | null>;
     countVevsByUserId(userId: string): Promise<number>;
     countAll(): Promise<number>;
-    countVevsByUserId(userId: string): Promise<number>;
     countVevsWonByUserId(userId: string): Promise<number>;
+    countVevsLostByUserId(userId: string): Promise<number>;
+    countVevsCreatedByUserId(userId: string): Promise<number>;
+    countVevsChallengedToUserId(userId: string): Promise<number>;
     
+    findAllByUserId(userId: string): Promise<IVev[]>;
+    findAllWhereUserIsChallenger(userId: string): Promise<IVev[]>;
+    findAllWhereUserIsChallenged(userId: string): Promise<IVev[]>;
+    findAllPastVevs(): Promise<IVev[]>;
+    findAllFutureVevs(): Promise<IVev[]>;
+    findAllPastVevsByUserId(userId: string): Promise<IVev[]>;
+    findAllFutureVevsByUserId(userId: string): Promise<IVev[]>;
+
     create(data: {
         id: string;
         challengerId: string;

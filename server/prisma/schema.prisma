@@ -39,4 +39,25 @@ model User {
     vevsChallenged Vev[] @relation("challenger")
     vevsChallengedBy Vev[] @relation("Challenged")
     vevsWon        Vev[] @relation("winner")
+    userAchievements UserAchievement[] @relation("UserToUserAchievement")
+}
+
+model Achievement {
+    id          String   @id @default(uuid()) // Use UUID for id as a string
+    name        String
+    description String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+    id             String      @id @default(uuid())
+    userId         String
+    achievementId  String
+    achievedAt     DateTime    @default(now())
+
+    user           User        @relation("UserToUserAchievement", fields: [userId], references: [id])
+    achievement    Achievement @relation(fields: [achievementId], references: [id])
 }

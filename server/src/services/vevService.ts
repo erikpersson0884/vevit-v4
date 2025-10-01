@@ -12,13 +12,18 @@ import { NotAllowedToUpdateError } from "../errors/NotAllowedToUpdateError.js";
 import { UpdateFailedError } from "../errors/UpdateFailedError.js";
 import { IVevService } from "../models/services/IVevService.js";
 import IVevRepository from "../models/repositories/IVevRepository.js";
+import AchievementService from "./achievementService.js";
 
 export class VevService implements IVevService {
     private vevRepo: IVevRepository;
     private userService: IUserService = createUserService();
+    private achievementService: AchievementService = new AchievementService();
 
-    constructor(prisma: PrismaClient = prismaClient) {
+    constructor(prisma: PrismaClient = prismaClient, achievementService?: AchievementService) {
         this.vevRepo = new VevRepository(prisma);
+        if (achievementService) {
+            this.achievementService = achievementService;
+        }
     }
 
     public async checkIfUserInVev(userId: string, vevId: string): Promise<boolean> {
@@ -70,6 +75,11 @@ export class VevService implements IVevService {
         bookedDate: new Date(),
         reason,
         });
+
+        if (this.achievementService) {
+            await this.achievementService.checkAndAwardAchievements(challengerId);
+            await this.achievementService.checkAndAwardAchievements(challengedId);
+        }
 
         return newVev;
     }
