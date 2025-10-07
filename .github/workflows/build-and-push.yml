@@ -3,7 +3,7 @@ name: Build and Push Docker Images
 on:
   push:
     branches:
-      - main   # change to your branch name if needed
+      - main
 
 jobs:
   build-and-push:
@@ -33,6 +33,10 @@ jobs:
           context: .
           file: Dockerfile.backend
           push: true
+          build-args: |
+            NODE_ENV=${{ secrets.NODE_ENV }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/vevit-backend:latest
             ghcr.io/${{ github.repository_owner }}/vevit-backend:${{ github.sha }}
@@ -43,6 +47,8 @@ jobs:
           context: .
           file: Dockerfile.frontend
           push: true
+          build-args: |
+            VITE_BASE_URL=${{ secrets.VITE_BASE_URL }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/vevit-frontend:latest
             ghcr.io/${{ github.repository_owner }}/vevit-frontend:${{ github.sha }}
