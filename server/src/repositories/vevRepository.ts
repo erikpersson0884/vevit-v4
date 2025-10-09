@@ -3,7 +3,7 @@ import { PrismaClient, Vev } from "@prisma/client";
 import prisma from "../lib/prisma.js";
 import IVevRepository from "../models/repositories/IVevRepository.js";
 
-export default class VevRepository implements VevRepository {
+export default class VevRepository implements IVevRepository {
     private prisma: PrismaClient;
 
     constructor(prismaClient: PrismaClient = prisma) {

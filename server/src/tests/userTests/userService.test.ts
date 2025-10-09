@@ -1,4 +1,5 @@
-import { UserService } from '../../services/userService.js';
+import Userservice from '../../services/userService.js';
+import { IUserService } from '../../models/services/IUserService.js';
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 const mockPrisma: any = {
@@ -13,11 +14,11 @@ const mockPrisma: any = {
 };
 
 describe('UserService', () => {
-    let userService: UserService;
+    let userService: IUserService;
 
     beforeEach(() => {
         vi.clearAllMocks();
-        userService = new UserService(mockPrisma); // Now you're passing the mock
+        userService = new Userservice(mockPrisma);
     });
 
     it('createUser should create a new user', async () => {

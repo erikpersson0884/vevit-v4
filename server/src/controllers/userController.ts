@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { createUserService } from "../services/userService.js";
+import Userservice from "../services/userService.js";
 import { IUserController } from "../models/controllers/IUserController.js";
 import { AuthenticatedRequest } from "../types/AuthenticatedRequest.js";
 import { UserResponseSchema, UserResponseArraySchema } from '../models/dtos/UserDTOs.js';
@@ -9,11 +9,13 @@ import { UnauthorizedActionError } from "../errors/UnauthorizedActionError.js";
 import IUserService from "../models/services/IUserService.js";
 import { User } from "@prisma/client";
 
+import AchievementService from "../services/achievementService.js";
 
-const defaultUserService = createUserService();
+
 
 export const UserController = (
-    userService: IUserService = defaultUserService,
+    userService: IUserService = new Userservice(),
+    achievementService: AchievementService = new AchievementService()
 ): IUserController => ({
 
 

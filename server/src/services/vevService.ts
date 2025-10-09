@@ -1,7 +1,7 @@
 // src/services/vevService.ts
 import { Vev } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
-import { createUserService } from "./userService.js";
+import Userservice from "./userService.js";
 import { IUserService } from "../models/services/IUserService.js";
 import { PrismaClient } from "@prisma/client";
 import prismaClient from "../lib/prisma.js";
@@ -14,14 +14,17 @@ import AchievementService from "./achievementService.js";
 
 export default class VevService implements VevService {
     private vevRepo: VevRepository;
-    private userService: IUserService = createUserService();
-    private achievementService: AchievementService = new AchievementService();
+    private userService: IUserService;
+    private achievementService: AchievementService;
 
-    constructor(prisma: PrismaClient = prismaClient, achievementService?: AchievementService) {
+    constructor(
+        prisma: PrismaClient = prismaClient, 
+        achievementService: AchievementService = new AchievementService(),
+        userService: IUserService = new Userservice()
+    ) {
         this.vevRepo = new VevRepository(prisma);
-        if (achievementService) {
-            this.achievementService = achievementService;
-        }
+        this.userService = userService;
+        this.achievementService = achievementService;
     }
 
     public async checkIfUserInVev(userId: string, vevId: string): Promise<boolean> {

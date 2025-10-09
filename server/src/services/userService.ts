@@ -1,14 +1,13 @@
 import { PrismaClient } from "@prisma/client"; 
-import prismaClient from "../lib/prisma.js";
 import { IUserService } from '../models/services/IUserService.js';
 import { UserNotFoundError } from '../errors/UserNotFoundError.js';
 import { UserAlreadyExistsError } from '../errors/UserAlreadyExistsError.js';
 import { User } from "@prisma/client";
 
-export class UserService implements IUserService {
+export default class UserService implements IUserService {
     private prisma: PrismaClient;
 
-    constructor(prismaClient: PrismaClient) {
+    constructor(prismaClient: PrismaClient = new PrismaClient()) {
         this.prisma = prismaClient;
     }
 
@@ -89,8 +88,4 @@ export class UserService implements IUserService {
         }
         else throw new UserNotFoundError(`User with id ${userId} not found`);
     }
-}
-
-export const createUserService = (prisma: PrismaClient = prismaClient): IUserService => {
-    return new UserService(prisma);
 }
