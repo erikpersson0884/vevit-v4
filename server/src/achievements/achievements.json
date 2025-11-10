@@ -1,0 +1,65 @@
+[
+  {
+    "key": "CHALLANGE_1_OPPONENT",
+    "name": "First Vev",
+    "description": "Booked your first Vev 🎉",
+    "category": "book_vev",
+    "threshold": 1
+  },
+  {
+    "key": "CHALLANGE_10_OPPONENTS",
+    "name": "Ten Vevs",
+    "description": "Booked 10 Vevs 💪",
+    "category": "book_vev",
+    "threshold": 10
+  },
+  {
+    "key": "CHALLANGE_50_OPPONENTS",
+    "name": "Hundred Vevs",
+    "description": "Booked 100 Vevs 🚀",
+    "category": "book_vev",
+    "threshold": 50
+  },
+  {
+    "key": "CHALLANGED_BY_1_OPPONENT",
+    "name": "Challenge Accepted",
+    "description": "Completed your first challenge",
+    "category": "challenged",
+    "threshold": 1
+  },
+  {
+    "key": "CHALLANGED_BY_10_OPPONENTS",
+    "name": "Keep It Coming",
+    "description": "Got challenged 10 times",
+    "category": "challenged",
+    "threshold": 10
+  },
+  {
+    "key": "CHALLANGED_BY_50_OPPONENTS",
+    "name": "Are You Not Entertained?!",
+    "description": "Got challenged 50 times",
+    "category": "challenged",
+    "threshold": 50
+  },
+  {
+    "key": "WIN_1_VEV",
+    "name": "Winner Winner Chicken Dinner",
+    "description": "Won a Vev",
+    "category": "wins",
+    "threshold": 1
+  },
+  {
+    "key": "WIN_10_VEVS",
+    "name": "Gladiator",
+    "description": "Won 10 Vevs",
+    "category": "wins",
+    "threshold": 10
+  },
+  {
+    "key": "WIN_50_VEVS",
+    "name": "Champion",
+    "description": "Won 50 Vevs 🏆",
+    "category": "wins",
+    "threshold": 50
+  }
+]

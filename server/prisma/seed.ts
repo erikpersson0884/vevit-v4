@@ -1,11 +1,27 @@
 import { PrismaClient } from "@prisma/client";
-import ACHIEVEMENTS from "../src/achievements/achievements.ts";
+import achievements from "../src/achievements/achievements.json" with { type: "json" };
+import { Achievement } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+function isAchievement(obj: any): obj is Achievement {
+  return (
+    typeof obj.id === "string" &&
+    typeof obj.name === "string" &&
+    typeof obj.description === "string" &&
+    (obj.type === "wins" || obj.type === "games") &&
+    typeof obj.threshold === "number"
+  );
+}
+
+
 async function seedAchievements() {
-    for (const key in ACHIEVEMENTS) {
-        const achievement = ACHIEVEMENTS[key as keyof typeof ACHIEVEMENTS];
+    for (const achievement in achievements) {
+
+        if (!isAchievement(achievement)) {
+            console.error("Invalid achievement format:", achievement);
+            continue;
+        }
 
         await prisma.achievement.upsert({
             where: { id: achievement.id },
@@ -15,6 +31,7 @@ async function seedAchievements() {
             },
             create: {
                 id: achievement.id,
+                key: achievement.id,
                 name: achievement.name,
                 description: achievement.description,
             },

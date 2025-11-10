@@ -44,8 +44,11 @@ model User {
 
 model Achievement {
     id          String   @id @default(uuid()) // Use UUID for id as a string
+    key         String   @unique
     name        String
     description String
+    category    String
+    threshold   Int?
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 
