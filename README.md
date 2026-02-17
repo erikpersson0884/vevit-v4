@@ -83,7 +83,7 @@ Three years later, on the 16:th of september 2025 vevIT version 4 was deployed a
 
     npx prisma migrate dev
 
-    npx prisma db push
+    npx prisma generate
     ```
 
 
