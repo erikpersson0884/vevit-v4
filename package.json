@@ -4,7 +4,7 @@
     "description": " The third (and hopfully final) version of the booking applicaiton to book vev in the Sandlådan ",
     "main": "index.js",
     "scripts": {
-        "install": "npm install && cd server && npm install && cd ../client && npm install",
+        "setup": "npm install && cd server && npm install && cd ../client && npm install",
         
         "server": "cd server && npm run dev",
         "client": "cd client && npm run dev",

@@ -60,19 +60,9 @@ Three years later, on the 16:th of september 2025 vevIT version 4 was deployed a
     ```
     cd vevit-v4
 
-    npm run install
+    npm run setup
     ```
-3. Set up a development database
-    ```sh
-    cd server 
-
-    docker run --name vevit-v4 -e POSTGRES_PASSWORD=secretpassword -e POSTGRES_USER=myuser -e POSTGRES_DB=mydb -p 5432:5432 -d postgres
-
-    npx prisma migrate dev
-
-    npx prisma db push
-    ```
-4. Set environmental variables
+3. Set environmental variables
 
     In `./client/.env`
     ```
@@ -85,7 +75,16 @@ Three years later, on the 16:th of september 2025 vevIT version 4 was deployed a
 
     JWT_SECRET=your_jwt_secret
     ```
+4. Set up a development database
+    ```sh
+    cd server 
 
+    docker run --name vevit-v4 -e POSTGRES_PASSWORD=secretpassword -e POSTGRES_USER=myuser -e POSTGRES_DB=mydb -p 5432:5432 -d postgres
+
+    npx prisma migrate dev
+
+    npx prisma db push
+    ```
 
 
 ## Usage
