@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"; 
+import { PrismaClient } from "../../prisma/generated/prisma/client.js";
 import prismaClient from "../lib/prisma.js";
 import { IUser } from '../models/IUser.js';
 import { IUserService } from '../models/services/IUserService.js';

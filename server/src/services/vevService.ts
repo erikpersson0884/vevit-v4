@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import prismaClient from "../lib/prisma.js";
 import { createUserService } from './userService.js';
 import { IUserService } from '../models/services/IUserService.js';
-import { PrismaClient, Vev } from '@prisma/client';
+import { PrismaClient, Vev } from "../../prisma/generated/prisma/client.js";
 import { UserNotFoundError } from '../errors/UserNotFoundError.js';
 import { NotAllowedToUpdateError } from '../errors/NotAllowedToUpdateError.js';
 import { IVevService } from '../models/services/IVevService.js';
