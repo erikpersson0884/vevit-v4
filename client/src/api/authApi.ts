@@ -10,6 +10,10 @@ const authApi = {
         const response: AxiosResponse = await api.post('/auth/register', { username, password });
         return response.data;
     },
+    loginWithGamma: (): void => {
+        window.location.href = 'api/auth/gamma';
+    }
+
 };
 
 export default authApi;

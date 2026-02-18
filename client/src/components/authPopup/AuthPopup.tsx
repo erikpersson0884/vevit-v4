@@ -19,7 +19,7 @@ enum PopupType {
 }
 
 const AuthPopup: React.FC = () => {
-    const { login, logout, currentUser, showAuthPopup, setShowAuthPopup } = useAuthContext();
+    const { login, logout, currentUser, showAuthPopup, setShowAuthPopup, loginWithGamma } = useAuthContext();
     const { createUser } = useUsersContext();
 
     const [ username, setUsername ] = useState(currentUser ? currentUser.username : '');
@@ -104,6 +104,8 @@ const AuthPopup: React.FC = () => {
                 className="auth-popup"
             >
                 {inputs()}
+                <p onClick={loginWithGamma}>Logga in med Gamma</p>
+
                 <p>Har du inget konto? <span className="link" onClick={() => setPopupType(PopupType.REGISTER)}>Registrera</span></p>
             </ActionPopupWindow>
         );

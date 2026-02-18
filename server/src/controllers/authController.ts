@@ -35,17 +35,14 @@ export const createAuthController = (authService: IAuthService = defualtAuthServ
 
     const startGammaLogin = async (req: Request, res: Response) => {
         const url = authorizedClient.authorizeUrl();
-        return res.redirect(url);
+        res.redirect(url);
     };
 
     const handleGammaCallback = async (req: Request, res: Response) => {
         const code = req.query.code;
 
         if (!code) {
-            throw new Error("Missing authorization code in callback request");
-            // return res.status(400).json({
-            //     error: "Missing authorization code"
-            // });
+            throw new Error("Authorization code is missing from the callback request."); // TODO: Add more specific error handling for missing authorization code
         }
 
         await authorizedClient.generateToken(code.toString());
@@ -53,10 +50,10 @@ export const createAuthController = (authService: IAuthService = defualtAuthServ
         const gammaId = profile.sub;
 
         // pass to service layer
-        const user = await authService.loginWithGamma(gammaId, profile);
+        const token: string = await authService.loginWithGamma(gammaId, profile);
 
-        // return your session / JWT
-        res.json(user);
+        const frontendUrl = `http://localhost:3000/oauth/callback?token=${token}`; //TODO: Move frontend URL to environment variable and add error handling for missing environment variable
+        return res.redirect(frontendUrl); 
     };
 
     return {

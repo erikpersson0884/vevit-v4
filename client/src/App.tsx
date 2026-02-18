@@ -6,6 +6,7 @@ import { useAuthContext } from './contexts/authContext'
 import MainPage from './pages/mainPage/MainPage'
 import UserManagement from './pages/userManagement/UserManagement'
 import NotFoundPage from './pages/notFoundPage/NotFoundPage'
+import OAuthCallback from './pages/OAuthCallback/OAuthCallback'
 
 import Header from './layout/header/Header'
 import Footer from './layout/footer/Footer'
@@ -28,6 +29,8 @@ function App() {
                 } />
 
                 { isLoggedIn && <Route path='/user-management' element={ <UserManagement /> } />}
+
+                <Route path='/oauth/callback' element={<OAuthCallback />} />
 
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>

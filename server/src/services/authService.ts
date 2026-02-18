@@ -27,7 +27,7 @@ class authService implements IAuthService {
         let user = await this.userService.getUserByExternalAccount("gamma", gammaId);
         if (!user) {
             // If not, create a new user with the gammaId and profile information
-            user = await this.userService.createUserWithExternalAccount("gamma", gammaId);
+            user = await this.userService.createUserWithExternalAccount("gamma", gammaId, profile.nickname);
         }
         // Generate and return a JWT for the user
         const userId = user.id;
