@@ -81,7 +81,7 @@ Three years later, on the 16:th of september 2025 vevIT version 4 was deployed a
 
     docker run --name vevit-v4 -e POSTGRES_PASSWORD=secretpassword -e POSTGRES_USER=myuser -e POSTGRES_DB=mydb -p 5432:5432 -d postgres
 
-    npx prisma migrate dev
+    npx prisma migrate dev --name init
 
     npx prisma generate
     ```
