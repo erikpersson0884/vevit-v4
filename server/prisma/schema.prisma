@@ -13,6 +13,8 @@ enum Role {
     admin
     user
 }
+
+
   
 model Vev {
     id            String   @id @default(uuid())   // Use UUID for id as a string
@@ -39,4 +41,23 @@ model User {
     vevsChallenged Vev[] @relation("challenger")
     vevsChallengedBy Vev[] @relation("Challenged")
     vevsWon        Vev[] @relation("winner")
+
+    externalAccounts ExternalAccount[]
+
+    @@map("users")
+}
+
+model ExternalAccount {
+    id         String @id @default(uuid())
+
+    provider   String // "gamma", "google", etc.
+    providerId String // the unique ID from that provider
+
+    userId     String
+    user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    createdAt  DateTime @default(now())
+
+    @@unique([provider, providerId])
+    @@map("external_accounts")
 }
