@@ -74,6 +74,10 @@ Three years later, on the 16:th of september 2025 vevIT version 4 was deployed a
     DATABASE_URL=postgresql://myuser:secretpassword@localhost:5432/mydb?schema=public
 
     JWT_SECRET=your_jwt_secret
+    
+    GAMMA_CLIENT_ID=<your_gamma_client_id>
+    GAMMA_REDIRECT_URI=<your_gamma_redirect_uri>
+    GAMMA_CLIENT_SECRET=<your_gamma_client_secret>
     ```
 4. Set up a development database
     ```sh

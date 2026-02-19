@@ -52,7 +52,7 @@ export const createAuthController = (authService: IAuthService = defualtAuthServ
         // pass to service layer
         const token: string = await authService.loginWithGamma(gammaId, profile);
 
-        const frontendUrl = `http://localhost:3000/oauth/callback?token=${token}`; //TODO: Move frontend URL to environment variable and add error handling for missing environment variable
+        const frontendUrl = process.env.frontend_url + `/oauth/callback?token=${token}`; //TODO: Move frontend URL to environment variable and add error handling for missing environment variable
         return res.redirect(frontendUrl); 
     };
 
