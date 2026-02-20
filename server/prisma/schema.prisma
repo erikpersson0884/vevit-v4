@@ -13,6 +13,11 @@ enum Role {
     admin
     user
 }
+
+enum AuthProvider {
+  gamma
+}
+
   
 model Vev {
     id            String   @id @default(uuid())   // Use UUID for id as a string
@@ -31,7 +36,7 @@ model Vev {
 model User {
     id        String      @id @default(uuid()) // Use Auto Increment for ID
     username  String      @unique
-    password  String
+    password  String?     // Nullable for users who sign up via external providers
     role      Role        @default(user)
     createdAt DateTime    @default(now())
     updatedAt DateTime    @updatedAt
@@ -39,4 +44,24 @@ model User {
     vevsChallenged Vev[] @relation("challenger")
     vevsChallengedBy Vev[] @relation("Challenged")
     vevsWon        Vev[] @relation("winner")
+
+    externalAccounts ExternalAccount[]
+
+    @@map("users")
+}
+
+model ExternalAccount {
+    id          String @id @default(uuid())
+
+    provider    AuthProvider// "gamma", "google", etc.
+    providerId  String // the unique ID from that provider
+
+    userId      String
+    user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    createdAt   DateTime @default(now())
+
+    @@unique([provider, providerId])
+    @@map("external_accounts")
+    @@index([userId])
 }

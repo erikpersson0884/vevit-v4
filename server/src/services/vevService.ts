@@ -70,8 +70,8 @@ export class VevService implements IVevService {
     ): Promise<IVev> {
 
         if (
-            !this.userService.checkIfUserExists(challengerId) || 
-            !this.userService.checkIfUserExists(challengedId)
+            !this.userService.checkIfUserIdExists(challengerId) || 
+            !this.userService.checkIfUserIdExists(challengedId)
         ) {
             throw new UserNotFoundError("Tried to create vev with non-existing user id, " + challengerId + " or " + challengedId);
         }
@@ -125,7 +125,7 @@ export class VevService implements IVevService {
             throw new NotAllowedToUpdateError(`Vev with id ${id} is in the future and cannot have a winner yet`);
         }
         if (winnerId !== null){ // if winnerId is null, we don't need to check if the user exists or if they are in the Vev
-            if (!this.userService.checkIfUserExists(winnerId)) {
+            if (!this.userService.checkIfUserIdExists(winnerId)) {
                 throw new UserNotFoundError(`User with id ${winnerId} not found`);
             }
             if (!this.checkIfUserInVev(winnerId, id)) {

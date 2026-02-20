@@ -8,9 +8,11 @@ interface AuthContextType {
     isLoggedIn: boolean;
     login: (username: string, password: string) => Promise<boolean>;
     logout: () => void;
+    loginWithGamma: () => Promise<boolean>;
 
     showAuthPopup: boolean;
     setShowAuthPopup: React.Dispatch<React.SetStateAction<boolean>>;
+    setAuthToken: (token: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -58,13 +60,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return false;
     };
 
+    const loginWithGamma = async (): Promise<boolean> => {
+        try {
+            authApi.loginWithGamma();
+        } catch (error: unknown) {
+            console.error('Gamma login failed', error);
+        }
+        return false;
+    };
+
     const logout = () => {
         setCurrentUser(null);
         localStorage.removeItem('authToken'); 
     };
 
     return (
-        <AuthContext.Provider value={{ currentUser, isLoggedIn, login, logout, showAuthPopup, setShowAuthPopup }}>
+        <AuthContext.Provider value={{ currentUser, isLoggedIn, login, logout, showAuthPopup, setShowAuthPopup, loginWithGamma, setAuthToken }}>
             {children}
         </AuthContext.Provider>
     );
