@@ -8,9 +8,9 @@ services:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://myuser:secretpassword@db:5432/vevit-v4?schema=public
       - JWT_SECRET=your_jwt_secret
-      - GAMMA_CLIENT_ID=2D3KIBB2V9XLLE6A2NXIMDTLTAGVNU
-      - GAMMA_REDIRECT_URI=http://localhost:3001/api/auth/gamma/callback
-      - GAMMA_CLIENT_SECRET=9MQdBKWw6TN2doFLser8induiNqTUOAu
+      - GAMMA_CLIENT_ID=1
+      - GAMMA_REDIRECT_URI=http://192.168.50.127:3000/api/auth/gamma/callback
+      - GAMMA_CLIENT_SECRET=1
       - frontend_url=http://localhost:3000
     depends_on:
       db:

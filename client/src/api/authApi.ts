@@ -11,9 +11,8 @@ const authApi = {
         return response.data;
     },
     loginWithGamma: (): void => {
-        window.location.href = 'api/auth/gamma';
+        window.location.replace("/api/auth/gamma");
     }
-
 };
 
 export default authApi;
