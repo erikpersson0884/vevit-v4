@@ -51,7 +51,9 @@ jobs:
       - name: Generate Prisma Client
         working-directory: ./server
         run: npx prisma generate
-        
+        env:
+          DATABASE_URL: "file:./test.db"
+
       - name: Run backend tests
         working-directory: ./server
         run: npm test
