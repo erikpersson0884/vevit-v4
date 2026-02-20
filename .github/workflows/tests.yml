@@ -33,6 +33,8 @@ jobs:
 
   test-backend:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "file:./test.db"
 
     steps:
       - name: Checkout code
@@ -51,8 +53,6 @@ jobs:
       - name: Generate Prisma Client
         working-directory: ./server
         run: npx prisma generate
-        env:
-          DATABASE_URL: "file:./test.db"
 
       - name: Run backend tests
         working-directory: ./server
