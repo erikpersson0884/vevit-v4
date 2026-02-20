@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import prismaClient from "../lib/prisma.js";
 import { createUserService } from './userService.js';
 import { IUserService } from '../models/services/IUserService.js';
-import { PrismaClient, Vev } from '@prisma/client';
+import { PrismaClient, Vev } from "../../prisma/generated/prisma/client.js";
 import { UserNotFoundError } from '../errors/UserNotFoundError.js';
 import { NotAllowedToUpdateError } from '../errors/NotAllowedToUpdateError.js';
 import { IVevService } from '../models/services/IVevService.js';
@@ -70,8 +70,8 @@ export class VevService implements IVevService {
     ): Promise<IVev> {
 
         if (
-            !this.userService.checkIfUserExists(challengerId) || 
-            !this.userService.checkIfUserExists(challengedId)
+            !this.userService.checkIfUserIdExists(challengerId) || 
+            !this.userService.checkIfUserIdExists(challengedId)
         ) {
             throw new UserNotFoundError("Tried to create vev with non-existing user id, " + challengerId + " or " + challengedId);
         }
@@ -125,7 +125,7 @@ export class VevService implements IVevService {
             throw new NotAllowedToUpdateError(`Vev with id ${id} is in the future and cannot have a winner yet`);
         }
         if (winnerId !== null){ // if winnerId is null, we don't need to check if the user exists or if they are in the Vev
-            if (!this.userService.checkIfUserExists(winnerId)) {
+            if (!this.userService.checkIfUserIdExists(winnerId)) {
                 throw new UserNotFoundError(`User with id ${winnerId} not found`);
             }
             if (!this.checkIfUserInVev(winnerId, id)) {

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"; 
+import { AuthProvider, PrismaClient } from "../../prisma/generated/prisma/client.js";
 import prismaClient from "../lib/prisma.js";
 import { IUser } from '../models/IUser.js';
 import { IUserService } from '../models/services/IUserService.js';
@@ -12,7 +12,14 @@ export class UserService implements IUserService {
         this.prisma = prismaClient;
     }
 
-    public async checkIfUserExists(username: string): Promise<boolean> {
+    public async checkIfUserIdExists(id: string): Promise<boolean> {
+        let userExists = await this.prisma.user.findFirst({
+            where: { id: id },
+        })
+        return userExists !== null;
+    }
+
+    public async checkIfUsernameExists(username: string): Promise<boolean> {
         let userExists = await this.prisma.user.findFirst({
             where: { username: username },
         })
@@ -39,7 +46,7 @@ export class UserService implements IUserService {
     }
 
     async createUser(username: string, password: string): Promise<IUser> {
-        if (await this.checkIfUserExists(username)) {
+        if (await this.checkIfUsernameExists(username)) {
             throw new UserAlreadyExistsError(`User with username ${username} already exists`);
         }
         const user: IUser = await this.prisma.user.create({
@@ -71,7 +78,7 @@ export class UserService implements IUserService {
     }
 
     async deleteUser(userId: string): Promise<IUser> {
-        if (await this.checkIfUserExists(userId)) {
+        if (await this.checkIfUserIdExists(userId)) {
             const user: IUser | null = await this.getUserById(userId);
             if (user) {
                 return this.prisma.user.delete({
@@ -81,6 +88,53 @@ export class UserService implements IUserService {
         }
         else throw new UserNotFoundError(`User with id ${userId} not found`);
     }
+
+    // OAuth related methods
+    async getUserByExternalAccount(provider: AuthProvider, providerId: string): Promise<IUser | null> {
+        const externalAccount = await this.prisma.externalAccount.findUnique({
+            where: {
+                provider_providerId: {
+                    provider,
+                    providerId,
+                },
+            },
+            include: {
+                user: true,
+            },
+        });
+        return externalAccount ? externalAccount.user : null;
+    }
+
+    async linkExternalAccount(userId: string, provider: AuthProvider, providerId: string): Promise<void> {
+        await this.prisma.externalAccount.create({
+            data: {
+                provider,
+                providerId,
+                userId,
+            },
+        });
+    }
+
+    async createUserWithExternalAccount(provider: AuthProvider, providerId: string, username?: string): Promise<IUser> {
+        if (username && await this.checkIfUsernameExists(username)) {
+            throw new UserAlreadyExistsError(`User with username ${username} already exists`);
+        } // TODO: Implement a way for users to link a existing vevit account to their oauth account if a username like that already exists, must include a way to verify ownership of the vevit account (probably by asking them to login with their vevit credentials and then linking the accounts in the database)
+
+        const user = await this.prisma.user.create({
+            data: {
+                username: username? username : `${provider}_${providerId}`,
+                password: null, // No password for external accounts
+                externalAccounts: {
+                    create: {
+                        provider,
+                        providerId,
+                    },
+                },
+            },
+        });
+        return user;
+    }
+    
 }
 
 export const createUserService = (prisma: PrismaClient = prismaClient): IUserService => {

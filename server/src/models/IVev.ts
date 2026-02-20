@@ -1,4 +1,4 @@
-import { Vev } from '@prisma/client';
+import { Vev } from "../../prisma/generated/prisma/client.js";
 
 // export interface IVev {
 //     id: string;
