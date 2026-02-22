@@ -9,6 +9,8 @@ jobs:
   backend:
     name: Build and Push Backend Image
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "file:./test.db"
     permissions:
       contents: read
       packages: write
